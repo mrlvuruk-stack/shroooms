@@ -39,15 +39,13 @@ const App = () => {
     }
   };
 
-  const isModal = location.state && location.state.modal;
-
   return (
     <div className="grid-container">
       {getHeader()}
       <main>
         <Switch>
           <Route path="/" exact component={Home} />
-          <Route path="/product/:id" component={Home} />
+          <Route path="/product/:id" component={ProductDetails} />
           <Route path="/checkout" component={Checkout} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/our-story" component={OurStory} />
@@ -61,9 +59,6 @@ const App = () => {
           <PrivateRoute path="/wishlist" component={Wishlist} />
           <Route component={BadRequest} />
         </Switch>
-        {isModal && (
-          <Route exact path="/product/:id" component={ProductDetails} />
-        )}
       </main>
       <SignIn />
       <Footer />

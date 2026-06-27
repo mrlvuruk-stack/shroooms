@@ -110,14 +110,7 @@ const Product = ({ product }, props) => {
 
       {/* Image Section */}
       <div className="pc-image-wrapper">
-        <Link
-          to={{
-            pathname: `/product/${product._id}`,
-            state: {
-              modal: true,
-            },
-          }}
-        >
+        <Link to={`/product/${product._id}`}>
           <img src={product.image} alt={product.name} className="pc-image" />
         </Link>
       </div>
@@ -128,14 +121,7 @@ const Product = ({ product }, props) => {
           {product.benefits || "Gourmet Mushroom"}
         </span>
         
-        <Link
-          to={{
-            pathname: `/product/${product._id}`,
-            state: {
-              modal: true,
-            },
-          }}
-        >
+        <Link to={`/product/${product._id}`}>
           <h2 className="pc-title">{product.name}</h2>
         </Link>
 

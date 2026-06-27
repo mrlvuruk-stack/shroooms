@@ -15,25 +15,11 @@ const WishlistScreen = ({ productData, wishlist }) => {
 
   return (
     <div key={product._id} className="card">
-      <Link
-        to={{
-          pathname: `/product/${product._id}`,
-          state: {
-            modal: true,
-          },
-        }}
-      >
+      <Link to={`/product/${product._id}`}>
         <img src={product.image} alt={product.name} className="medium" />
       </Link>
       <div className="cardBody">
-        <Link
-          to={{
-            pathname: `/product/${product._id}`,
-            state: {
-              modal: true,
-            },
-          }}
-        >
+        <Link to={`/product/${product._id}`}>
           <h2>{product.name}</h2>
         </Link>
         <div

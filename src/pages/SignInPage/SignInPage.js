@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory, useLocation, Link } from "react-router-dom";
 import axios from "axios";
 import { signin, signInTestUser } from "../../store/actions/actionCreators/signInAction";
 import "./SignInPage.css";
@@ -137,7 +137,7 @@ const SignInPage = () => {
                 </form>
 
                 <p className="signin-footer-text">
-                  Don't have an account? <span className="signin-link" onClick={handleGoogleLogin}>Sign up</span>
+                  Don't have an account? <Link to="/signup" className="signin-link">Sign up</Link>
                 </p>
               </>
             )}

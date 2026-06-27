@@ -389,6 +389,25 @@ const Admin = () => {
           if (!userErr && dbUsers) {
             setUsersListState(dbUsers);
           }
+
+          // Fetch Orders
+          const { data: dbOrders, error: orderErr } = await supabase.from("orders").select("*").order("created_at", { ascending: false });
+          if (!orderErr && dbOrders) {
+            const formattedOrders = dbOrders.map(o => {
+              const orderDetails = o.order_data || {};
+              return {
+                ...orderDetails,
+                _id: o._id,
+                created_at: o.created_at,
+                createdAt: orderDetails.createdAt || o.created_at,
+                customerDetails: orderDetails.customerDetails || {},
+                orderItems: orderDetails.orderItems || [],
+                totalPrice: orderDetails.totalPrice || 0,
+                status: orderDetails.status || o.status || 'Paid'
+              };
+            });
+            setOrders(formattedOrders);
+          }
         } catch (err) {
           console.error("Error loading data from Supabase in Admin Panel:", err);
         }
@@ -919,10 +938,33 @@ const Admin = () => {
   // ── Orders ──
   const [orders, setOrders] = useState(() => JSON.parse(localStorage.getItem("mock_orders") || "[]"));
 
-  const updateOrderStatus = (id, status) => {
+  const updateOrderStatus = async (id, status) => {
     const updated = orders.map(o => o._id === id ? { ...o, status } : o);
     localStorage.setItem("mock_orders", JSON.stringify(updated));
     setOrders(updated);
+
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const { data: existing, error: fetchErr } = await supabase
+          .from("orders")
+          .select("order_data")
+          .eq("_id", id)
+          .single();
+        
+        if (!fetchErr && existing) {
+          const currentOrderData = existing.order_data || {};
+          currentOrderData.status = status;
+          
+          const { error: updErr } = await supabase
+            .from("orders")
+            .update({ order_data: currentOrderData })
+            .eq("_id", id);
+          if (updErr) throw updErr;
+        }
+      } catch (err) {
+        console.error("Failed to update order status in Supabase:", err);
+      }
+    }
   };
 
   // ── Sensors ──

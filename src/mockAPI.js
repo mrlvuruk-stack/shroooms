@@ -1,0 +1,597 @@
+import axios from "axios";
+import { supabase, isSupabaseConfigured } from "./supabase";
+
+// Helper to simulate network latency
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Mock database for products
+const mockProducts = [
+  {
+    _id: "p1",
+    name: "Lion's Mane Mushroom (Organic)",
+    image: "https://images.unsplash.com/photo-1628351821419-e26e83afec52?auto=format&fit=crop&w=400&q=80",
+    price: 499,
+    unit: "150 Gm",
+    description: "Premium organic Lion's Mane. Highly prized for cognitive enhancement, memory support, and neural health. Features a beautiful white, shaggy fluff texture with a mild seafood-like sweet flavor when cooked.",
+    purchasing: false,
+    quantity: 0,
+    benefits: "Focus · Memory · Wellness",
+    badge: "100% Organic"
+  },
+  {
+    _id: "p2",
+    name: "King Oyster Mushroom (Premium)",
+    image: "https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=400&q=80",
+    price: 349,
+    unit: "150 Gm",
+    description: "Elegant King Oyster Mushrooms, grown for culinary perfection. Dense, meaty stems that slice into scallop-like rounds with a rich, savory umami flavor profile that elevates any gourmet dish.",
+    purchasing: false,
+    quantity: 0,
+    benefits: "Gourmet Culinary Excellence",
+    badge: "Chef's Choice"
+  },
+  {
+    _id: "p3",
+    name: "Pink Oyster Mushroom (Exotic)",
+    image: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=400&q=80",
+    price: 399,
+    unit: "150 Gm",
+    description: "Vibrant and exotic Pink Oyster Mushrooms. Highly decorative with a rich woodsy flavor and a chewy bacon-like texture when sautéed crisp. Sourced fresh at dawn from our temperature-controlled grow chambers.",
+    purchasing: false,
+    quantity: 0,
+    benefits: "Rich Flavor · Premium Harvest",
+    badge: "Rare Find"
+  },
+  {
+    _id: "p4",
+    name: "Blue Oyster Mushroom (Artisan)",
+    image: "https://images.unsplash.com/photo-1563865436874-9aef32095ffd?auto=format&fit=crop&w=400&q=80",
+    price: 399,
+    unit: "150 Gm",
+    description: "Artisan-grade Blue Oyster Mushrooms. Features beautiful steel-blue caps and dense clustering. Known for its quick-cooking, tender texture and a subtle, mild earthy-anise aroma preferred by gourmet chefs.",
+    purchasing: false,
+    quantity: 0,
+    benefits: "Unique Taste · Artisan Quality",
+    badge: "Best Seller"
+  },
+  {
+    _id: "p5",
+    name: "Golden Oyster Mushroom (Vibrant)",
+    image: "https://images.unsplash.com/photo-1504387828074-177dc8d9d40b?auto=format&fit=crop&w=400&q=80",
+    price: 429,
+    unit: "150 Gm",
+    description: "Stunning yellow Golden Oyster Mushrooms. Offers a delicate aroma with nutty notes and a slightly sweet finish. Packed with antioxidants and immune-supportive compounds. Grown sustainably.",
+    purchasing: false,
+    quantity: 0,
+    benefits: "Antioxidant Rich · Vibrant Color",
+    badge: "Superfood"
+  },
+  {
+    _id: "p6",
+    name: "Reishi Mushroom (Medicinal)",
+    image: "https://images.unsplash.com/photo-1570733577033-91894d3fa54e?auto=format&fit=crop&w=400&q=80",
+    price: 599,
+    unit: "100 Gm",
+    description: "Red Reishi Mushroom, the legendary 'Mushroom of Immortality'. Bitter, woody texture suitable for grinding into wellness powders or steeping in health teas. Outstanding adaptogenic support for stress and sleep.",
+    purchasing: false,
+    quantity: 0,
+    benefits: "Immune Support · Stress Relief",
+    badge: "Adaptogen"
+  },
+  {
+    _id: "p7",
+    name: "Shiitake Mushroom (Organic)",
+    image: "https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?auto=format&fit=crop&w=400&q=80",
+    price: 299,
+    unit: "150 Gm",
+    description: "USDA Certified Organic Shiitake Mushrooms. Rich in B vitamins, minerals, and dietary fibers. These dark brown mushrooms carry deep, smoky-umami profiles and are perfect for pan-frying or in rich broths.",
+    purchasing: false,
+    quantity: 0,
+    benefits: "Traditional Umami · Heart Health",
+    badge: "100% Organic"
+  },
+  {
+    _id: "p8",
+    name: "Maitake Mushroom (Hen of the Woods)",
+    image: "https://images.unsplash.com/photo-1596547609652-9cf5d8d76921?auto=format&fit=crop&w=400&q=80",
+    price: 479,
+    unit: "150 Gm",
+    description: "Maitake, meaning 'Dancing Mushroom' in Japanese, is prized for its cluster formations resembling feathers. Rich earthy flavor, excellent for roasting or grilling. Powerful support for metabolic wellness.",
+    purchasing: false,
+    quantity: 0,
+    benefits: "Deep Flavor · Energy Support",
+    badge: "Premium Cultivated"
+  }
+];
+
+const getParsedData = (data) => {
+  if (!data) return {};
+  if (typeof data === "string") {
+    try {
+      return JSON.parse(data);
+    } catch (e) {
+      return {};
+    }
+  }
+  return data;
+};
+
+const salt = "shroooms_sec_salt_9083";
+
+const hashCode = (str) => {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash;
+  }
+  return Math.abs(hash).toString(36);
+};
+
+axios.interceptors.request.use(async (config) => {
+  const { url, method, data } = config;
+  
+  // 1. GET /api/products
+  if (url.includes("/api/products") && method === "get") {
+    await delay(300);
+    config.adapter = async () => {
+      const hasSeeded = localStorage.getItem("mock_products_seeded");
+      let productsData = JSON.parse(localStorage.getItem("mock_products") || "[]");
+      // Track IDs deleted by admin — survives Supabase re-fetch
+      const deletedIds = JSON.parse(localStorage.getItem("mock_deleted_ids") || "[]");
+
+      if (!hasSeeded) {
+        productsData = mockProducts;
+        localStorage.setItem("mock_products", JSON.stringify(mockProducts));
+        localStorage.setItem("mock_products_seeded", "true");
+      }
+
+      if (isSupabaseConfigured && supabase) {
+        try {
+          const { data: dbProducts, error } = await supabase
+            .from("products")
+            .select("*");
+          if (error) throw error;
+
+          if (!dbProducts || dbProducts.length === 0) {
+            console.log("Supabase products table is empty. Seeding catalog...");
+            const { error: seedError } = await supabase
+              .from("products")
+              .insert(mockProducts);
+            if (seedError) throw seedError;
+            productsData = mockProducts;
+          } else {
+            productsData = dbProducts;
+          }
+          localStorage.setItem("mock_products", JSON.stringify(productsData));
+        } catch (err) {
+          console.error("Failed to fetch products from Supabase, falling back to local storage:", err);
+        }
+      }
+
+      // Always filter out locally-deleted IDs (handles Supabase caching delays)
+      if (deletedIds.length > 0) {
+        productsData = productsData.filter(p => !deletedIds.includes(p._id));
+      }
+
+      return Promise.resolve({
+        data: productsData,
+        status: 200,
+        statusText: "OK",
+        headers: {},
+        config
+      });
+    };
+  }
+
+  // 1b. POST /api/products
+  else if (url.endsWith("/api/products") && method === "post") {
+    await delay(300);
+    const parsedData = getParsedData(data);
+    config.adapter = async () => {
+      const localProducts = JSON.parse(localStorage.getItem("mock_products") || "[]");
+      const newProduct = {
+        ...parsedData,
+        _id: parsedData._id || "p" + (localProducts.length + 1) + "_" + Date.now(),
+        purchasing: false,
+        quantity: 0
+      };
+      localProducts.push(newProduct);
+      localStorage.setItem("mock_products", JSON.stringify(localProducts));
+      
+      if (isSupabaseConfigured && supabase) {
+        try {
+          await supabase.from("products").insert([newProduct]);
+        } catch (err) {
+          console.error("Failed to insert product into Supabase:", err);
+        }
+      }
+      return Promise.resolve({
+        data: newProduct,
+        status: 201,
+        statusText: "Created",
+        headers: {},
+        config
+      });
+    };
+  }
+
+  // 1c. PUT /api/products/:id
+  else if (url.includes("/api/products/") && method === "put") {
+    await delay(300);
+    const parsedData = getParsedData(data);
+    const prodId = url.split("/").pop();
+    config.adapter = async () => {
+      const localProducts = JSON.parse(localStorage.getItem("mock_products") || "[]");
+      const index = localProducts.findIndex(x => x._id === prodId);
+      if (index > -1) {
+        localProducts[index] = { ...localProducts[index], ...parsedData };
+        localStorage.setItem("mock_products", JSON.stringify(localProducts));
+        
+        if (isSupabaseConfigured && supabase) {
+          try {
+            await supabase.from("products").update(parsedData).eq("_id", prodId);
+          } catch (err) {
+            console.error("Failed to update product in Supabase:", err);
+          }
+        }
+        return Promise.resolve({
+          data: localProducts[index],
+          status: 200,
+          statusText: "OK",
+          headers: {},
+          config
+        });
+      }
+      return Promise.reject({
+        status: 404,
+        statusText: "Not Found",
+        config
+      });
+    };
+  }
+
+  // 1d. DELETE /api/products/:id
+  else if (url.includes("/api/products/") && method === "delete") {
+    await delay(300);
+    const prodId = url.split("/").pop();
+    config.adapter = async () => {
+      // 1. Remove from localStorage immediately
+      let localProducts = JSON.parse(localStorage.getItem("mock_products") || "[]");
+      localProducts = localProducts.filter(x => x._id !== prodId);
+      localStorage.setItem("mock_products", JSON.stringify(localProducts));
+
+      // 2. Track this deletion — so GET never brings it back even after Supabase re-fetch
+      const deletedIds = JSON.parse(localStorage.getItem("mock_deleted_ids") || "[]");
+      if (!deletedIds.includes(prodId)) {
+        deletedIds.push(prodId);
+        localStorage.setItem("mock_deleted_ids", JSON.stringify(deletedIds));
+      }
+
+      // 3. Delete from Supabase
+      if (isSupabaseConfigured && supabase) {
+        try {
+          const { error } = await supabase.from("products").delete().eq("_id", prodId);
+          if (error) console.error("Supabase delete error:", error.message);
+          else {
+            // Success — remove from deleted tracking list (Supabase is now source of truth)
+            const updated = deletedIds.filter(id => id !== prodId);
+            localStorage.setItem("mock_deleted_ids", JSON.stringify(updated));
+          }
+        } catch (err) {
+          console.error("Failed to delete product from Supabase:", err);
+        }
+      }
+      return Promise.resolve({
+        data: { success: true },
+        status: 200,
+        statusText: "OK",
+        headers: {},
+        config
+      });
+    };
+  }
+
+  // 2. POST /api/users/sendOTP
+  else if (url.includes("/api/users/sendOTP") && method === "post") {
+    await delay(300);
+    const parsedData = getParsedData(data);
+    const phone = parsedData.phone || "9999999999";
+    // Generate a 4-digit OTP
+    const otp = Math.floor(1000 + Math.random() * 9000).toString();
+    const otpHash = hashCode(phone + "_" + otp + "_" + salt);
+
+    config.adapter = async () => {
+      const apiKey = process.env.REACT_APP_FAST2SMS_API_KEY;
+      if (apiKey) {
+        try {
+          console.log(`[Fast2SMS] Sending OTP ${otp} to phone ${phone}...`);
+          const response = await fetch("https://www.fast2sms.com/dev/bulkV2", {
+            method: "POST",
+            headers: {
+              "authorization": apiKey,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              variables_values: otp,
+              route: "otp",
+              numbers: phone
+            })
+          });
+          const resData = await response.json();
+          console.log("[Fast2SMS] API Response:", resData);
+        } catch (err) {
+          console.error("[Fast2SMS] Failed to send SMS:", err);
+        }
+      } else {
+        // Fallback: log the OTP to browser console so it is testable locally for free
+        console.log(`%c[Fast2SMS Dev Fallback] OTP for ${phone} is: ${otp}`, "color: #ff9900; font-size: 16px; font-weight: bold;");
+      }
+
+      return Promise.resolve({
+        data: {
+          hash: otpHash,
+          phone: phone
+        },
+        status: 200,
+        statusText: "OK",
+        headers: {},
+        config
+      });
+    };
+  }
+
+  // 3. POST /api/users/verifyOTP
+  else if (url.includes("/api/users/verifyOTP") && method === "post") {
+    await delay(300);
+    const parsedData = getParsedData(data);
+    const phone = parsedData.phone;
+    const submittedHash = parsedData.hash;
+    const submittedOtp = parsedData.otp;
+
+    const expectedHash = hashCode(phone + "_" + submittedOtp + "_" + salt);
+
+    config.adapter = () => {
+      if (expectedHash === submittedHash || submittedOtp === "1234") { // Allow "1234" as a backdoor master OTP for easy testing
+        const name = localStorage.getItem("userName_" + phone) || "Gourmet Customer";
+        return Promise.resolve({
+          data: {
+            _id: "usr_" + phone,
+            phone: phone,
+            userName: name,
+            token: "mock_jwt_token_" + phone + "_" + Date.now()
+          },
+          status: 200,
+          statusText: "OK",
+          headers: {},
+          config
+        });
+      } else {
+        const error = new Error("Request failed with status code 400");
+        error.response = {
+          status: 400,
+          statusText: "Bad Request",
+          data: { message: "Invalid OTP code. Please try again." },
+          headers: {},
+          config
+        };
+        error.config = config;
+        return Promise.reject(error);
+      }
+    };
+  }
+
+  // 4. POST /api/users/testuser
+  else if (url.includes("/api/users/testuser") && method === "post") {
+    await delay(300);
+    config.adapter = () => {
+      return Promise.resolve({
+        data: {
+          _id: "mock_guest_id_202",
+          phone: "9999999999",
+          userName: "Guest User",
+          token: "mock_jwt_token_guest_67890"
+        },
+        status: 200,
+        statusText: "OK",
+        headers: {},
+        config
+      });
+    };
+  }
+
+  // 4b. PUT /api/users/username
+  else if (url.includes("/api/users/username") && method === "put") {
+    await delay(100);
+    const parsedData = getParsedData(data);
+    const name = parsedData.name || "Gourmet Customer";
+    config.adapter = () => {
+      let activePhone = "9999999999";
+      const cachedInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
+      if (cachedInfo.phone) {
+        activePhone = cachedInfo.phone;
+      }
+      
+      localStorage.setItem("userName_" + activePhone, name);
+      
+      const updatedUserInfo = {
+        ...cachedInfo,
+        userName: name
+      };
+      localStorage.setItem("userInfo", JSON.stringify(updatedUserInfo));
+
+      return Promise.resolve({
+        data: updatedUserInfo,
+        status: 200,
+        statusText: "OK",
+        headers: {},
+        config
+      });
+    };
+  }
+
+  // 5. GET /api/wishlist/mywishlist
+  else if (url.includes("/api/wishlist/mywishlist") && method === "get") {
+    await delay(100);
+    config.adapter = async () => {
+      let localWishlist = JSON.parse(localStorage.getItem("mock_wishlist") || "[]");
+      if (isSupabaseConfigured && supabase) {
+        try {
+          const { data, error } = await supabase.from("wishlists").select("*");
+          if (error) throw error;
+          localWishlist = data || [];
+          localStorage.setItem("mock_wishlist", JSON.stringify(localWishlist));
+        } catch (err) {
+          console.error("Failed to fetch wishlist from Supabase:", err);
+        }
+      }
+      return Promise.resolve({
+        data: localWishlist,
+        status: 200,
+        statusText: "OK",
+        headers: {},
+        config
+      });
+    };
+  }
+
+  // 6. POST /api/wishlist
+  else if (url.includes("/api/wishlist") && method === "post") {
+    await delay(100);
+    const parsedData = getParsedData(data);
+    config.adapter = async () => {
+      const localWishlist = JSON.parse(localStorage.getItem("mock_wishlist") || "[]");
+      const newItem = {
+        _id: "wish_" + Date.now(),
+        product: parsedData.id
+      };
+      if (isSupabaseConfigured && supabase) {
+        try {
+          const { error } = await supabase.from("wishlists").insert([
+            {
+              _id: newItem._id,
+              product: newItem.product,
+              created_at: new Date().toISOString()
+            }
+          ]);
+          if (error) throw error;
+        } catch (err) {
+          console.error("Failed to save wishlist to Supabase:", err);
+        }
+      }
+      if (!localWishlist.some(x => x.product === newItem.product)) {
+        localWishlist.push(newItem);
+        localStorage.setItem("mock_wishlist", JSON.stringify(localWishlist));
+      }
+      return Promise.resolve({
+        data: newItem,
+        status: 200,
+        statusText: "OK",
+        headers: {},
+        config
+      });
+    };
+  }
+
+  // 7. DELETE /api/wishlist/remove
+  else if (url.includes("/api/wishlist/remove") && method === "delete") {
+    await delay(100);
+    const parsedData = getParsedData(config.data);
+    const prodId = parsedData ? parsedData.id : null;
+    config.adapter = async () => {
+      let localWishlist = JSON.parse(localStorage.getItem("mock_wishlist") || "[]");
+      if (isSupabaseConfigured && supabase) {
+        try {
+          const { error } = await supabase.from("wishlists").delete().eq("product", prodId);
+          if (error) throw error;
+        } catch (err) {
+          console.error("Failed to delete wishlist item from Supabase:", err);
+        }
+      }
+      localWishlist = localWishlist.filter(x => x.product !== prodId);
+      localStorage.setItem("mock_wishlist", JSON.stringify(localWishlist));
+      return Promise.resolve({
+        data: { success: true },
+        status: 200,
+        statusText: "OK",
+        headers: {},
+        config
+      });
+    };
+  }
+
+  // 8. GET /api/orders/myorders
+  else if (url.includes("/api/orders/myorders") && method === "get") {
+    await delay(100);
+    config.adapter = async () => {
+      let localOrders = JSON.parse(localStorage.getItem("mock_orders") || "[]");
+      if (isSupabaseConfigured && supabase) {
+        try {
+          const { data, error } = await supabase
+            .from("orders")
+            .select("*")
+            .order("created_at", { ascending: false });
+          if (error) throw error;
+          localOrders = (data || []).map((row) => {
+            return {
+              ...row.order_data,
+              _id: row._id,
+              createdAt: row.created_at
+            };
+          });
+          localStorage.setItem("mock_orders", JSON.stringify(localOrders));
+        } catch (err) {
+          console.error("Failed to fetch orders from Supabase:", err);
+        }
+      }
+      return Promise.resolve({
+        data: localOrders,
+        status: 200,
+        statusText: "OK",
+        headers: {},
+        config
+      });
+    };
+  }
+
+  // 9. POST /api/orders
+  else if (url.includes("/api/orders") && method === "post") {
+    await delay(100);
+    const parsedData = getParsedData(data);
+    config.adapter = async () => {
+      const localOrders = JSON.parse(localStorage.getItem("mock_orders") || "[]");
+      const newOrder = {
+        ...parsedData,
+        _id: "ord_" + Math.random().toString(36).substr(2, 9),
+        createdAt: new Date().toISOString()
+      };
+      if (isSupabaseConfigured && supabase) {
+        try {
+          const { error } = await supabase.from("orders").insert([
+            {
+              _id: newOrder._id,
+              created_at: newOrder.createdAt,
+              order_data: newOrder
+            }
+          ]);
+          if (error) throw error;
+        } catch (err) {
+          console.error("Failed to save order to Supabase:", err);
+        }
+      }
+      localOrders.push(newOrder);
+      localStorage.setItem("mock_orders", JSON.stringify(localOrders));
+      return Promise.resolve({
+        data: newOrder,
+        status: 201,
+        statusText: "Created",
+        headers: {},
+        config
+      });
+    };
+  }
+
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});

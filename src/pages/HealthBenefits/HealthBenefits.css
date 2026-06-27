@@ -1,0 +1,361 @@
+/* Health Benefits page container */
+.benefits-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem 8rem 2rem;
+  font-family: "Outfit", sans-serif;
+  color: var(--frugivore-dark);
+}
+
+/* Inner content capsule with blur */
+.benefits-inner {
+  background-color: rgba(250, 247, 240, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--frugivore-border);
+  border-radius: 24px;
+  padding: 5rem 6rem;
+  box-shadow: 0 10px 40px rgba(89, 78, 59, 0.05);
+}
+
+/* Header section styling */
+.benefits-header-section {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.benefits-eyebrow {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--frugivore-green);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.benefits-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--frugivore-dark);
+  line-height: 1.25;
+  margin-bottom: 1.5rem;
+}
+
+.benefits-subtitle {
+  font-size: 1.6rem;
+  color: var(--frugivore-gray);
+  max-width: 650px;
+  margin: 0 auto 2.5rem auto;
+  line-height: 1.6;
+}
+
+.benefits-divider {
+  width: 80px;
+  height: 2px;
+  background-color: var(--frugivore-green);
+  margin: 2.5rem auto;
+  position: relative;
+}
+
+.benefits-divider::after {
+  content: "";
+  display: block;
+  width: 12px;
+  height: 12px;
+  background-color: var(--frugivore-bg);
+  border: 2px solid var(--frugivore-green);
+  border-radius: 50%;
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Filter Navigation */
+.benefits-filter-nav {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 5rem;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  background-color: var(--frugivore-white);
+  border: 1px solid var(--frugivore-border);
+  color: var(--frugivore-dark);
+  padding: 1rem 2.2rem;
+  font-family: "Outfit", sans-serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(89, 78, 59, 0.02);
+}
+
+.filter-btn:hover {
+  border-color: var(--frugivore-green);
+  color: var(--frugivore-forest);
+  transform: translateY(-1px);
+}
+
+.filter-btn.active {
+  background-color: var(--frugivore-forest);
+  border-color: var(--frugivore-forest);
+  color: var(--frugivore-white);
+  box-shadow: 0 4px 15px rgba(90, 75, 49, 0.15);
+}
+
+/* Grid Layout of Benefits */
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+  margin-bottom: 6rem;
+}
+
+/* Benefit Cards */
+.benefit-card {
+  background-color: var(--frugivore-white);
+  border: 1px solid var(--frugivore-border);
+  border-radius: 20px;
+  padding: 3rem;
+  box-shadow: 0 10px 30px rgba(89, 78, 59, 0.03);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.benefit-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(89, 78, 59, 0.08);
+}
+
+/* Colored accent bar at the top of the card */
+.card-top-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+}
+
+/* Card Header */
+.benefit-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
+  margin-bottom: 2.2rem;
+}
+
+.benefit-icon-wrapper {
+  width: 5.4rem;
+  height: 5.4rem;
+  border-radius: 50%;
+  border: 2px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(250, 247, 240, 0.5);
+  flex-shrink: 0;
+}
+
+.benefit-icon-wrapper .fa {
+  font-size: 2.4rem;
+}
+
+.benefit-names h3 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: var(--frugivore-dark);
+  margin-bottom: 0.2rem;
+}
+
+.scientific-name {
+  font-size: 1.25rem;
+  font-style: italic;
+  color: var(--frugivore-green);
+  display: block;
+}
+
+/* Card Body elements */
+.benefit-summary {
+  font-size: 1.45rem;
+  line-height: 1.6;
+  color: var(--frugivore-gray);
+  margin-bottom: 2.2rem;
+  font-weight: 400;
+}
+
+.section-label {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--frugivore-dark);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.bioactive-compounds-section {
+  margin-bottom: 2.5rem;
+}
+
+.compounds-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.compound-tag {
+  background-color: #faf7f0;
+  border: 1px solid var(--frugivore-border);
+  color: var(--frugivore-forest);
+  font-size: 1.2rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+/* List of details */
+.benefit-detail-list {
+  margin-bottom: 3rem;
+  flex-grow: 1;
+}
+
+.benefit-detail-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.benefit-detail-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+}
+
+.benefit-detail-list li .fa {
+  color: var(--frugivore-green);
+  font-size: 1.2rem;
+  margin-top: 0.4rem;
+  flex-shrink: 0;
+}
+
+.benefit-detail-list li span {
+  font-size: 1.35rem;
+  line-height: 1.5;
+  color: var(--frugivore-gray);
+}
+
+/* Card footer button */
+.benefit-card-footer {
+  border-top: 1px solid var(--frugivore-border);
+  padding-top: 2rem;
+  margin-top: auto;
+}
+
+.shop-cultivar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  width: 100%;
+  background-color: var(--frugivore-border);
+  color: var(--frugivore-forest);
+  padding: 1.2rem;
+  border-radius: 12px;
+  font-size: 1.35rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.shop-cultivar-btn:hover {
+  background-color: var(--frugivore-forest);
+  color: var(--frugivore-white);
+}
+
+.shop-cultivar-btn:hover .fa {
+  transform: translateX(4px);
+  color: var(--frugivore-white);
+}
+
+.shop-cultivar-btn .fa {
+  font-size: 1.3rem;
+  transition: transform 0.3s ease;
+}
+
+/* Medical Disclaimer strip */
+.benefits-disclaimer {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  border-top: 1px solid var(--frugivore-border);
+  padding-top: 3.5rem;
+  margin-top: 2rem;
+}
+
+.benefits-disclaimer .fa {
+  font-size: 2.2rem;
+  color: var(--frugivore-green);
+  margin-top: 0.2rem;
+  flex-shrink: 0;
+}
+
+.benefits-disclaimer p {
+  font-size: 1.3rem;
+  line-height: 1.6;
+  color: var(--frugivore-gray);
+  margin: 0;
+}
+
+/* Responsive media queries */
+@media (max-width: 991px) {
+  .benefits-inner {
+    padding: 4rem 3rem;
+  }
+  .benefits-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+  .benefits-title {
+    font-size: 3.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .benefits-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  .benefits-filter-nav {
+    margin-bottom: 3.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .benefits-container {
+    padding: 2rem 1rem 4rem 1rem;
+  }
+  .benefits-inner {
+    padding: 3rem 1.5rem;
+    border-radius: 16px;
+  }
+  .benefits-title {
+    font-size: 2.6rem;
+  }
+  .filter-btn {
+    padding: 0.8rem 1.6rem;
+    font-size: 1.25rem;
+  }
+}

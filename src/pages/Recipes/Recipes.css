@@ -1,0 +1,517 @@
+/* Recipes Page container */
+.recipes-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem 8rem 2rem;
+  font-family: "Outfit", sans-serif;
+  color: var(--frugivore-dark);
+}
+
+/* Inner capsule panel */
+.recipes-inner {
+  background-color: rgba(250, 247, 240, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--frugivore-border);
+  border-radius: 24px;
+  padding: 5rem 6rem;
+  box-shadow: 0 10px 40px rgba(89, 78, 59, 0.05);
+}
+
+/* Header section styling */
+.recipes-header-section {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.recipes-eyebrow {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--frugivore-green);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.recipes-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--frugivore-dark);
+  line-height: 1.25;
+  margin-bottom: 1.5rem;
+}
+
+.recipes-subtitle {
+  font-size: 1.6rem;
+  color: var(--frugivore-gray);
+  max-width: 650px;
+  margin: 0 auto 2.5rem auto;
+  line-height: 1.6;
+}
+
+.recipes-divider {
+  width: 80px;
+  height: 2px;
+  background-color: var(--frugivore-green);
+  margin: 2.5rem auto;
+  position: relative;
+}
+
+.recipes-divider::after {
+  content: "";
+  display: block;
+  width: 12px;
+  height: 12px;
+  background-color: var(--frugivore-bg);
+  border: 2px solid var(--frugivore-green);
+  border-radius: 50%;
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Search & Filter Toolbar */
+.recipes-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4rem;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+/* Search Input wrapper */
+.recipes-search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1.6rem;
+  font-size: 1.6rem !important;
+  color: var(--frugivore-gray);
+  pointer-events: none;
+}
+
+.recipes-search-input {
+  height: 4.4rem;
+  width: 320px;
+  border-radius: 30px;
+  border: 1px solid var(--frugivore-border);
+  background-color: var(--frugivore-white);
+  padding: 0 4rem 0 4.2rem;
+  font-size: 1.35rem;
+  font-family: "Outfit", sans-serif;
+  outline: none;
+  box-shadow: 0 4px 10px rgba(89, 78, 59, 0.02);
+  transition: all 0.3s ease;
+}
+
+.recipes-search-input:focus {
+  border-color: var(--frugivore-green);
+  box-shadow: 0 4px 15px rgba(89, 78, 59, 0.08);
+  width: 350px;
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 1.6rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem;
+}
+
+.clear-search-btn .fa {
+  font-size: 1.4rem !important;
+  color: var(--frugivore-gray);
+}
+
+.clear-search-btn:hover .fa {
+  color: var(--frugivore-green);
+}
+
+/* Filters Navigation */
+.recipes-filter-nav {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.recipe-filter-btn {
+  background-color: var(--frugivore-white);
+  border: 1px solid var(--frugivore-border);
+  color: var(--frugivore-dark);
+  padding: 1rem 2.2rem;
+  font-family: "Outfit", sans-serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(89, 78, 59, 0.02);
+}
+
+.recipe-filter-btn:hover {
+  border-color: var(--frugivore-green);
+  color: var(--frugivore-forest);
+  transform: translateY(-1px);
+}
+
+.recipe-filter-btn.active {
+  background-color: var(--frugivore-forest);
+  border-color: var(--frugivore-forest);
+  color: var(--frugivore-white);
+  box-shadow: 0 4px 15px rgba(90, 75, 49, 0.15);
+}
+
+/* Recipes vertical stack grid */
+.recipes-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2.2rem;
+}
+
+/* Recipe Card styling */
+.recipe-card {
+  background-color: var(--frugivore-white);
+  border: 1px solid var(--frugivore-border);
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(89, 78, 59, 0.02);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.recipe-card:hover {
+  box-shadow: 0 12px 30px rgba(89, 78, 59, 0.07);
+}
+
+.recipe-card.expanded {
+  border-color: var(--frugivore-green);
+  box-shadow: 0 15px 35px rgba(89, 78, 59, 0.08);
+}
+
+/* Card Header - Clickable area */
+.recipe-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3rem 4rem;
+  cursor: pointer;
+  gap: 3rem;
+}
+
+.recipe-main-meta {
+  flex-grow: 1;
+}
+
+.recipe-mushroom-tag {
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--frugivore-green);
+  border: 1px solid var(--frugivore-border);
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  background-color: #faf7f0;
+  letter-spacing: 1px;
+}
+
+.recipe-main-meta h3 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 2.3rem;
+  font-weight: 700;
+  color: var(--frugivore-dark);
+  margin-top: 1.2rem;
+  margin-bottom: 0.8rem;
+}
+
+.recipe-summary-text {
+  font-size: 1.45rem;
+  line-height: 1.6;
+  color: var(--frugivore-gray);
+  margin: 0;
+  max-width: 600px;
+}
+
+/* Quick metadata tags */
+.recipe-quick-tags {
+  display: flex;
+  gap: 1.2rem;
+  flex-shrink: 0;
+}
+
+.meta-tag {
+  background-color: #faf7f0;
+  border: 1px solid var(--frugivore-border);
+  color: var(--frugivore-forest);
+  font-size: 1.25rem;
+  font-weight: 600;
+  padding: 0.6rem 1.4rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.meta-tag .fa {
+  font-size: 1.3rem !important;
+  color: var(--frugivore-green);
+}
+
+/* Icon button indicator */
+.expand-indicator-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.8rem;
+  color: var(--frugivore-green);
+  flex-shrink: 0;
+}
+
+.expand-indicator-btn .fa {
+  font-size: 2rem !important;
+  transition: transform 0.3s ease;
+}
+
+/* Expanded section */
+.recipe-expanded-content {
+  border-top: 1px solid var(--frugivore-border);
+  padding: 4rem;
+  background-color: rgba(250, 247, 240, 0.3);
+}
+
+.recipe-content-split {
+  display: flex;
+  gap: 6rem;
+  margin-bottom: 4rem;
+}
+
+/* Ingredients panel */
+.ingredients-block {
+  width: 35%;
+  border-right: 1px solid var(--frugivore-border);
+  padding-right: 4rem;
+}
+
+.ingredients-block h4, .steps-block h4 {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--frugivore-forest);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.ingredients-block h4 .fa, .steps-block h4 .fa {
+  font-size: 1.6rem !important;
+  color: var(--frugivore-green);
+}
+
+.ingredients-block ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.ingredients-block li {
+  font-size: 1.45rem;
+  line-height: 1.5;
+  color: var(--frugivore-gray);
+  position: relative;
+  padding-left: 2rem;
+}
+
+.ingredients-block li::before {
+  content: "•";
+  color: var(--frugivore-green);
+  font-size: 1.8rem;
+  position: absolute;
+  left: 0.4rem;
+  top: -0.2rem;
+}
+
+/* Steps panel */
+.steps-block {
+  width: 65%;
+}
+
+.steps-block ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.steps-block li {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.8rem;
+}
+
+.step-num {
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 50%;
+  border: 1px solid var(--frugivore-green);
+  color: var(--frugivore-green);
+  font-size: 1.25rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background-color: var(--frugivore-white);
+  box-shadow: 0 2px 5px rgba(89, 78, 59, 0.05);
+}
+
+.steps-block li p {
+  font-size: 1.45rem;
+  line-height: 1.7;
+  color: var(--frugivore-gray);
+  margin: 0;
+}
+
+/* Expanded Card Actions */
+.recipe-card-actions {
+  border-top: 1px solid var(--frugivore-border);
+  padding-top: 3rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.shop-ingredients-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background-color: var(--frugivore-forest);
+  color: var(--frugivore-white);
+  padding: 1.2rem 2.8rem;
+  border-radius: 30px;
+  font-size: 1.35rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(90, 75, 49, 0.15);
+}
+
+.shop-ingredients-btn:hover {
+  background-color: var(--frugivore-green);
+  transform: translateY(-1px);
+}
+
+.shop-ingredients-btn:hover .fa {
+  transform: translateX(4px);
+}
+
+.shop-ingredients-btn .fa {
+  font-size: 1.3rem !important;
+  color: var(--frugivore-white);
+  transition: transform 0.3s ease;
+}
+
+/* Empty recipes state */
+.no-recipes-found {
+  text-align: center;
+  padding: 6rem 2rem;
+  border: 1px dashed var(--frugivore-border);
+  border-radius: 20px;
+  background-color: var(--frugivore-white);
+}
+
+.no-recipes-found .fa {
+  font-size: 4rem !important;
+  color: var(--frugivore-green);
+  margin-bottom: 2rem;
+}
+
+.no-recipes-found p {
+  font-size: 1.55rem;
+  color: var(--frugivore-gray);
+  max-width: 450px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Responsive queries */
+@media (max-width: 991px) {
+  .recipes-inner {
+    padding: 4rem 3rem;
+  }
+  .recipes-search-input {
+    width: 100%;
+  }
+  .recipes-search-input:focus {
+    width: 100%;
+  }
+  .recipes-search-wrapper {
+    width: 100%;
+  }
+  .recipe-card-header {
+    padding: 2.5rem 3rem;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+  .recipe-quick-tags {
+    width: 100%;
+    order: 3;
+    justify-content: flex-start;
+  }
+  .recipe-expanded-content {
+    padding: 3rem;
+  }
+  .recipe-content-split {
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+  .ingredients-block {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--frugivore-border);
+    padding-right: 0;
+    padding-bottom: 3rem;
+  }
+  .steps-block {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .recipes-container {
+    padding: 2rem 1rem 4rem 1rem;
+  }
+  .recipes-inner {
+    padding: 3rem 1.5rem;
+    border-radius: 16px;
+  }
+  .recipes-title {
+    font-size: 2.6rem;
+  }
+  .recipe-filter-btn {
+    padding: 0.8rem 1.6rem;
+    font-size: 1.25rem;
+  }
+  .recipe-card-header {
+    padding: 2rem;
+  }
+  .recipe-main-meta h3 {
+    font-size: 1.95rem;
+  }
+  .recipe-expanded-content {
+    padding: 2rem;
+  }
+}

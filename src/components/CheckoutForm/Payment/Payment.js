@@ -1,0 +1,102 @@
+import React, { useEffect } from "react";
+import { withRouter } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { sendOrderDetails } from "../../../store/actions/actionCreators/orderAction";
+import ErrorBox from "../../ErrorBox/ErrorBox";
+import LoadingBox from "../../LoadingBox/LoadingBox";
+
+import "./Payment.css";
+
+const Payment = (props) => {
+  const cart = useSelector((state) => state.cart);
+
+  const newOrder = useSelector((state) => state.newOrder);
+  const { loading, success, error } = newOrder;
+
+  const { taxes, shipping, totalPay } = props;
+
+  const dispatch = useDispatch();
+
+  const successPaymentHandler = () => {
+    dispatch(
+      sendOrderDetails({
+        orderItems: cart.cartData.vegetablesCart,
+        customerAddress: cart.customerAddress,
+        cartTotal: cart.cartData.cartTotal,
+        taxes: taxes,
+        shippingPrice: shipping,
+        totalPrice: totalPay,
+        isPaid: true,
+      })
+    );
+  };
+
+  useEffect(() => {
+    if (success) {
+      props.history.push("/orders");
+    }
+  }, [success, props.history]);
+
+  return (
+    <div className={`checkout-step ${props.paymentStep}`}>
+      <span className="checkout-step__number">3</span>
+      <span className="checkout-step__name" data-test-id="payment-title">
+        Payment
+      </span>
+      <div className="checkout-step__body checkout-step__body--payment-step">
+        <div className="payment--details">
+          <div>
+            <p>Total Price: </p>
+            <p>{cart.cartData.cartTotal}&#8377;</p>
+          </div>
+          <div>
+            <p>Shipping: </p>
+            <p>{shipping === 0 ? "Free" : { shipping }}</p>
+          </div>
+          <div>
+            <p>Taxes: </p>
+            <p>{taxes}&#8377;</p>
+          </div>
+        </div>
+        <div className="payment--total">
+          <p>Total Pay: </p>
+          <p>{totalPay}&#8377;</p>
+        </div>
+        <div>
+          <h3>Test Credientials</h3>
+          <p>Email Id: sb-8hgkh7198474@personal.example.com</p>
+          <p style={{ fontWeight: "normal" }}>Password: rMAm)C1o</p>
+        </div>
+        <br />
+        <button
+          onClick={successPaymentHandler}
+          className="btn-pay-demo"
+          style={{
+            width: "100%",
+            padding: "1.4rem 2.8rem",
+            backgroundColor: "#1e352f",
+            color: "#fff",
+            fontSize: "1.5rem",
+            fontWeight: "600",
+            border: "none",
+            borderRadius: "30px",
+            cursor: "pointer",
+            transition: "all 0.2s ease",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            boxShadow: "0 4px 15px rgba(30, 53, 47, 0.25)"
+          }}
+          onMouseOver={(e) => e.target.style.backgroundColor = "#12211d"}
+          onMouseOut={(e) => e.target.style.backgroundColor = "#1e352f"}
+        >
+          Pay &#8377;{totalPay} & Place Order (Demo Mode)
+        </button>
+        {loading && <LoadingBox></LoadingBox>}
+        {error && <ErrorBox varient="error">{error}</ErrorBox>}
+      </div>
+    </div>
+  );
+};
+
+export default withRouter(Payment);

@@ -1,0 +1,187 @@
+/*------- SideBar Design --------*/
+.cart__sidebar {
+  width: 43.8rem;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background-color: #fff;
+  outline: none;
+  z-index: 2001;
+  transform: translate(100%);
+  transition: transform 0.4s ease-in-out;
+  border-left: 1px solid var(--frugivore-border);
+}
+
+.ReactModal__Content--after-open {
+  transform: translate(0) !important;
+}
+
+.ReactModal__Content--before-close {
+  transform: translate(100%) !important;
+}
+
+.ReactModal__Body--open {
+  overflow: hidden;
+}
+
+.sidebar__header {
+  background-color: #1e352f; /* Premium Shroooms Forest Green */
+  height: 7rem;
+  letter-spacing: 1px;
+  color: #fff;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  font-family: "Outfit", sans-serif;
+}
+
+.sidebar__header h4 {
+  font-size: 1.6rem;
+}
+
+.sidebar__header p {
+  cursor: pointer;
+}
+
+.sidebarclose__btn {
+  cursor: pointer;
+  width: 2rem;
+}
+
+.sidebar__empty {
+  text-align: center;
+  padding-top: 51%;
+  padding-bottom: 99%;
+}
+
+.sidebar__empty h6 {
+  font-size: 2rem;
+}
+
+.sidebar__empty p {
+  font-size: 1.6rem;
+  padding-top: 1rem;
+  color: #555;
+}
+
+/* ------ Single cart item -------- */
+.sidebar__main {
+  overflow-y: auto;
+  height: calc(100vh - 16rem);
+  position: relative;
+  padding: 1rem 0;
+}
+
+.cart__item {
+  padding: 1.6rem 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.cart__item--img {
+  max-width: 20%;
+  width: 100%;
+  padding-right: 1.6rem;
+}
+
+.cart--item--details {
+  max-width: 100%;
+  width: 100%;
+}
+
+.cart--item--details h6,
+.cart--item--details p {
+  font-size: 1.6rem;
+  font-weight: 400;
+}
+
+.quantity__cart--ind {
+  padding-bottom: 0.8rem;
+}
+
+.item__cart {
+  font-size: 1.6rem;
+  padding: 0.3rem 0.7rem;
+}
+
+p.tertiary__counter {
+  font-size: 1.8rem;
+}
+
+.btnpurchasing__finalcart {
+  max-width: 95% !important;
+}
+
+.btnpurchasing__cart {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 16rem;
+}
+
+.multiplication__cart {
+  opacity: 0.8;
+}
+
+div.priceitem__total p {
+  font-weight: 700;
+  font-size: 1.6rem;
+}
+
+.sidebar__shopping {
+  position: absolute;
+  bottom: 1rem;
+  max-width: 95%;
+  width: 100%;
+  left: 1rem;
+  height: 7%;
+  text-align: center;
+  padding: 1.2rem 0;
+  font-size: 1.6rem;
+  color: #fff;
+  border-radius: 25px; /* Premium rounded pill style */
+  background-color: var(--frugivore-forest);
+  font-family: "Outfit", sans-serif;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar__shopping:hover {
+  background-color: var(--frugivore-green);
+  transform: translateY(-1px);
+}
+
+.sidebar__checkout {
+  text-align: left;
+  padding-left: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+p.final__cart--value {
+  padding-right: 2.4rem;
+}
+
+p.final__cart--value::after {
+  content: "\003E";
+  padding-left: 1rem;
+}
+
+.sidebar__checkout:hover {
+  background-color: var(--frugivore-green);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 441px) {
+  .cart__sidebar {
+    width: 100%;
+  }
+}

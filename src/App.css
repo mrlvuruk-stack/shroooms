@@ -1,0 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,700;1,700&family=Outfit:wght@400;500;600;700&display=swap');
+
+:root {
+  --frugivore-green: #a28a5c;      /* Shroooms Soft Gold */
+  --frugivore-forest: #5a4b31;     /* Shroooms Deep Gold/Bronze */
+  --frugivore-pink: #d96f7c;       /* Rose Foil Pink */
+  --frugivore-yellow: #dcae1d;     /* Accent Gold */
+  --frugivore-dark: #23221e;       /* Shroooms Deep Charcoal */
+  --frugivore-bg: #faf8f5;         /* Shroooms Warm Cream Background */
+  --frugivore-white: #ffffff;
+  --frugivore-gray: #7d776f;       /* Warm Gray */
+  --frugivore-border: #e6dfd1;     /* Warm Gold Border */
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+html {
+  font-size: 62.5%; /* 62.5% = 62.5/100 * 16 = 10px */
+  scroll-behavior: smooth;
+}
+body {
+  box-sizing: border-box;
+  font-size: 1.6rem;
+  font-family: "Outfit", "Inter", "Poppins", Helvetica, Arial, sans-serif;
+  height: 100vh;
+  background-color: var(--frugivore-bg);
+  color: var(--frugivore-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+#root {
+  height: 100%;
+}
+
+/* Basic Layout */
+.grid-container {
+  display: grid;
+  grid-template-areas:
+    "header"
+    "main"
+    "footer";
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+}
+header {
+  grid-area: header;
+  height: 14.5rem;
+}
+main {
+  grid-area: main;
+  padding-top: 14.5rem;
+  min-height: calc(100vh - 19.5rem);
+  padding-bottom: 2rem;
+}
+footer {
+  grid-area: footer;
+  background-color: var(--frugivore-dark);
+  color: var(--frugivore-white);
+  padding: 1.5rem 0;
+  text-align: center;
+}
+
+/* Reusable components */
+h1 {
+  font-size: 1.8rem;
+  padding: 1rem 0;
+}
+h2 {
+  font-size: 1.6rem;
+  padding: 1rem 0;
+}
+a {
+  text-decoration: none;
+}
+button {
+  outline: none;
+}
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+/* Icons */
+.fa {
+  color: var(--frugivore-dark);
+  font-size: 2.6rem;
+  font-weight: normal;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.fa-heart {
+  color: var(--frugivore-pink) !important;
+  font-weight: normal;
+}
+.fa-heart-o {
+  font-weight: normal;
+}
+.fa:hover {
+  color: var(--frugivore-forest);
+}
+.fa-heart:hover {
+  color: var(--frugivore-pink);
+}
+
+/* Header component */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.btn {
+  padding: 0.8rem 1.6rem;
+  margin-right: 3rem;
+  border-radius: 25px;
+}
+.row.center {
+  justify-content: center;
+}
+.row.top {
+  align-items: flex-start;
+}
+
+/* Image */
+img {
+  border-radius: 1rem;
+}
+
+img.medium {
+  max-width: 25rem;
+  width: 75%;
+  display: block;
+  margin: 0 auto;
+  height: 20rem;
+  object-fit: contain;
+}
+
+.btn,
+.btn--link,
+.btn--link-primary,
+.btn-base {
+  background: var(--frugivore-forest);
+  border-radius: 25px;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+  padding: 8px 18px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.btn:hover,
+.btn--link:hover,
+.btn--link-primary:hover,
+.btn-base:hover {
+  background: var(--frugivore-green);
+}
+
+@media (max-width: 823px) {
+  header {
+    height: 13rem;
+  }
+  main {
+    padding-top: 13rem;
+  }
+}
+@media (max-width: 600px) {
+  header {
+    height: 17.5rem;
+  }
+  main {
+    padding-top: 17.5rem;
+  }
+}

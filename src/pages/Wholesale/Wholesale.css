@@ -1,0 +1,449 @@
+/* Wholesale Container styling */
+.wholesale-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem 8rem 2rem;
+  font-family: "Outfit", sans-serif;
+  color: var(--frugivore-dark);
+}
+
+/* Inner capsule with blur */
+.wholesale-inner {
+  background-color: rgba(250, 247, 240, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--frugivore-border);
+  border-radius: 24px;
+  padding: 5rem 6rem;
+  box-shadow: 0 10px 40px rgba(89, 78, 59, 0.05);
+}
+
+/* Header section styling */
+.wholesale-header-section {
+  text-align: center;
+  margin-bottom: 5rem;
+}
+
+.wholesale-eyebrow {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--frugivore-green);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.wholesale-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--frugivore-dark);
+  line-height: 1.25;
+  margin-bottom: 1.5rem;
+}
+
+.wholesale-subtitle {
+  font-size: 1.6rem;
+  color: var(--frugivore-gray);
+  max-width: 700px;
+  margin: 0 auto 2.5rem auto;
+  line-height: 1.6;
+}
+
+.wholesale-divider {
+  width: 80px;
+  height: 2px;
+  background-color: var(--frugivore-green);
+  margin: 0 auto;
+  position: relative;
+}
+
+.wholesale-divider::after {
+  content: "";
+  display: block;
+  width: 12px;
+  height: 12px;
+  background-color: var(--frugivore-bg);
+  border: 2px solid var(--frugivore-green);
+  border-radius: 50%;
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Three benefits cards */
+.wholesale-benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+  margin-bottom: 6rem;
+}
+
+.benefit-card-wholesale {
+  background-color: var(--frugivore-white);
+  border: 1px solid var(--frugivore-border);
+  border-radius: 20px;
+  padding: 3.5rem 3rem;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(89, 78, 59, 0.02);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.benefit-card-wholesale:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(89, 78, 59, 0.08);
+}
+
+.benefit-icon-ws {
+  font-size: 3.6rem !important;
+  color: var(--frugivore-green);
+  margin-bottom: 2rem;
+  display: block;
+}
+
+.benefit-card-wholesale h3 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: var(--frugivore-dark);
+  margin-bottom: 1.2rem;
+}
+
+.benefit-card-wholesale p {
+  font-size: 1.4rem;
+  line-height: 1.6;
+  color: var(--frugivore-gray);
+  margin: 0;
+}
+
+/* Split content layout */
+.wholesale-split-section {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 6rem;
+  align-items: start;
+}
+
+/* Titles */
+.panel-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--frugivore-forest);
+  margin-bottom: 2.2rem;
+  letter-spacing: -0.2px;
+}
+
+/* Left side: Bulk catalog products list */
+.bulk-products-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.bulk-product-item {
+  background-color: var(--frugivore-white);
+  border: 1px solid var(--frugivore-border);
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 6px 15px rgba(89, 78, 59, 0.02);
+  transition: all 0.3s ease;
+}
+
+.bulk-product-item:hover {
+  box-shadow: 0 12px 25px rgba(89, 78, 59, 0.06);
+  border-color: var(--frugivore-green);
+}
+
+.bulk-product-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.bulk-product-header h4 {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--frugivore-dark);
+  margin: 0;
+}
+
+.bulk-suitability {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--frugivore-green);
+  border: 1px solid var(--frugivore-border);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  background-color: #faf7f0;
+  letter-spacing: 0.8px;
+}
+
+.bulk-desc {
+  font-size: 1.35rem;
+  line-height: 1.5;
+  color: var(--frugivore-gray);
+  margin-bottom: 1.5rem;
+  margin-top: 0;
+}
+
+.bulk-pack-info {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1.3rem;
+  color: var(--frugivore-forest);
+}
+
+.bulk-pack-info .fa {
+  font-size: 1.4rem !important;
+  color: var(--frugivore-green);
+}
+
+/* Right side: Partnership Inquiry Form card */
+.wholesale-form-card, .form-success-card {
+  background-color: var(--frugivore-white);
+  border: 1px solid var(--frugivore-border);
+  border-radius: 20px;
+  padding: 4rem;
+  box-shadow: 0 10px 30px rgba(89, 78, 59, 0.04);
+}
+
+.form-guide-text {
+  font-size: 1.45rem;
+  line-height: 1.6;
+  color: var(--frugivore-gray);
+  margin-bottom: 3.5rem;
+  margin-top: 0;
+}
+
+/* Form layouts */
+.ws-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2.2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.form-group label {
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--frugivore-dark);
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+  height: 4.4rem;
+  border-radius: 12px;
+  border: 1px solid var(--frugivore-border);
+  background-color: var(--frugivore-white);
+  padding: 0 1.6rem;
+  font-size: 1.4rem;
+  font-family: "Outfit", sans-serif;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.form-group textarea {
+  height: auto;
+  padding: 1.4rem 1.6rem;
+}
+
+.form-group input:focus, 
+.form-group select:focus, 
+.form-group textarea:focus {
+  border-color: var(--frugivore-green);
+  box-shadow: 0 4px 15px rgba(89, 78, 59, 0.05);
+}
+
+.form-row-ws {
+  display: flex;
+  gap: 2rem;
+}
+
+.form-row-ws .half-ws {
+  width: 50%;
+}
+
+/* Submit button */
+.ws-submit-btn {
+  background-color: var(--frugivore-forest);
+  border: none;
+  color: var(--frugivore-white);
+  padding: 1.4rem;
+  border-radius: 12px;
+  font-family: "Outfit", sans-serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(90, 75, 49, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.ws-submit-btn:hover {
+  background-color: var(--frugivore-green);
+  transform: translateY(-1px);
+}
+
+.ws-submit-btn .fa {
+  font-size: 1.3rem !important;
+  color: var(--frugivore-white);
+}
+
+/* Error Banner */
+.form-error-banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: #fdf2f2;
+  border: 1px solid #f8b4b4;
+  border-radius: 12px;
+  padding: 1.2rem 1.6rem;
+  margin-bottom: 2.5rem;
+  color: #c81e1e;
+  font-size: 1.35rem;
+}
+
+.form-error-banner .fa {
+  font-size: 1.6rem !important;
+  color: #c81e1e;
+}
+
+/* Success Card styling */
+.form-success-card {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.success-icon-wrapper {
+  width: 6.4rem;
+  height: 6.4rem;
+  border-radius: 50%;
+  background-color: #ecfdf5;
+  border: 2px solid #34d399;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+  color: #059669;
+}
+
+.success-icon-wrapper .fa {
+  font-size: 2.8rem !important;
+  color: #059669;
+}
+
+.form-success-card h3 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--frugivore-dark);
+  margin-bottom: 1.5rem;
+}
+
+.form-success-card p {
+  font-size: 1.45rem;
+  line-height: 1.6;
+  color: var(--frugivore-gray);
+  margin-bottom: 3rem;
+  max-width: 320px;
+}
+
+.submitted-summary {
+  background-color: #faf7f0;
+  border: 1px solid var(--frugivore-border);
+  border-radius: 12px;
+  padding: 2rem;
+  width: 100%;
+  margin-bottom: 3.5rem;
+  text-align: left;
+}
+
+.submitted-summary p {
+  font-size: 1.35rem;
+  margin: 0.6rem 0;
+  color: var(--frugivore-forest);
+  max-width: 100%;
+}
+
+.reset-form-btn {
+  background-color: var(--frugivore-white);
+  border: 1px solid var(--frugivore-border);
+  color: var(--frugivore-forest);
+  padding: 1.2rem 2.8rem;
+  border-radius: 30px;
+  font-family: "Outfit", sans-serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reset-form-btn:hover {
+  border-color: var(--frugivore-green);
+  background-color: #faf7f0;
+}
+
+/* Responsive queries */
+@media (max-width: 991px) {
+  .wholesale-inner {
+    padding: 4rem 3rem;
+  }
+  .wholesale-benefits-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    margin-bottom: 5rem;
+  }
+  .wholesale-split-section {
+    grid-template-columns: 1fr;
+    gap: 5rem;
+  }
+  .wholesale-title {
+    font-size: 3.2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .wholesale-container {
+    padding: 2rem 1rem 4rem 1rem;
+  }
+  .wholesale-inner {
+    padding: 3rem 1.5rem;
+    border-radius: 16px;
+  }
+  .wholesale-title {
+    font-size: 2.6rem;
+  }
+  .wholesale-form-card, .form-success-card {
+    padding: 2.5rem 2rem;
+    border-radius: 16px;
+  }
+  .form-row-ws {
+    flex-direction: column;
+    gap: 2.2rem;
+  }
+  .form-row-ws .half-ws {
+    width: 100%;
+  }
+}

@@ -84,10 +84,14 @@ const SignUpPage = () => {
       if (dbErr) throw dbErr;
 
       // 4. Send Email via nodemailer API
-      await axios.post("/api/send-email", {
-        email: email.toLowerCase(),
-        otp: generatedOtp
-      });
+      try {
+        await axios.post("/api/send-email", {
+          email: email.toLowerCase(),
+          otp: generatedOtp
+        });
+      } catch (mailErr) {
+        console.warn("Mail API failed but proceeding to OTP verification (Sandbox Mode):", mailErr.message);
+      }
 
       setStep(2);
     } catch (err) {

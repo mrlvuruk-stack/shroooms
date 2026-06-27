@@ -76,10 +76,14 @@ const SignInPage = () => {
         if (dbErr) throw dbErr;
 
         // 3. Send email via serverless function
-        await axios.post("/api/send-email", {
-          email: value.toLowerCase(),
-          otp: generatedOtp
-        });
+        try {
+          await axios.post("/api/send-email", {
+            email: value.toLowerCase(),
+            otp: generatedOtp
+          });
+        } catch (mailErr) {
+          console.warn("Mail API failed but proceeding to OTP verification (Sandbox Mode):", mailErr.message);
+        }
 
         setStep(2);
       } else {

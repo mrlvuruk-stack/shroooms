@@ -84,24 +84,7 @@ const SignUpPage = () => {
     }
   };
 
-  const handleGoogleSignUp = (e) => {
-    e.preventDefault();
-    // Simulate login as guest/test user
-    const mockGuest = {
-      _id: "mock_guest_id_202",
-      name: "Guest Explorer",
-      email: "guest@shroooms.in",
-      phone: "9999999999",
-      token: "mock_guest_token_99"
-    };
 
-    dispatch({
-      type: actionTypes.USER_SIGNIN_SUCCESS,
-      payload: mockGuest
-    });
-
-    localStorage.setItem("userInfo", JSON.stringify(mockGuest));
-  };
 
   return (
     <div className="signup-page-container">
@@ -201,16 +184,7 @@ const SignUpPage = () => {
                 {loading ? "Creating Account..." : "Create Account"}
               </button>
 
-              <div className="signup-divider">
-                <span>OR</span>
-              </div>
-
-              {/* Google signup option */}
-              <button onClick={handleGoogleSignUp} className="signup-google-btn">
-                <img src="/google_icon.png" alt="Google" className="signup-google-icon" onError={(e) => { e.target.style.display = 'none'; }} />
-                <span>Sign up with Google</span>
-              </button>
-            </form>
+              </form>
 
             <p className="signup-footer-text">
               Already have an account? <Link to="/signin" className="signup-link">Log in</Link>

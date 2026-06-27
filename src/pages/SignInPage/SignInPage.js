@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation, Link } from "react-router-dom";
 import axios from "axios";
-import { signin, signInTestUser } from "../../store/actions/actionCreators/signInAction";
+import { signin } from "../../store/actions/actionCreators/signInAction";
 import { supabase } from "../../supabase";
 import * as actionTypes from "../../store/actions/actionTypes/signInTypes";
 import "./SignInPage.css";
@@ -71,10 +71,7 @@ const SignInPage = () => {
     }
   };
 
-  const handleGoogleLogin = (e) => {
-    e.preventDefault();
-    dispatch(signInTestUser());
-  };
+
 
   const handleTruecallerLogin = async (e) => {
     e.preventDefault();
@@ -205,15 +202,6 @@ const SignInPage = () => {
                   >
                     <i className="fa fa-phone-square truecaller-icon"></i>
                     <span>{truecallerLoading ? "Verifying via Truecaller..." : "Verify with Truecaller"}</span>
-                  </button>
-
-                  <div className="signin-divider">
-                    <span>OR CONTINUE WITH</span>
-                  </div>
-
-                  <button onClick={handleGoogleLogin} className="signin-google-btn">
-                    <img src="/google_icon.png" alt="Google" className="google-icon" onError={(e) => { e.target.style.display = 'none'; }} />
-                    <span>Sign in as Guest</span>
                   </button>
                 </form>
 

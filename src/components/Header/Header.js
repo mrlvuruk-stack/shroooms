@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { sidebarOpen } from "../../store/actions/actionCreators/addToCartAction";
 import {
-  signInTestUser,
   userSignOut,
 } from "../../store/actions/actionCreators/signInAction";
 import { filteredProducts } from "../../store/actions/actionCreators/productsListAction";
@@ -143,7 +142,6 @@ const Header = (props) => {
                 </Link>
                 <div className="dropdown-content">
                   <Link to="/signin">Sign In</Link>
-                  <Link to="#" onClick={() => dispatch(signInTestUser())}>Guest Sign In</Link>
                 </div>
               </div>
             )}

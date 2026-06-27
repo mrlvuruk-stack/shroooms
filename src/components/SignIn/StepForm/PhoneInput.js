@@ -3,7 +3,6 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import {
   signInClose,
-  signInTestUser,
 } from "../../../store/actions/actionCreators/signInAction";
 
 const PhoneInput = ({ value, handleChange, hashHandleChange, nextStep }) => {
@@ -26,11 +25,7 @@ const PhoneInput = ({ value, handleChange, hashHandleChange, nextStep }) => {
     nextStep();
   };
 
-  const guestSignIn = (e) => {
-    e.preventDefault();
-    dispatch(signInTestUser());
-    dispatch(signInClose());
-  };
+
 
   return (
     <div className="sendotp">
@@ -72,9 +67,6 @@ const PhoneInput = ({ value, handleChange, hashHandleChange, nextStep }) => {
             disabled={value.phone.length < 10}
           >
             Next
-          </button>
-          <button className="login-button" onClick={guestSignIn}>
-            Guest Login
           </button>
         </form>
       </div>

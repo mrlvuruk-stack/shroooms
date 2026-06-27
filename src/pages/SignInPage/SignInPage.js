@@ -15,7 +15,8 @@ const SignInPage = () => {
   const userSignIn = useSelector((state) => state.userSignIn);
   const { userInfo, error: authError } = userSignIn;
 
-  const [phone, setPhone] = useState("");
+  const [identifier, setIdentifier] = useState(""); // Phone number or Email address
+  const [isEmailFlow, setIsEmailFlow] = useState(false);
   const [hash, setHash] = useState("");
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState(1);
@@ -31,22 +32,71 @@ const SignInPage = () => {
     }
   }, [userInfo, history, location]);
 
-  const handlePhoneSubmit = async (e) => {
+  const handleIdentifierSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    if (phone.length < 10) {
-      setError("Please enter a valid 10-digit phone number.");
+
+    const value = identifier.trim();
+    if (!value) {
+      setError("Please enter a phone number or email address.");
       return;
     }
 
+    const isEmail = value.includes("@");
+    setIsEmailFlow(isEmail);
+
     setLoading(true);
     try {
-      const res = await axios.post("/api/users/sendOTP", { phone });
-      setHash(res.data.hash);
-      setStep(2);
+      if (isEmail) {
+        // Validate Email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+          setError("Please enter a valid email address.");
+          setLoading(false);
+          return;
+        }
+
+        // 1. Generate 4-digit OTP code
+        const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+
+        // 2. Upsert OTP to Supabase 'email_otps' table
+        const expiresAt = new Date(Date.now() + 5 * 60 * 1000).toISOString(); // 5 minutes validity
+        const { error: dbErr } = await supabase.from("email_otps").upsert(
+          [
+            {
+              email: value.toLowerCase(),
+              otp: generatedOtp,
+              expires_at: expiresAt
+            }
+          ],
+          { onConflict: "email" }
+        );
+
+        if (dbErr) throw dbErr;
+
+        // 3. Send email via serverless function
+        await axios.post("/api/send-email", {
+          email: value.toLowerCase(),
+          otp: generatedOtp
+        });
+
+        setStep(2);
+      } else {
+        // Phone number flow
+        const cleanPhone = value.replace(/[^0-9]/g, "");
+        if (cleanPhone.length < 10) {
+          setError("Please enter a valid 10-digit phone number.");
+          setLoading(false);
+          return;
+        }
+
+        const res = await axios.post("/api/users/sendOTP", { phone: cleanPhone });
+        setHash(res.data.hash);
+        setStep(2);
+      }
     } catch (err) {
       console.error(err);
-      setError("Failed to send OTP. Please try again.");
+      setError("Failed to send verification code. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -62,16 +112,101 @@ const SignInPage = () => {
 
     setLoading(true);
     try {
-      dispatch(signin(phone, hash, otp));
+      if (isEmailFlow) {
+        const emailValue = identifier.trim().toLowerCase();
+
+        // 1. Fetch OTP record from Supabase 'email_otps' table
+        const { data, error: dbErr } = await supabase
+          .from("email_otps")
+          .select("*")
+          .eq("email", emailValue)
+          .single();
+
+        if (dbErr || !data) {
+          setError("Verification code expired or not found. Please request a new one.");
+          setLoading(false);
+          return;
+        }
+
+        // 2. Verify OTP code and expiration time
+        const now = new Date();
+        const expirationTime = new Date(data.expires_at);
+
+        if (data.otp !== otp) {
+          setError("Invalid code. Please try again.");
+          setLoading(false);
+          return;
+        }
+
+        if (now > expirationTime) {
+          setError("Verification code expired. Please request a new one.");
+          setLoading(false);
+          return;
+        }
+
+        // OTP is correct! Clear the row from db
+        await supabase.from("email_otps").delete().eq("email", emailValue);
+
+        // 3. Check if user already exists in 'users' table
+        const { data: userData, error: userErr } = await supabase
+          .from("users")
+          .select("*")
+          .eq("email", emailValue)
+          .single();
+
+        let loggedInUser;
+
+        if (!userErr && userData) {
+          // Existing User
+          loggedInUser = {
+            _id: userData.id || "usr_" + Date.now(),
+            name: userData.name || emailValue.split("@")[0],
+            email: userData.email,
+            phone: userData.phone || "",
+            token: "email_session_" + Date.now()
+          };
+        } else {
+          // New User signup/login on the fly
+          const mockPhone = "email_" + Date.now();
+          await supabase
+            .from("users")
+            .insert([
+              {
+                name: emailValue.split("@")[0],
+                email: emailValue,
+                phone: mockPhone,
+                wishlist: []
+              }
+            ]);
+
+          loggedInUser = {
+            _id: "usr_" + Date.now(),
+            name: emailValue.split("@")[0],
+            email: emailValue,
+            phone: "",
+            token: "email_session_" + Date.now()
+          };
+        }
+
+        // Log user in
+        dispatch({
+          type: actionTypes.USER_SIGNIN_SUCCESS,
+          payload: loggedInUser
+        });
+
+        localStorage.setItem("userInfo", JSON.stringify(loggedInUser));
+      } else {
+        // Phone flow: verify through standard Redux thunk
+        const cleanPhone = identifier.trim().replace(/[^0-9]/g, "");
+        dispatch(signin(cleanPhone, hash, otp));
+      }
     } catch (err) {
       console.error(err);
-      setError("Verification failed.");
+      setError("Verification failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
-
-
 
   const handleTruecallerLogin = async (e) => {
     e.preventDefault();
@@ -172,17 +307,15 @@ const SignInPage = () => {
 
                 {error && <div className="signin-err-msg">{error}</div>}
 
-                <form onSubmit={handlePhoneSubmit} className="signin-form">
+                <form onSubmit={handleIdentifierSubmit} className="signin-form">
                   <div className="signin-form-group">
-                    <label className="signin-label">PHONE NUMBER</label>
+                    <label className="signin-label">PHONE OR EMAIL ADDRESS</label>
                     <input
-                      type="tel"
-                      maxLength="10"
-                      pattern="[0-9]*"
-                      placeholder="e.g. 9826012345"
-                      value={phone}
+                      type="text"
+                      placeholder="e.g. 9826012345 or user@shrooom.in"
+                      value={identifier}
                       onChange={(e) => {
-                        setPhone(e.target.value.replace(/[^0-9]/g, ""));
+                        setIdentifier(e.target.value);
                         setError("");
                       }}
                       className="signin-line-input"
@@ -215,7 +348,7 @@ const SignInPage = () => {
               <>
                 <h2 className="signin-form-title font-serif">Verify Account</h2>
                 <p className="signin-form-desc">
-                  Enter the 4-digit code sent to +91 {phone}
+                  Enter the 4-digit code sent to {identifier}
                 </p>
 
                 {(error || authError) && (
@@ -246,9 +379,9 @@ const SignInPage = () => {
 
                   <div className="signin-verify-actions">
                     <span className="signin-back-link" onClick={() => setStep(1)}>
-                      ← Change Number
+                      ← Change Details
                     </span>
-                    <span className="signin-resend-link" onClick={handlePhoneSubmit}>
+                    <span className="signin-resend-link" onClick={handleIdentifierSubmit}>
                       Resend Code
                     </span>
                   </div>

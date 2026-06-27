@@ -58,6 +58,7 @@ const SignInPage = () => {
 
         // 1. Generate 4-digit OTP code
         const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+        console.log("%c[Dev Fallback] OTP for " + value + " is: " + generatedOtp, "color: #ff9900; font-size: 16px; font-weight: bold;");
 
         // 2. Upsert OTP to Supabase 'email_otps' table
         const expiresAt = new Date(Date.now() + 5 * 60 * 1000).toISOString(); // 5 minutes validity

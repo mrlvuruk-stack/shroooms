@@ -90,8 +90,8 @@ const SignUpPage = () => {
 
       setStep(2);
     } catch (err) {
-      console.error(err);
-      setError("Failed to register. Please try again.");
+      console.error("Error during signup send:", err);
+      setError("Failed to register: " + (err.response?.data?.message || err.message || "Please try again."));
     } finally {
       setLoading(false);
     }

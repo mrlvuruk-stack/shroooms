@@ -95,8 +95,8 @@ const SignInPage = () => {
         setStep(2);
       }
     } catch (err) {
-      console.error(err);
-      setError("Failed to send verification code. Please try again.");
+      console.error("Error sending verification code:", err);
+      setError("Failed to send verification code: " + (err.response?.data?.message || err.message || "Please try again."));
     } finally {
       setLoading(false);
     }

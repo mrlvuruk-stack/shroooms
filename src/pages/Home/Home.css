@@ -162,8 +162,9 @@
   text-transform: none;
   color: #5c3a35;
   letter-spacing: 0;
-  display: inline-block;
-  margin-top: 0.5rem;
+  display: block;
+  margin-top: 1.8rem;
+  line-height: 1.1;
   animation: fadeLeft 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
   animation-delay: 0.38s;
   /* Shimmer on first load */

@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation, Link } from "react-router-dom";
 import axios from "axios";
 import { signin, signInTestUser } from "../../store/actions/actionCreators/signInAction";
+import { supabase } from "../../supabase";
+import * as actionTypes from "../../store/actions/actionTypes/signInTypes";
 import "./SignInPage.css";
 
 const SignInPage = () => {
@@ -19,6 +21,7 @@ const SignInPage = () => {
   const [step, setStep] = useState(1);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [truecallerLoading, setTruecallerLoading] = useState(false);
 
   // Redirect if already logged in
   useEffect(() => {
@@ -73,6 +76,74 @@ const SignInPage = () => {
     dispatch(signInTestUser());
   };
 
+  const handleTruecallerLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+    
+    // Detect mobile device
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (!isMobile) {
+      setError("Truecaller One-Tap is only supported on mobile devices with the Truecaller app installed.");
+      return;
+    }
+
+    setTruecallerLoading(true);
+    const reqId = "tc_" + Math.random().toString(36).substring(2) + Date.now();
+    const appKey = "N0lIN65efea9e6a9a4953881ce21d74c8f24e";
+    const appName = "shroooms";
+    
+    sessionStorage.setItem("tc_request_id", reqId);
+
+    // Open Truecaller app using deep link scheme
+    const deepLink = `truecallersdk://truesdk/open_app?request_id=${reqId}&app_key=${appKey}&app_name=${encodeURIComponent(appName)}`;
+    window.location.href = deepLink;
+
+    // Start polling the Supabase 'truecaller_sessions' table for callback status
+    let attempts = 0;
+    const interval = setInterval(async () => {
+      attempts++;
+      if (attempts > 12) { // 30 seconds timeout limit
+        clearInterval(interval);
+        setTruecallerLoading(false);
+        setError("Truecaller verification timed out. Please try again or use Phone OTP.");
+        return;
+      }
+
+      try {
+        const { data, error: dbErr } = await supabase
+          .from("truecaller_sessions")
+          .select("*")
+          .eq("request_id", reqId)
+          .single();
+
+        if (!dbErr && data) {
+          clearInterval(interval);
+          setTruecallerLoading(false);
+
+          // Clean up database row in Supabase
+          await supabase.from("truecaller_sessions").delete().eq("request_id", reqId);
+
+          const loggedInUser = {
+            _id: "usr_" + Date.now(),
+            name: data.user_data?.name || "Truecaller User",
+            phone: data.user_data?.phone || "",
+            email: data.user_data?.email || "",
+            token: data.token
+          };
+
+          dispatch({
+            type: actionTypes.USER_SIGNIN_SUCCESS,
+            payload: loggedInUser
+          });
+
+          localStorage.setItem("userInfo", JSON.stringify(loggedInUser));
+        }
+      } catch (pollErr) {
+        console.error("Truecaller polling error:", pollErr);
+      }
+    }, 2500);
+  };
+
   return (
     <div className="signin-page-container">
       <div className="signin-split-wrapper">
@@ -122,8 +193,18 @@ const SignInPage = () => {
                     />
                   </div>
 
-                  <button type="submit" className="signin-primary-btn" disabled={loading}>
+                  <button type="submit" className="signin-primary-btn" disabled={loading || truecallerLoading}>
                     {loading ? "Sending OTP..." : "Get OTP Code"}
+                  </button>
+
+                  {/* Truecaller verification option */}
+                  <button 
+                    onClick={handleTruecallerLogin} 
+                    className="signin-truecaller-btn" 
+                    disabled={loading || truecallerLoading}
+                  >
+                    <i className="fa fa-phone-square truecaller-icon"></i>
+                    <span>{truecallerLoading ? "Verifying via Truecaller..." : "Verify with Truecaller"}</span>
                   </button>
 
                   <div className="signin-divider">

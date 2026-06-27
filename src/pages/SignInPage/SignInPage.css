@@ -200,6 +200,43 @@
   cursor: not-allowed;
 }
 
+/* Truecaller Button */
+.signin-truecaller-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background-color: #0087ff;
+  border: none;
+  color: #fff;
+  border-radius: 0.6rem;
+  padding: 1.15rem;
+  font-family: inherit;
+  font-size: 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 135, 255, 0.15);
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.signin-truecaller-btn:hover {
+  background-color: #0074db;
+}
+
+.signin-truecaller-btn:active {
+  transform: translateY(1px);
+}
+
+.signin-truecaller-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.truecaller-icon {
+  font-size: 1.6rem;
+}
+
 /* Divider styling */
 .signin-divider {
   display: flex;

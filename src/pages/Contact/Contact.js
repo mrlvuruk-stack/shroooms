@@ -189,16 +189,16 @@ const Contact = () => {
             <div className="contact-socials-wrapper">
               <h4>Follow the Mycelium</h4>
               <div className="social-links-row">
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-btn">
+                <a href="https://www.instagram.com/shroooms.in/" target="_blank" rel="noopener noreferrer" className="social-btn">
                   <i className="fa fa-instagram"></i>
                 </a>
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-btn">
+                <a href="https://www.facebook.com/profile.php?id=61591560354551" target="_blank" rel="noopener noreferrer" className="social-btn">
                   <i className="fa fa-facebook"></i>
                 </a>
-                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-btn">
+                <a href="https://x.com/SHROOOM23" target="_blank" rel="noopener noreferrer" className="social-btn">
                   <i className="fa fa-twitter"></i>
                 </a>
-                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="social-btn">
+                <a href="https://www.youtube.com/channel/UC2mzbw-IGm995O1QJfGEccA" target="_blank" rel="noopener noreferrer" className="social-btn">
                   <i className="fa fa-youtube-play"></i>
                 </a>
               </div>

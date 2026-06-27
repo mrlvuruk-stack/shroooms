@@ -29,17 +29,17 @@ export const Footer = () => {
             Nourishing lives with pure, premium and sustainably grown mushrooms.
           </p>
           <div className="footer-social-row">
-            <a href="https://instagram.com" target="_blank" rel="noreferrer" className="social-gold-circle">
+            <a href="https://www.instagram.com/shroooms.in/" target="_blank" rel="noreferrer" className="social-gold-circle">
               <i className="fa fa-instagram"></i>
             </a>
-            <a href="https://facebook.com" target="_blank" rel="noreferrer" className="social-gold-circle">
+            <a href="https://www.facebook.com/profile.php?id=61591560354551" target="_blank" rel="noreferrer" className="social-gold-circle">
               <i className="fa fa-facebook"></i>
             </a>
-            <a href="https://youtube.com" target="_blank" rel="noreferrer" className="social-gold-circle">
+            <a href="https://www.youtube.com/channel/UC2mzbw-IGm995O1QJfGEccA" target="_blank" rel="noreferrer" className="social-gold-circle">
               <i className="fa fa-youtube-play"></i>
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="social-gold-circle">
-              <i className="fa fa-linkedin"></i>
+            <a href="https://x.com/SHROOOM23" target="_blank" rel="noreferrer" className="social-gold-circle">
+              <i className="fa fa-twitter"></i>
             </a>
             <a href="https://wa.me/919238909365" target="_blank" rel="noreferrer" className="social-gold-circle">
               <i className="fa fa-whatsapp"></i>

@@ -252,9 +252,14 @@ a.brand {
   padding: 0 2px;
 }
 
-/* Adjust Main padding for curved header */
 main {
-  padding-top: 11.5rem !important;
+  padding-top: 11.5rem;
+}
+
+@media (max-width: 600px) {
+  main {
+    padding-top: 17.5rem !important;
+  }
 }
 
 /* Header checkout page adjustment */

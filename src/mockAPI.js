@@ -525,6 +525,8 @@ axios.interceptors.request.use(async (config) => {
     await delay(100);
     config.adapter = async () => {
       let localOrders = JSON.parse(localStorage.getItem("mock_orders") || "[]");
+      const userInfo = JSON.parse(localStorage.getItem("userInfo") || "null");
+
       if (isSupabaseConfigured && supabase) {
         try {
           const { data, error } = await supabase
@@ -539,11 +541,25 @@ axios.interceptors.request.use(async (config) => {
               createdAt: row.created_at
             };
           });
-          localStorage.setItem("mock_orders", JSON.stringify(localOrders));
         } catch (err) {
           console.error("Failed to fetch orders from Supabase:", err);
         }
       }
+
+      // Filter orders to only return the current logged-in user's orders
+      if (userInfo) {
+        localOrders = localOrders.filter(o => {
+          const emailMatch = userInfo.email && o.customerAddress?.email?.toLowerCase() === userInfo.email.toLowerCase();
+          const phoneMatch = userInfo.phone && o.customerAddress?.phone === userInfo.phone;
+          return emailMatch || phoneMatch;
+        });
+      } else {
+        localOrders = [];
+      }
+
+      // Save user's filtered orders in local mock storage
+      localStorage.setItem("mock_orders", JSON.stringify(localOrders));
+
       return Promise.resolve({
         data: localOrders,
         status: 200,

@@ -25,6 +25,7 @@ const SignUpPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [sandboxOtp, setSandboxOtp] = useState(""); // For displaying OTP on screen in sandbox mode
 
   // Redirect if already logged in
   useEffect(() => {
@@ -37,6 +38,7 @@ const SignUpPage = () => {
   const handleSignUp = async (e) => {
     e.preventDefault();
     setError("");
+    setSandboxOtp("");
     if (!fullName || !email || !password) {
       setError("Please fill in all fields.");
       return;
@@ -85,17 +87,22 @@ const SignUpPage = () => {
 
       // 4. Send Email via nodemailer API
       try {
-        await axios.post("/api/send-email", {
+        const res = await axios.post("/api/send-email", {
           email: email.toLowerCase(),
           otp: generatedOtp
         });
+        
+        if (res.data && res.data.sandbox) {
+          setSandboxOtp(generatedOtp);
+        }
       } catch (mailErr) {
         console.warn("Mail API failed but proceeding to OTP verification (Sandbox Mode):", mailErr.message);
+        setSandboxOtp(generatedOtp); // Fallback to displaying on screen
       }
 
       setStep(2);
     } catch (err) {
-      console.error("Error during signup send:", err);
+      console.error(err);
       setError("Failed to register: " + (err.response?.data?.message || err.message || "Please try again."));
     } finally {
       setLoading(false);
@@ -301,6 +308,15 @@ const SignUpPage = () => {
                 <p className="signup-form-desc">
                   Enter the 4-digit code sent to {email}
                 </p>
+
+                {sandboxOtp && (
+                  <div className="signup-sandbox-alert" style={{ backgroundColor: "#fdf5e6", border: "1px dashed #d2691e", padding: "1.1rem", borderRadius: "0.6rem", margin: "1.2rem 0", color: "#8b4513", textAlign: "left", fontSize: "1.25rem" }}>
+                    <strong>Sandbox Testing Active:</strong> Use code <code style={{ backgroundColor: "#f5f5dc", border: "1px solid #d3d3d3", padding: "0.1rem 0.5rem", borderRadius: "0.3rem", fontFamily: "monospace", fontWeight: "bold", fontSize: "1.35rem", color: "#b22222" }}>{sandboxOtp}</code> to verify.
+                    <div style={{ fontSize: "1.1rem", marginTop: "0.5rem", color: "#666" }}>
+                      Note: Real emails will be sent once SMTP credentials are set up in Vercel.
+                    </div>
+                  </div>
+                )}
 
                 {error && <div className="signup-err-msg">{error}</div>}
                 {success && <div className="signup-success-msg">Email Verified! Setting up your space...</div>}

@@ -23,6 +23,7 @@ const SignInPage = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [truecallerLoading, setTruecallerLoading] = useState(false);
+  const [sandboxOtp, setSandboxOtp] = useState(""); // For displaying OTP on screen in sandbox mode
 
   // Redirect if already logged in
   useEffect(() => {
@@ -35,6 +36,7 @@ const SignInPage = () => {
   const handleIdentifierSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setSandboxOtp("");
 
     const value = identifier.trim();
     if (!value) {
@@ -75,14 +77,19 @@ const SignInPage = () => {
 
         if (dbErr) throw dbErr;
 
-        // 3. Send email via serverless function
+        // 3. Send email via serverless function (and handle fallback dynamically)
         try {
-          await axios.post("/api/send-email", {
+          const res = await axios.post("/api/send-email", {
             email: value.toLowerCase(),
             otp: generatedOtp
           });
+          
+          if (res.data && res.data.sandbox) {
+            setSandboxOtp(generatedOtp);
+          }
         } catch (mailErr) {
           console.warn("Mail API failed but proceeding to OTP verification (Sandbox Mode):", mailErr.message);
+          setSandboxOtp(generatedOtp); // Fallback to displaying on screen
         }
 
         setStep(2);
@@ -355,6 +362,15 @@ const SignInPage = () => {
                 <p className="signin-form-desc">
                   Enter the 4-digit code sent to {identifier}
                 </p>
+
+                {sandboxOtp && (
+                  <div className="signin-sandbox-alert">
+                    <strong>Sandbox Testing Active:</strong> Use code <code>{sandboxOtp}</code> to verify.
+                    <div style={{ fontSize: "1.1rem", marginTop: "0.5rem", color: "#666" }}>
+                      Note: Real emails will be sent once SMTP credentials are set up in Vercel.
+                    </div>
+                  </div>
+                )}
 
                 {(error || authError) && (
                   <div className="signin-err-msg">{error || authError}</div>

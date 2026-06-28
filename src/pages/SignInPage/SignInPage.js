@@ -238,9 +238,18 @@ const SignInPage = () => {
     
     sessionStorage.setItem("tc_request_id", reqId);
 
-    // Open Truecaller app using deep link scheme
-    const deepLink = `truecallersdk://truesdk/open_app?request_id=${reqId}&app_key=${appKey}&app_name=${encodeURIComponent(appName)}`;
+    // Open Truecaller app using the correct web_verify deep link scheme
+    const deepLink = `truecallersdk://truesdk/web_verify?type=btmsheet&requestNonce=${reqId}&partnerKey=${appKey}&partnerName=${encodeURIComponent(appName)}&lang=en`;
     window.location.href = deepLink;
+
+    // Fallback check: if the document still has focus after 2.5 seconds, the Truecaller app failed to launch
+    const focusTimeout = setTimeout(() => {
+      if (document.hasFocus()) {
+        clearInterval(interval);
+        setTruecallerLoading(false);
+        setError("Truecaller app not detected or failed to open. Please use Phone or Email OTP instead.");
+      }
+    }, 2500);
 
     // Start polling the Supabase 'truecaller_sessions' table for callback status
     let attempts = 0;
@@ -248,8 +257,9 @@ const SignInPage = () => {
       attempts++;
       if (attempts > 12) { // 30 seconds timeout limit
         clearInterval(interval);
+        clearTimeout(focusTimeout);
         setTruecallerLoading(false);
-        setError("Truecaller verification timed out. Please try again or use Phone OTP.");
+        setError("Truecaller verification timed out. Please try again or use Phone/Email OTP.");
         return;
       }
 
@@ -262,6 +272,7 @@ const SignInPage = () => {
 
         if (!dbErr && data) {
           clearInterval(interval);
+          clearTimeout(focusTimeout);
           setTruecallerLoading(false);
 
           // Clean up database row in Supabase

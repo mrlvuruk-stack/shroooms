@@ -395,12 +395,25 @@ const Admin = () => {
           if (!orderErr && dbOrders) {
             const formattedOrders = dbOrders.map(o => {
               const orderDetails = o.order_data || {};
+              const customerAddress = orderDetails.customerAddress || {};
+              const derivedName = customerAddress.userName || orderDetails.customerDetails?.fullName || "Guest";
+              const derivedAddress = [
+                customerAddress.flatNumber,
+                customerAddress.streetName,
+                customerAddress.locality,
+                customerAddress.city,
+                customerAddress.state
+              ].filter(Boolean).join(", ") || orderDetails.customerDetails?.address || "—";
+
               return {
                 ...orderDetails,
                 _id: o._id,
                 created_at: o.created_at,
                 createdAt: orderDetails.createdAt || o.created_at,
-                customerDetails: orderDetails.customerDetails || {},
+                customerDetails: {
+                  fullName: derivedName,
+                  address: derivedAddress
+                },
                 orderItems: orderDetails.orderItems || [],
                 totalPrice: orderDetails.totalPrice || 0,
                 status: orderDetails.status || o.status || 'Paid'

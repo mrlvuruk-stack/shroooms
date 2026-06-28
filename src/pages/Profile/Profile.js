@@ -200,24 +200,28 @@ const Profile = () => {
     const lowerStatus = (status || "").toLowerCase();
     const steps = [
       { key: "placed", title: "Order Placed", desc: "We have received your order.", icon: "✅", done: true, active: false },
-      { key: "packing", title: "Processing & Packing", desc: "Preparing fresh forest harvest.", icon: "📦", done: false, active: false },
-      { key: "shipping", title: "Out for Delivery", desc: "Harvest is on the way to you.", icon: "🚚", done: false, active: false },
+      { key: "processing", title: "Processing & Packing", desc: "Preparing fresh forest harvest.", icon: "📦", done: false, active: false },
+      { key: "shipped", title: "Out for Delivery / Shipped", desc: "Harvest is on the way to you.", icon: "🚚", done: false, active: false },
       { key: "delivered", title: "Delivered", desc: "Enjoy your fresh gourmet shroooms!", icon: "🏠", done: false, active: false }
     ];
 
-    if (lowerStatus === "packing") {
+    if (lowerStatus === "processing" || lowerStatus === "packing") {
+      steps[0].done = true;
       steps[1].done = true;
       steps[1].active = true;
-    } else if (lowerStatus === "out for delivery" || lowerStatus === "shipping") {
+    } else if (lowerStatus === "shipped" || lowerStatus === "out for delivery" || lowerStatus === "shipping") {
+      steps[0].done = true;
       steps[1].done = true;
       steps[2].done = true;
       steps[2].active = true;
     } else if (lowerStatus === "delivered") {
+      steps[0].done = true;
       steps[1].done = true;
       steps[2].done = true;
       steps[3].done = true;
     } else {
-      // Default: Paid / Processing
+      // Default: Paid
+      steps[0].done = true;
       steps[0].active = true;
     }
 

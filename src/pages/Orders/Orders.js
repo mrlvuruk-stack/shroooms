@@ -29,6 +29,7 @@ const Orders = () => {
           <thead>
             <tr>
               <th>Order ID</th>
+              <th>Items Ordered</th>
               <th>Billing Cost</th>
               <th>Tax</th>
               <th>Shipping Cost</th>
@@ -42,6 +43,13 @@ const Orders = () => {
               orderHistory.map((order) => (
                 <tr key={order._id}>
                   <td>{order._id.toUpperCase()}</td>
+                  <td>
+                    {order.orderItems?.map((item, idx) => (
+                      <div key={idx} style={{ fontSize: "1.2rem", padding: "0.2rem 0" }}>
+                        • {item.name} × {item.qty}
+                      </div>
+                    ))}
+                  </td>
                   <td>&#8377;{order.itemsPrice}</td>
                   <td>&#8377;{order.taxPrice}</td>
                   <td>

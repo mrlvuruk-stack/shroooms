@@ -130,7 +130,8 @@ const Header = (props) => {
                 </Link>
                 <div className="dropdown-content">
                   <span className="dropdown-user-welcome" style={{ padding: "0.8rem 1.6rem", display: "block", fontSize: "1.2rem", color: "var(--frugivore-gray)", borderBottom: "1px solid var(--frugivore-border)" }}>Hi, {user ? user[0] : "User"}</span>
-                  <Link to="/orders">Orders</Link>
+                  <Link to="/profile">My Profile</Link>
+                  <Link to="/orders">My Orders</Link>
                   <Link to="/wishlist">Wishlist</Link>
                   <Link to="#" onClick={() => dispatch(userSignOut())}>Sign Out</Link>
                 </div>

@@ -1528,10 +1528,10 @@ const Admin = () => {
                               <td><span className="adm-mono">{o._id?.substr(0,8)}…</span></td>
                               <td>
                                 <b>{o.customerDetails?.fullName || "Guest"}</b><br />
-                                <span style={{ fontSize:"1.2rem", color:"rgba(255,255,255,0.3)" }}>{o.customerDetails?.address || "—"}</span>
+                                <span style={{ fontSize:"1.2rem", color:"rgba(0,0,0,0.65)" }}>{o.customerDetails?.address || "—"}</span>
                               </td>
                               <td style={{ fontSize:"1.25rem" }}>{o.orderItems?.map((i,n) => <div key={n}>• {i.name} ×{i.qty}</div>)}</td>
-                              <td><b style={{ color:"#e0c98a" }}>₹{o.totalPrice}</b></td>
+                              <td><b style={{ color:"#5a1827" }}>₹{o.totalPrice}</b></td>
                               <td>{new Date(o.createdAt).toLocaleDateString("en-IN")}</td>
                               <td>
                                 <select

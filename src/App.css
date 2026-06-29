@@ -183,3 +183,39 @@ img.medium {
     padding-top: 17.5rem;
   }
 }
+
+/* Nature Background Side Decorations */
+.global-nature-decor {
+  position: fixed;
+  top: 18rem;
+  width: 260px;
+  height: 600px;
+  pointer-events: none;
+  z-index: 1;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.global-nature-decor.left-decor {
+  left: 0;
+  transform: translateX(-40px);
+}
+
+.global-nature-decor.right-decor {
+  right: 0;
+  transform: translateX(40px);
+}
+
+@media (max-width: 1450px) {
+  .global-nature-decor.left-decor {
+    transform: translateX(-120px) scale(0.9);
+  }
+  .global-nature-decor.right-decor {
+    transform: translateX(120px) scale(0.9);
+  }
+}
+
+@media (max-width: 1220px) {
+  .global-nature-decor {
+    display: none; /* Hide on smaller screens to prevent overlapping content */
+  }
+}

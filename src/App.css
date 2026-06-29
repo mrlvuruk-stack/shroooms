@@ -39,6 +39,7 @@ body {
 
 /* Basic Layout */
 .grid-container {
+  position: relative;
   display: grid;
   grid-template-areas:
     "header"
@@ -186,7 +187,7 @@ img.medium {
 
 /* Nature Background Side Decorations */
 .global-nature-decor {
-  position: fixed;
+  position: absolute;
   top: 18rem;
   width: 260px;
   height: 600px;

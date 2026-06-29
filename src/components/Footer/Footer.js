@@ -1,5 +1,6 @@
 /* u:\VeggiesShop-main\src\components\Footer\Footer.js */
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import "./Footer.css";
 
 export const Footer = () => {
@@ -257,6 +258,17 @@ export const Footer = () => {
           <span className="designer-text">
             Designed with <span className="designer-stamp-icon">🍄</span> in India.
           </span>
+        </div>
+
+        {/* E-E-A-T POLICY LINKS */}
+        <div className="footer-policy-row">
+          <Link to="/privacy-policy" className="footer-policy-link">Privacy Policy</Link>
+          <span className="footer-policy-dot">•</span>
+          <Link to="/refund-policy" className="footer-policy-link">Refund & Cancellation</Link>
+          <span className="footer-policy-dot">•</span>
+          <Link to="/shipping-policy" className="footer-policy-link">Shipping & Delivery</Link>
+          <span className="footer-policy-dot">•</span>
+          <Link to="/terms" className="footer-policy-link">Terms of Service</Link>
         </div>
 
         {/* DECORATIVE GOLD LEAF ON RIGHT */}

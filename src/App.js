@@ -24,6 +24,7 @@ import Admin from "./pages/Admin/Admin";
 import SignInPage from "./pages/SignInPage/SignInPage";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import Profile from "./pages/Profile/Profile";
+import Policies from "./pages/Policies/Policies";
 
 const App = () => {
   const location = useLocation();
@@ -101,6 +102,10 @@ const App = () => {
           <PrivateRoute path="/orders" component={Orders} />
           <PrivateRoute path="/wishlist" component={Wishlist} />
           <PrivateRoute path="/profile" component={Profile} />
+          <Route path="/privacy-policy" render={() => <Policies type="privacy" />} />
+          <Route path="/refund-policy" render={() => <Policies type="refund" />} />
+          <Route path="/shipping-policy" render={() => <Policies type="shipping" />} />
+          <Route path="/terms" render={() => <Policies type="terms" />} />
           <Route component={BadRequest} />
         </Switch>
       </main>

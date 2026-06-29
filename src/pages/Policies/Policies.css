@@ -1,0 +1,131 @@
+/* ============================================================
+   SHROOOMS — Company Policies Screen CSS (Google E-E-A-T)
+   ============================================================ */
+
+.policy-page-container {
+  max-width: 900px;
+  margin: 18rem auto 6rem auto; /* Header spacing */
+  padding: 0 2rem;
+  font-family: inherit;
+  color: #1b2d1f;
+}
+
+.policy-inner-box {
+  background-color: rgba(250, 247, 240, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--frugivore-border);
+  border-radius: 32px;
+  padding: 5rem 6rem;
+  box-shadow: 0 15px 45px rgba(89, 78, 59, 0.04);
+}
+
+.policy-header-box {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.policy-eyebrow {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #a28a5c;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.policy-title {
+  font-size: 3.6rem;
+  font-weight: 700;
+  color: #5a4b31;
+  line-height: 1.3;
+  margin: 0 0 1.5rem 0;
+}
+
+.policy-header-divider {
+  width: 60px;
+  height: 2px;
+  background-color: #a28a5c;
+  margin: 0 auto 1.5rem auto;
+}
+
+.policy-effective-date {
+  font-size: 1.2rem;
+  color: #7d776f;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Text Blocks */
+.policy-text-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  border-bottom: 1px solid var(--frugivore-border);
+  padding-bottom: 4rem;
+  margin-bottom: 3rem;
+}
+
+.policy-text-block h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #5a4b31;
+  padding: 0;
+  margin: 0;
+}
+
+.policy-text-block p {
+  font-size: 1.5rem;
+  line-height: 1.8;
+  color: #7d776f;
+  margin: 0;
+}
+
+.policy-text-block b {
+  color: #5a4b31;
+}
+
+/* Inner Footer */
+.policy-inner-footer {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  font-size: 1.3rem;
+  color: #7d776f;
+  line-height: 1.5;
+}
+
+.policy-inner-footer a {
+  color: #a28a5c;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.policy-inner-footer a:hover {
+  color: #5a4b31;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .policy-inner-box {
+    padding: 4rem 3rem;
+    border-radius: 20px;
+  }
+  .policy-title {
+    font-size: 2.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .policy-page-container {
+    margin-top: 19rem;
+    padding: 0 1rem;
+  }
+  .policy-inner-box {
+    padding: 3rem 1.5rem;
+  }
+  .policy-title {
+    font-size: 2.4rem;
+  }
+}

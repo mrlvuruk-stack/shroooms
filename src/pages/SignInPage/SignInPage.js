@@ -316,9 +316,7 @@ const SignInPage = () => {
 
         {/* Right Side: Form Panel */}
         <div className="signin-right-form-panel">
-          {/* Subtle watermarks */}
-          <div className="signin-watermark top-right" style={{ backgroundImage: "url('/shroooms_bg_decor.png')" }}></div>
-          <div className="signin-watermark bottom-left" style={{ backgroundImage: "url('/shroooms_bg_decor.png')" }}></div>
+
 
           <div className="signin-form-box animate__animated animate__fadeIn">
             {step === 1 && (

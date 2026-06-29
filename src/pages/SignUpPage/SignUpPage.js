@@ -207,9 +207,7 @@ const SignUpPage = () => {
 
         {/* Right Side: Form Panel */}
         <div className="signup-right-form-panel">
-          {/* Subtle watermarks */}
-          <div className="signup-watermark top-right" style={{ backgroundImage: "url('/shroooms_bg_decor.png')" }}></div>
-          <div className="signup-watermark bottom-left" style={{ backgroundImage: "url('/shroooms_bg_decor.png')" }}></div>
+
 
           <div className="signup-form-box animate__animated animate__fadeIn">
             

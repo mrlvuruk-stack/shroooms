@@ -160,32 +160,7 @@ const Recipes = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedRecipe, setExpandedRecipe] = useState(null);
 
-  // Apply botanical watermark on mount and clean up on unmount
-  useEffect(() => {
-    const handleBgResize = () => {
-      if (window.innerWidth > 1200) {
-        document.body.style.backgroundImage = "url('/shroooms_bg_decor.png'), url('/shroooms_bg_decor.png')";
-        document.body.style.backgroundPosition = "left -150px top 120px, right -150px top 120px";
-        document.body.style.backgroundRepeat = "no-repeat, no-repeat";
-        document.body.style.backgroundSize = "450px auto, 450px auto";
-        document.body.style.backgroundAttachment = "fixed, fixed";
-      } else {
-        document.body.style.backgroundImage = "";
-      }
-    };
 
-    handleBgResize();
-    window.addEventListener("resize", handleBgResize);
-
-    return () => {
-      window.removeEventListener("resize", handleBgResize);
-      document.body.style.backgroundImage = "";
-      document.body.style.backgroundPosition = "";
-      document.body.style.backgroundRepeat = "";
-      document.body.style.backgroundSize = "";
-      document.body.style.backgroundAttachment = "";
-    };
-  }, []);
 
   const toggleRecipeExpand = (id) => {
     if (expandedRecipe === id) {

@@ -1,0 +1,9 @@
+- [x] Update `public/index.html` with target keywords, SEO description, Open Graph/Twitter tags, and JSON-LD schema.
+- [x] Add dynamic document title & description updates in `Home.js`.
+- [x] Add dynamic document title & description updates in `OurStory.js`.
+- [x] Add dynamic document title & description updates in `HealthBenefits.js`.
+- [x] Add dynamic document title & description updates in `Recipes.js`.
+- [x] Add dynamic document title & description updates in `Wholesale.js`.
+- [x] Add dynamic document title & description updates in `Blog.js`.
+- [x] Add dynamic document title & description updates in `Contact.js`.
+- [x] Run build test to verify zero compilation errors.

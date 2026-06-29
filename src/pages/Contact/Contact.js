@@ -43,6 +43,11 @@ const Contact = () => {
       }
     };
     fetchContact();
+    document.title = "Contact Shroooms | Organic Mushroom Farm Indore";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute("content", "Get in touch with Shroooms farm. Address, phone number, email, and wholesale inquiry form. Find where to buy organic mushrooms in Indore.");
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

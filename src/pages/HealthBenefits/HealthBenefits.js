@@ -98,7 +98,13 @@ const MUSHROOM_BENEFITS = [
 const HealthBenefits = () => {
   const [activeFilter, setActiveFilter] = useState("all");
 
-
+  useEffect(() => {
+    document.title = "Health Benefits of Gourmet Mushrooms | Cordyceps, Lion's Mane – Shroooms";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute("content", "Explore the incredible medicinal and health benefits of Lion's Mane, Cordyceps, Reishi, and Oyster mushrooms for focus, memory, and immunity.");
+    }
+  }, []);
 
   const [benefits, setBenefits] = useState(MUSHROOM_BENEFITS);
 

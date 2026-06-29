@@ -46,8 +46,13 @@ const Wholesale = () => {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
 
-
-
+  useEffect(() => {
+    document.title = "Wholesale Gourmet Mushrooms | Bulk Supply for Restaurants – Shroooms";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute("content", "Order premium gourmet mushrooms in bulk. Reliable farm-to-table supply chain for restaurants, hotels, and cafes in Indore and across India.");
+    }
+  }, []);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({

@@ -21,6 +21,11 @@ const Home = (props) => {
 
   useEffect(() => {
     dispatch(vegetablesList());
+    document.title = "Shroooms | Buy Fresh Gourmet Mushrooms & Grow Kits Online";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute("content", "Buy fresh organic gourmet mushrooms online in India. Order fresh Lion's Mane, Pink Oyster, Blue Oyster, and King Oyster mushrooms grown locally in Indore.");
+    }
   }, [dispatch]);
 
 

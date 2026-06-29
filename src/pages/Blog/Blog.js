@@ -104,6 +104,11 @@ const Blog = () => {
       }
     };
     fetchBlogs();
+    document.title = "Shrooom Chronicles | Mushroom Cultivation & Wellness Blog";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute("content", "Read the latest articles on mushroom superfoods, indoor vertical cultivation, recipes, and medicinal wellness guides from Shroooms experts.");
+    }
   }, []);
 
   const filteredPosts = posts.filter((post) => {

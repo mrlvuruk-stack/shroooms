@@ -35,6 +35,17 @@ const ProductDetails = (props) => {
     }
   }, [dispatch, vegetables]);
 
+  // Dynamic Product Page SEO updates
+  useEffect(() => {
+    if (product) {
+      document.title = `${product.name} | Premium Gourmet Mushrooms – Shroooms`;
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) {
+        metaDesc.setAttribute("content", `Buy organic ${product.name} online in India. ${product.benefits || ''} - Premium quality doorstep delivery.`);
+      }
+    }
+  }, [product]);
+
   if (loading || !product) {
     return (
       <div className="pdp-loading-container">

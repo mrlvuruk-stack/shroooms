@@ -160,7 +160,13 @@ const Recipes = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedRecipe, setExpandedRecipe] = useState(null);
 
-
+  useEffect(() => {
+    document.title = "Gourmet Mushroom Recipes | Cook Oyster & Shiitake – Shroooms";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute("content", "Learn how to cook gourmet mushrooms with chef-curated recipes. Simple, delicious guides for sautéed Pink Oyster, Lion's Mane, and Shiitake broth.");
+    }
+  }, []);
 
   const toggleRecipeExpand = (id) => {
     if (expandedRecipe === id) {

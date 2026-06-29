@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./OurStory.css";
 
 const OurStory = () => {
+  useEffect(() => {
+    document.title = "Our Story | Gourmet Mushroom Farming in Indore – Shroooms";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute("content", "Discover how Shroooms cultivates exotic, premium gourmet and functional mushrooms in Indore using sustainable, clean indoor vertical farming methods.");
+    }
+  }, []);
 
   return (
     <div className="story-container">

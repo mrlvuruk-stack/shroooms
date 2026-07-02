@@ -9,7 +9,7 @@ const mockProducts = [
   {
     _id: "p1",
     name: "Lion's Mane Mushroom (Organic)",
-    image: "https://images.unsplash.com/photo-1628351821419-e26e83afec52?auto=format&fit=crop&w=400&q=80",
+    image: "/box_lions_mane.jpg",
     price: 499,
     unit: "150 Gm",
     description: "Premium organic Lion's Mane. Highly prized for cognitive enhancement, memory support, and neural health. Features a beautiful white, shaggy fluff texture with a mild seafood-like sweet flavor when cooked.",
@@ -21,7 +21,7 @@ const mockProducts = [
   {
     _id: "p2",
     name: "King Oyster Mushroom (Premium)",
-    image: "https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=400&q=80",
+    image: "/box_king_oyster.jpg",
     price: 349,
     unit: "150 Gm",
     description: "Elegant King Oyster Mushrooms, grown for culinary perfection. Dense, meaty stems that slice into scallop-like rounds with a rich, savory umami flavor profile that elevates any gourmet dish.",
@@ -33,7 +33,7 @@ const mockProducts = [
   {
     _id: "p3",
     name: "Pink Oyster Mushroom (Exotic)",
-    image: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=400&q=80",
+    image: "/box_pink_oyster.jpg",
     price: 399,
     unit: "150 Gm",
     description: "Vibrant and exotic Pink Oyster Mushrooms. Highly decorative with a rich woodsy flavor and a chewy bacon-like texture when sautéed crisp. Sourced fresh at dawn from our temperature-controlled grow chambers.",
@@ -45,7 +45,7 @@ const mockProducts = [
   {
     _id: "p4",
     name: "Blue Oyster Mushroom (Artisan)",
-    image: "https://images.unsplash.com/photo-1563865436874-9aef32095ffd?auto=format&fit=crop&w=400&q=80",
+    image: "/box_blue_oyster.jpg",
     price: 399,
     unit: "150 Gm",
     description: "Artisan-grade Blue Oyster Mushrooms. Features beautiful steel-blue caps and dense clustering. Known for its quick-cooking, tender texture and a subtle, mild earthy-anise aroma preferred by gourmet chefs.",
@@ -57,7 +57,7 @@ const mockProducts = [
   {
     _id: "p5",
     name: "Golden Oyster Mushroom (Vibrant)",
-    image: "https://images.unsplash.com/photo-1504387828074-177dc8d9d40b?auto=format&fit=crop&w=400&q=80",
+    image: "/shrooom.jpg",
     price: 429,
     unit: "150 Gm",
     description: "Stunning yellow Golden Oyster Mushrooms. Offers a delicate aroma with nutty notes and a slightly sweet finish. Packed with antioxidants and immune-supportive compounds. Grown sustainably.",
@@ -69,7 +69,7 @@ const mockProducts = [
   {
     _id: "p6",
     name: "Reishi Mushroom (Medicinal)",
-    image: "https://images.unsplash.com/photo-1570733577033-91894d3fa54e?auto=format&fit=crop&w=400&q=80",
+    image: "/cultivar_reishi.jpg",
     price: 599,
     unit: "100 Gm",
     description: "Red Reishi Mushroom, the legendary 'Mushroom of Immortality'. Bitter, woody texture suitable for grinding into wellness powders or steeping in health teas. Outstanding adaptogenic support for stress and sleep.",
@@ -81,7 +81,7 @@ const mockProducts = [
   {
     _id: "p7",
     name: "Shiitake Mushroom (Organic)",
-    image: "https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?auto=format&fit=crop&w=400&q=80",
+    image: "/cultivar_chaga.jpg",
     price: 299,
     unit: "150 Gm",
     description: "USDA Certified Organic Shiitake Mushrooms. Rich in B vitamins, minerals, and dietary fibers. These dark brown mushrooms carry deep, smoky-umami profiles and are perfect for pan-frying or in rich broths.",
@@ -93,7 +93,7 @@ const mockProducts = [
   {
     _id: "p8",
     name: "Maitake Mushroom (Hen of the Woods)",
-    image: "https://images.unsplash.com/photo-1596547609652-9cf5d8d76921?auto=format&fit=crop&w=400&q=80",
+    image: "/cultivar_maitake.jpg",
     price: 479,
     unit: "150 Gm",
     description: "Maitake, meaning 'Dancing Mushroom' in Japanese, is prized for its cluster formations resembling feathers. Rich earthy flavor, excellent for roasting or grilling. Powerful support for metabolic wellness.",

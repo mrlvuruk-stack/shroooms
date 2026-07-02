@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
-const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
+const supabaseUrl = process.env.REACT_APP_SUPABASE_URL || "https://zttyzogoifqhcxiaxsbi.supabase.co";
+const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY || "sb_publishable_XLJlCPbw4WdUS_A1k8KYoA_mpCDI8it";
 
 // Check if credentials are set
 const isSupabaseConfigured = !!(supabaseUrl && supabaseAnonKey);

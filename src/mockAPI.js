@@ -144,9 +144,22 @@ axios.interceptors.request.use(async (config) => {
         productsData = mockProducts;
         localStorage.setItem("mock_products", JSON.stringify(mockProducts));
         localStorage.setItem("mock_products_seeded", "true");
-      }
+        localStorage.setItem("mock_deleted_ids", JSON.stringify([]));
 
-      if (isSupabaseConfigured && supabase) {
+        if (isSupabaseConfigured && supabase) {
+          try {
+            console.log("Resetting Supabase products catalog...");
+            await supabase.from("products").delete().neq("_id", "dummy_clear_all");
+            const { error: seedError } = await supabase
+              .from("products")
+              .insert(mockProducts);
+            if (seedError) throw seedError;
+            productsData = mockProducts;
+          } catch (seedErr) {
+            console.error("Failed to reset Supabase products table:", seedErr);
+          }
+        }
+      } else if (isSupabaseConfigured && supabase) {
         try {
           const { data: dbProducts, error } = await supabase
             .from("products")

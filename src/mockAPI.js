@@ -136,16 +136,10 @@ axios.interceptors.request.use(async (config) => {
     await delay(300);
     config.adapter = async () => {
       const hasSeeded = localStorage.getItem("mock_products_seeded");
-      let productsData = JSON.parse(localStorage.getItem("mock_products") || "[]");
-      // Track IDs deleted by admin — survives Supabase re-fetch
-      const deletedIds = JSON.parse(localStorage.getItem("mock_deleted_ids") || "[]");
+      let productsData = [];
 
       if (!hasSeeded) {
-        productsData = mockProducts;
-        localStorage.setItem("mock_products", JSON.stringify(mockProducts));
         localStorage.setItem("mock_products_seeded", "true");
-        localStorage.setItem("mock_deleted_ids", JSON.stringify([]));
-
         if (isSupabaseConfigured && supabase) {
           try {
             console.log("Resetting Supabase products catalog...");
@@ -157,7 +151,10 @@ axios.interceptors.request.use(async (config) => {
             productsData = mockProducts;
           } catch (seedErr) {
             console.error("Failed to reset Supabase products table:", seedErr);
+            productsData = mockProducts;
           }
+        } else {
+          productsData = mockProducts;
         }
       } else if (isSupabaseConfigured && supabase) {
         try {
@@ -176,15 +173,12 @@ axios.interceptors.request.use(async (config) => {
           } else {
             productsData = dbProducts;
           }
-          localStorage.setItem("mock_products", JSON.stringify(productsData));
         } catch (err) {
-          console.error("Failed to fetch products from Supabase, falling back to local storage:", err);
+          console.error("Failed to fetch products from Supabase:", err);
+          productsData = mockProducts;
         }
-      }
-
-      // Always filter out locally-deleted IDs (handles Supabase caching delays)
-      if (deletedIds.length > 0) {
-        productsData = productsData.filter(p => !deletedIds.includes(p._id));
+      } else {
+        productsData = mockProducts;
       }
 
       return Promise.resolve({
@@ -202,21 +196,24 @@ axios.interceptors.request.use(async (config) => {
     await delay(300);
     const parsedData = getParsedData(data);
     config.adapter = async () => {
-      const localProducts = JSON.parse(localStorage.getItem("mock_products") || "[]");
       const newProduct = {
         ...parsedData,
-        _id: parsedData._id || "p" + (localProducts.length + 1) + "_" + Date.now(),
+        _id: parsedData._id || "p_" + Date.now(),
         purchasing: false,
         quantity: 0
       };
-      localProducts.push(newProduct);
-      localStorage.setItem("mock_products", JSON.stringify(localProducts));
       
       if (isSupabaseConfigured && supabase) {
         try {
-          await supabase.from("products").insert([newProduct]);
+          const { error } = await supabase.from("products").insert([newProduct]);
+          if (error) throw error;
         } catch (err) {
           console.error("Failed to insert product into Supabase:", err);
+          return Promise.reject({
+            status: 500,
+            statusText: "Database Error",
+            config
+          });
         }
       }
       return Promise.resolve({
@@ -235,30 +232,24 @@ axios.interceptors.request.use(async (config) => {
     const parsedData = getParsedData(data);
     const prodId = url.split("/").pop();
     config.adapter = async () => {
-      const localProducts = JSON.parse(localStorage.getItem("mock_products") || "[]");
-      const index = localProducts.findIndex(x => x._id === prodId);
-      if (index > -1) {
-        localProducts[index] = { ...localProducts[index], ...parsedData };
-        localStorage.setItem("mock_products", JSON.stringify(localProducts));
-        
-        if (isSupabaseConfigured && supabase) {
-          try {
-            await supabase.from("products").update(parsedData).eq("_id", prodId);
-          } catch (err) {
-            console.error("Failed to update product in Supabase:", err);
-          }
+      if (isSupabaseConfigured && supabase) {
+        try {
+          const { error } = await supabase.from("products").update(parsedData).eq("_id", prodId);
+          if (error) throw error;
+        } catch (err) {
+          console.error("Failed to update product in Supabase:", err);
+          return Promise.reject({
+            status: 500,
+            statusText: "Database Error",
+            config
+          });
         }
-        return Promise.resolve({
-          data: localProducts[index],
-          status: 200,
-          statusText: "OK",
-          headers: {},
-          config
-        });
       }
-      return Promise.reject({
-        status: 404,
-        statusText: "Not Found",
+      return Promise.resolve({
+        data: { _id: prodId, ...parsedData },
+        status: 200,
+        statusText: "OK",
+        headers: {},
         config
       });
     };
@@ -269,30 +260,17 @@ axios.interceptors.request.use(async (config) => {
     await delay(300);
     const prodId = url.split("/").pop();
     config.adapter = async () => {
-      // 1. Remove from localStorage immediately
-      let localProducts = JSON.parse(localStorage.getItem("mock_products") || "[]");
-      localProducts = localProducts.filter(x => x._id !== prodId);
-      localStorage.setItem("mock_products", JSON.stringify(localProducts));
-
-      // 2. Track this deletion — so GET never brings it back even after Supabase re-fetch
-      const deletedIds = JSON.parse(localStorage.getItem("mock_deleted_ids") || "[]");
-      if (!deletedIds.includes(prodId)) {
-        deletedIds.push(prodId);
-        localStorage.setItem("mock_deleted_ids", JSON.stringify(deletedIds));
-      }
-
-      // 3. Delete from Supabase
       if (isSupabaseConfigured && supabase) {
         try {
           const { error } = await supabase.from("products").delete().eq("_id", prodId);
-          if (error) console.error("Supabase delete error:", error.message);
-          else {
-            // Success — remove from deleted tracking list (Supabase is now source of truth)
-            const updated = deletedIds.filter(id => id !== prodId);
-            localStorage.setItem("mock_deleted_ids", JSON.stringify(updated));
-          }
+          if (error) throw error;
         } catch (err) {
           console.error("Failed to delete product from Supabase:", err);
+          return Promise.reject({
+            status: 500,
+            statusText: "Database Error",
+            config
+          });
         }
       }
       return Promise.resolve({

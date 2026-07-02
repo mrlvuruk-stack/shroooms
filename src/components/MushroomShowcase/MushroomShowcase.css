@@ -1,0 +1,456 @@
+/* ============================================================
+   SHROOOMS — Interactive Mushroom Showcase Component CSS
+   ============================================================ */
+
+.showcase-section {
+  max-width: 1200px;
+  margin: 6rem auto;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+.showcase-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  max-width: 600px;
+}
+
+.showcase-eyebrow {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #a28a5c;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  display: block;
+  margin-bottom: 0.8rem;
+}
+
+.showcase-title {
+  font-size: 3.8rem;
+  font-weight: 700;
+  color: #1b2d1f;
+  margin: 0 0 1.2rem 0;
+  line-height: 1.2;
+}
+
+.showcase-title em {
+  font-style: italic;
+  font-family: inherit;
+  font-weight: 300;
+}
+
+.showcase-subtitle {
+  font-size: 1.5rem;
+  color: #7d776f;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Tabs */
+.showcase-tabs {
+  display: flex;
+  gap: 1.2rem;
+  margin-bottom: 4rem;
+  background: rgba(240, 236, 227, 0.4);
+  padding: 0.6rem;
+  border-radius: 40px;
+  border: 1px solid var(--frugivore-border);
+}
+
+.showcase-tab-btn {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #7d776f;
+  background: none;
+  border: none;
+  padding: 1rem 2.4rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  letter-spacing: 0.5px;
+}
+
+.showcase-tab-btn:hover {
+  color: #1b2d1f;
+}
+
+.showcase-tab-btn.active {
+  background: #ffffff;
+  color: #5a4b31;
+  box-shadow: 0 4px 15px rgba(89, 78, 59, 0.08);
+}
+
+/* Showcase Main Area */
+.showcase-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1080px;
+  height: 520px;
+  position: relative;
+  background: rgba(250, 247, 240, 0.7);
+  border: 1px solid var(--frugivore-border);
+  border-radius: 40px;
+  padding: 4rem;
+  box-sizing: border-box;
+  box-shadow: 0 10px 40px rgba(89, 78, 59, 0.02);
+  transition: background-color 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+}
+
+/* Left Side: Mushroom */
+.showcase-mushroom-wrapper {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 270px;
+  height: 270px;
+  cursor: pointer;
+  z-index: 10;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.showcase-mushroom-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.05));
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), filter 0.45s ease;
+}
+
+.showcase-glow-effect {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(224, 201, 138, 0.15) 0%, transparent 70%);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.showcase-tap-hint {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #a28a5c;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  opacity: 0.6;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+/* Right Side: Expanding Card */
+.showcase-card-wrapper {
+  position: absolute;
+  right: 4.5rem;
+  width: 460px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(30px);
+  filter: blur(10px);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.showcase-card {
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 3.6rem 4rem;
+  box-shadow: 0 15px 40px rgba(89, 78, 59, 0.05);
+  border: 1px solid rgba(224, 201, 138, 0.15);
+  box-sizing: border-box;
+}
+
+.card-category {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #a28a5c;
+  letter-spacing: 2px;
+  display: block;
+  margin-bottom: 0.6rem;
+}
+
+.card-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #5a4b31;
+  margin: 0 0 0.5rem 0;
+}
+
+.card-scientific {
+  font-size: 1.3rem;
+  font-style: italic;
+  color: #7d776f;
+  display: block;
+}
+
+.card-divider {
+  width: 40px;
+  height: 1.5px;
+  background: #a28a5c;
+  margin: 2rem 0;
+}
+
+.card-desc {
+  font-size: 1.4rem;
+  line-height: 1.7;
+  color: #7d776f;
+  margin: 0 0 2.4rem 0;
+}
+
+.card-section {
+  margin-bottom: 2.2rem;
+}
+
+.card-section-label {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #5a4b31;
+  letter-spacing: 1.5px;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.card-tag {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #7d776f;
+  background: rgba(240, 236, 227, 0.5);
+  padding: 0.6rem 1.4rem;
+  border-radius: 20px;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.card-benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.card-benefits-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  font-size: 1.35rem;
+  line-height: 1.5;
+  color: #7d776f;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.benefit-check {
+  color: #a28a5c;
+  font-weight: bold;
+}
+
+.card-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: #1b2d1f;
+  padding: 1.4rem 2.8rem;
+  border-radius: 30px;
+  text-decoration: none;
+  letter-spacing: 1.5px;
+  box-shadow: 0 8px 24px rgba(27, 45, 31, 0.15);
+  margin-top: 1.5rem;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card-cta-btn:hover {
+  background: #a28a5c;
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(162, 138, 92, 0.2);
+}
+
+.cta-arrow {
+  transition: transform 0.3s;
+}
+
+.card-cta-btn:hover .cta-arrow {
+  transform: translateX(4px);
+}
+
+/* ============================================================
+   HOVER STATE — TRIGGER
+   ============================================================ */
+
+.showcase-container.expanded {
+  background: rgba(250, 247, 240, 0.95);
+  box-shadow: 0 20px 50px rgba(89, 78, 59, 0.04);
+}
+
+/* Mushroom transforms left, tilts and scales */
+.showcase-container.expanded .showcase-mushroom-wrapper {
+  transform: translate(-145%, -50%) scale(1.05) rotateY(-8deg) rotateX(4deg);
+}
+
+/* Golden glow appears */
+.showcase-container.expanded .showcase-glow-effect {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Add tilt lighting filter effect */
+.showcase-container.expanded .showcase-mushroom-img {
+  filter: drop-shadow(0 15px 30px rgba(162, 138, 92, 0.18));
+}
+
+/* Card slides in and reveals */
+.showcase-container.expanded .showcase-card-wrapper {
+  pointer-events: auto;
+  opacity: 1;
+  transform: translateX(0);
+  filter: blur(0);
+}
+
+/* Sequential Fade-ups */
+.showcase-container.expanded .card-tag {
+  animation: fadeUpItem 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.showcase-container.expanded .card-benefits-list li {
+  animation: fadeUpItem 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.showcase-container.expanded .card-cta-btn {
+  animation: fadeUpItem 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: 600ms;
+}
+
+@keyframes fadeUpItem {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tap hints for mobile */
+.showcase-tap-hint span {
+  display: none;
+}
+
+/* ============================================================
+   RESPONSIVE MEDIA QUERIES
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .showcase-container {
+    height: 480px;
+    padding: 3rem;
+  }
+  .showcase-card-wrapper {
+    right: 3rem;
+    width: 420px;
+  }
+  .showcase-card {
+    padding: 3rem;
+  }
+  .showcase-mushroom-wrapper {
+    width: 280px;
+    height: 280px;
+  }
+}
+
+@media (max-width: 768px) {
+  .showcase-section {
+    padding: 0 1.5rem;
+  }
+  .showcase-container {
+    height: auto;
+    min-height: 480px;
+    flex-direction: column;
+    padding: 3rem 1.5rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .showcase-mushroom-wrapper {
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+    margin: 2rem 0;
+    width: 240px;
+    height: 240px;
+  }
+  .showcase-card-wrapper {
+    position: relative;
+    right: auto;
+    width: 100%;
+    margin-top: 2rem;
+    transform: translateY(20px);
+    opacity: 0;
+    filter: blur(5px);
+    display: none; /* Collapsed by default on mobile tap */
+  }
+
+  /* Mobile expanded states */
+  .showcase-container.expanded .showcase-mushroom-wrapper {
+    transform: scale(0.95);
+  }
+  .showcase-container.expanded .showcase-card-wrapper {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+  
+  .showcase-tap-hint span {
+    display: inline-block;
+    background: rgba(27, 45, 31, 0.08);
+    padding: 0.5rem 1.2rem;
+    border-radius: 20px;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .showcase-title {
+    font-size: 2.8rem;
+  }
+  .showcase-subtitle {
+    font-size: 1.3rem;
+  }
+  .showcase-tab-btn {
+    padding: 0.8rem 1.6rem;
+    font-size: 1.2rem;
+  }
+  .showcase-card {
+    padding: 2.5rem 2rem;
+    border-radius: 20px;
+  }
+  .card-title {
+    font-size: 2.4rem;
+  }
+}

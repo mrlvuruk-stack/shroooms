@@ -175,9 +175,15 @@ axios.interceptors.request.use(async (config) => {
           }
         } catch (err) {
           console.error("Failed to fetch products from Supabase:", err);
+          if (process.env.NODE_ENV === "production") {
+            return Promise.reject(new Error("Catalog temporarily unavailable. Database connection issue."));
+          }
           productsData = mockProducts;
         }
       } else {
+        if (process.env.NODE_ENV === "production") {
+          return Promise.reject(new Error("Catalog temporarily unavailable. Supabase is not configured."));
+        }
         productsData = mockProducts;
       }
 
@@ -293,31 +299,8 @@ axios.interceptors.request.use(async (config) => {
     const otpHash = hashCode(phone + "_" + otp + "_" + salt);
 
     config.adapter = async () => {
-      const apiKey = process.env.REACT_APP_FAST2SMS_API_KEY;
-      if (apiKey) {
-        try {
-          console.log(`[Fast2SMS] Sending OTP ${otp} to phone ${phone}...`);
-          const response = await fetch("https://www.fast2sms.com/dev/bulkV2", {
-            method: "POST",
-            headers: {
-              "authorization": apiKey,
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              variables_values: otp,
-              route: "otp",
-              numbers: phone
-            })
-          });
-          const resData = await response.json();
-          console.log("[Fast2SMS] API Response:", resData);
-        } catch (err) {
-          console.error("[Fast2SMS] Failed to send SMS:", err);
-        }
-      } else {
-        // Fallback: log the OTP to browser console so it is testable locally for free
-        console.log(`%c[Fast2SMS Dev Fallback] OTP for ${phone} is: ${otp}`, "color: #ff9900; font-size: 16px; font-weight: bold;");
-      }
+      // Local testing fallback: log the OTP directly to the browser console to allow testing without third-party calls
+      console.log(`%c[Dev OTP Fallback] OTP for ${phone} is: ${otp}`, "color: #ff9900; font-size: 16px; font-weight: bold;");
 
       return Promise.resolve({
         data: {

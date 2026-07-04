@@ -495,3 +495,10 @@
   }
 }
 
+.footer-policy-link:focus-visible,
+.social-gold-circle:focus-visible,
+.contact-link:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+

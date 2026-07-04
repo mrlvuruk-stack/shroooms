@@ -5,15 +5,9 @@ import "./Footer.css";
 
 export const Footer = () => {
   const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
 
   const handleSubscribe = (e) => {
     e.preventDefault();
-    if (email.trim()) {
-      setSubscribed(true);
-      setTimeout(() => setSubscribed(false), 5000); // Clear after 5 seconds
-      setEmail("");
-    }
   };
   return (
     <footer className="shroooms-custom-footer">
@@ -213,23 +207,20 @@ export const Footer = () => {
           <p className="newsletter-desc-text">
             Subscribe to get exclusive offers, gourmet recipes, and expert cultivation insights.
           </p>
-          {subscribed ? (
-            <div className="newsletter-success-message">
-              <i className="fa fa-check-circle" style={{ color: "#e0c98a", marginRight: "0.5rem" }}></i> Subscribed!
-            </div>
-          ) : (
-            <form onSubmit={handleSubscribe} className="footer-newsletter-form">
-              <input 
-                type="email" 
-                placeholder="Enter your email" 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="footer-newsletter-input" 
-                required 
-              />
-              <button type="submit" className="footer-newsletter-btn">Subscribe</button>
-            </form>
-          )}
+          <form onSubmit={handleSubscribe} className="footer-newsletter-form">
+            <input 
+              type="email" 
+              placeholder="Enter your email" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="footer-newsletter-input" 
+              disabled
+            />
+            <button type="submit" className="footer-newsletter-btn" disabled>Subscribe</button>
+          </form>
+          <span className="newsletter-helper-text" style={{ fontSize: "1.1rem", color: "var(--color-text-secondary)", marginTop: "0.8rem", display: "block" }}>
+            Newsletter signup is not currently available.
+          </span>
         </div>
 
       </div>

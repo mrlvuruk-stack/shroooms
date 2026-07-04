@@ -12,6 +12,7 @@ import "./Header.css";
 const Header = (props) => {
   const history = useHistory();
   const [showSearch, setShowSearch] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   const cartInfo = useSelector((state) => state.cart.cartData);
   const searchTerm = useSelector((state) => state.searchFilter);
@@ -31,21 +32,30 @@ const Header = (props) => {
 
   const [menuOpen, setMenuOpen] = useState(false);
 
+  React.useEffect(() => {
+    let isScrolled = false;
+    const handleScroll = () => {
+      const shouldScroll = window.scrollY > 40;
+      if (shouldScroll !== isScrolled) {
+        isScrolled = shouldScroll;
+        setScrolled(shouldScroll);
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <div className="header-container">
+    <div className={`header-container ${scrolled ? "header-compact" : ""}`}>
       {/* Top Utility Strip */}
       <div className="top-utility-strip">
         <div className="utility-inner">
           <span className="utility-item">
-            <i className="fa fa-truck"></i> Same-Day Deliveries in DelhiNCR
+            <i className="fa fa-map-marker"></i> Controlled indoor vertical farm in Indore
           </span>
           <span className="utility-sep">·</span>
           <span className="utility-item">
-            <i className="fa fa-clock-o"></i> Deliveries from 8 AM
-          </span>
-          <span className="utility-sep">·</span>
-          <span className="utility-item utility-cta">
-            <i className="fa fa-gift"></i> Get 50% off on your 1st order
+            <i className="fa fa-leaf"></i> Fresh gourmet cultivars and grow kits
           </span>
         </div>
       </div>
@@ -73,15 +83,15 @@ const Header = (props) => {
               <a href="/#produce-list" className="menu-link">SHOP <i className="fa fa-angle-down"></i></a>
               <div className="shop-dropdown-menu">
                 <Link to="/" onClick={() => dispatch(filteredProducts(""))}>All Mushrooms</Link>
-                <Link to="/" onClick={() => dispatch(filteredProducts("organic"))}>Organic Cultivars</Link>
-                <Link to="/" onClick={() => dispatch(filteredProducts("medicinal"))}>Medicinal & Teas</Link>
+                <Link to="/" onClick={() => dispatch(filteredProducts("oyster"))}>Oyster Mushrooms</Link>
+                <Link to="/" onClick={() => dispatch(filteredProducts("lion"))}>Lion's Mane</Link>
               </div>
             </li>
             <li className="menu-item">
               <Link to="/our-story" className="menu-link">OUR STORY</Link>
             </li>
             <li className="menu-item">
-              <Link to="/health-benefits" className="menu-link">HEALTH BENEFITS</Link>
+              <Link to="/health-benefits" className="menu-link">MUSHROOM GUIDE</Link>
             </li>
             <li className="menu-item">
               <Link to="/recipes" className="menu-link">RECIPES</Link>
@@ -162,16 +172,16 @@ const Header = (props) => {
               <Link to="/" onClick={() => { setMenuOpen(false); dispatch(filteredProducts("")); }} className="mobile-menu-link">All Mushrooms</Link>
             </li>
             <li className="mobile-menu-item">
-              <Link to="/" onClick={() => { setMenuOpen(false); dispatch(filteredProducts("organic")); }} className="mobile-menu-link">Organic Cultivars</Link>
+              <Link to="/" onClick={() => { setMenuOpen(false); dispatch(filteredProducts("oyster")); }} className="mobile-menu-link">Oyster Mushrooms</Link>
             </li>
             <li className="mobile-menu-item">
-              <Link to="/" onClick={() => { setMenuOpen(false); dispatch(filteredProducts("medicinal")); }} className="mobile-menu-link">Medicinal &amp; Teas</Link>
+              <Link to="/" onClick={() => { setMenuOpen(false); dispatch(filteredProducts("lion")); }} className="mobile-menu-link">Lion's Mane</Link>
             </li>
             <li className="mobile-menu-item">
               <Link to="/our-story" onClick={() => setMenuOpen(false)} className="mobile-menu-link">OUR STORY</Link>
             </li>
             <li className="mobile-menu-item">
-              <Link to="/health-benefits" onClick={() => setMenuOpen(false)} className="mobile-menu-link">HEALTH BENEFITS</Link>
+              <Link to="/health-benefits" onClick={() => setMenuOpen(false)} className="mobile-menu-link">MUSHROOM GUIDE</Link>
             </li>
             <li className="mobile-menu-item">
               <Link to="/recipes" onClick={() => setMenuOpen(false)} className="mobile-menu-link">RECIPES</Link>

@@ -6,10 +6,16 @@
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1000;
+  z-index: var(--z-sticky);
   padding: 1.5rem 3rem;
   background: transparent;
   pointer-events: none; /* Let clicks pass through background space */
+  transition: padding var(--duration-normal) var(--ease-emphasized);
+}
+
+/* Compact sticky scroll state */
+.header-container.header-compact {
+  padding: 0.8rem 3rem;
 }
 
 /* Top Utility Strip - Hidden to match reference screenshot's clean top-bar design */
@@ -25,13 +31,20 @@
   padding: 1.2rem 4rem;
   background-color: rgba(250, 247, 240, 0.95); /* Creamy white glassmorphism */
   backdrop-filter: blur(10px);
-  border: 1px solid var(--frugivore-border);
-  border-radius: 50px; /* Fully rounded header capsule */
-  box-shadow: 0 8px 30px rgba(89, 78, 59, 0.08);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill); /* Fully rounded header capsule */
+  box-shadow: var(--shadow-md);
   width: 100%;
   max-width: 1300px;
   margin: 0 auto;
   pointer-events: auto; /* Re-enable clicks for the header capsule */
+  transition: all var(--duration-normal) var(--ease-emphasized);
+}
+
+.header-container.header-compact .main-header.row {
+  padding: 0.8rem 3rem;
+  box-shadow: var(--shadow-lg);
+  background-color: rgba(250, 247, 240, 0.98);
 }
 
 /* Logo Section */

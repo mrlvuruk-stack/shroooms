@@ -1,0 +1,119 @@
+/* src/components/WhyChooseUs/WhyChooseUs.css */
+
+.why-section {
+  margin-top: var(--space-16);
+  margin-bottom: var(--space-16);
+}
+
+.why-editorial-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: var(--space-12);
+  align-items: flex-start;
+}
+
+/* Left side statement */
+.why-left-statement {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  position: sticky;
+  top: 14rem;
+}
+
+.why-eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-focus);
+  letter-spacing: 2px;
+  display: block;
+}
+
+.why-title-text {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: 1.1;
+  margin: 0;
+}
+
+.why-subtitle-text {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-body);
+  margin: 0;
+}
+
+/* Right side list */
+.why-right-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.why-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-6) 0;
+}
+
+.why-item:first-child {
+  padding-top: 0;
+}
+
+.why-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.why-item-header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+.why-item-index {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  color: var(--color-focus);
+  font-weight: 700;
+}
+
+.why-item-title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.why-item-desc {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-body);
+  margin: 0;
+  padding-left: var(--space-6);
+}
+
+/* ── Responsive Styling ── */
+@media (max-width: 1024px) {
+  .why-editorial-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+
+  .why-left-statement {
+    position: static;
+    text-align: center;
+  }
+
+  .why-item-desc {
+    padding-left: 0;
+  }
+}

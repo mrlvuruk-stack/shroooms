@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Recipes.css";
 
-const RECIPES_DATA = [
+export const RECIPES_DATA = [
   {
     id: "lions-mane-steaks",
     name: "Pan-Seared Lion's Mane Steaks",
@@ -104,13 +104,13 @@ const RECIPES_DATA = [
   },
   {
     id: "reishi-golden-milk",
-    name: "Reishi Adaptogenic Golden Milk",
-    mushroom: "Reishi (Medicinal)",
+    name: "Reishi Spiced Golden Milk",
+    mushroom: "Reishi",
     category: "wellness",
     time: "10 mins",
     difficulty: "Easy",
     icon: "fa-coffee",
-    summary: "A soothing, warm adaptogenic beverage to promote deep relaxation and restful sleep.",
+    summary: "A warm, earthy spiced beverage prepared with Reishi powder, turmeric, and ginger.",
     ingredients: [
       "1 tsp organic Reishi powder (extract)",
       "1/2 tsp ground turmeric",

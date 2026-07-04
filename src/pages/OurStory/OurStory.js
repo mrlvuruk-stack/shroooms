@@ -1,202 +1,325 @@
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 import "./OurStory.css";
 
 const OurStory = () => {
   useEffect(() => {
-    document.title = "Our Story | Gourmet Mushroom Farming in Indore – Shroooms";
+    document.title = "Our Story | SHROOOMS";
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
-      metaDesc.setAttribute("content", "Discover how Shroooms cultivates exotic, premium gourmet and functional mushrooms in Indore using sustainable, clean indoor vertical farming methods.");
+      metaDesc.setAttribute(
+        "content",
+        "Learn what SHROOOMS is building around mushroom product discovery, recipes, grow-at-home offerings, and wholesale access."
+      );
     }
+    window.scrollTo(0, 0);
   }, []);
 
   return (
-    <div className="story-container">
-      <div className="story-inner animate__animated animate__fadeIn">
-        
-        {/* ── HERO SECTION ── */}
-        <header className="story-header-section">
-          <span className="story-eyebrow">Our Story</span>
-          <h1 className="story-title">From Curiosity to Cultivation</h1>
-          <div className="story-divider"></div>
-          <p className="story-motto">
-            "Grown with Care. Chosen with Purpose. Made for You."
+    <main className="ourstory">
+
+      {/* ═══ 1. STORY HERO ═══ */}
+      <header className="ourstory-hero">
+        <div className="ourstory-hero__content">
+          <span className="ourstory-hero__eyebrow">The SHROOOMS Story</span>
+          <h1 className="ourstory-hero__title">
+            More Than Mushrooms.
+          </h1>
+          <p className="ourstory-hero__subtitle">
+            SHROOOMS is building a focused place to discover gourmet mushrooms,
+            explore mushroom products, learn practical ways to use them, and
+            access grow-at-home offerings.
           </p>
-        </header>
+        </div>
+        <div className="ourstory-hero__visual">
+          <img
+            src="/shroooms_product_showcase.png"
+            alt="SHROOOMS gourmet mushroom product collection"
+            className="ourstory-hero__image"
+          />
+        </div>
+      </header>
 
-        {/* ── FOUNDING STORY & FARM ── */}
-        <section className="story-content-grid">
-          <div className="story-text-column">
-            <div className="story-block">
-              <p className="lead-paragraph">
-                Shroooms was founded with a simple belief: <b>nature offers extraordinary nutrition when we choose the right ingredients.</b>
-              </p>
-              <p>
-                In a market dominated by ordinary mushrooms, we set out to introduce something different—premium gourmet and functional mushrooms that combine exceptional taste with outstanding nutritional value.
-              </p>
-              <p>
-                Our journey began with a passion for sustainable farming, clean cultivation, and the desire to make world-class gourmet mushrooms accessible to every home, chef, and health-conscious individual.
-              </p>
-              <p>
-                Every mushroom is grown in a controlled environment using sustainable cultivation practices that prioritize freshness, quality, and food safety. From selecting premium substrates to maintaining optimal growing conditions, every stage is managed with precision and care.
-              </p>
-            </div>
+      {/* ─── divider ─── */}
+      <div className="ourstory-divider"><div className="ourstory-divider__line" /></div>
+
+      {/* ═══ 2. THE IDEA BEHIND SHROOOMS ═══ */}
+      <section className="ourstory-section">
+        <div className="ourstory-idea">
+          <span className="ourstory-idea__marker" aria-hidden="true">I</span>
+          <div className="ourstory-idea__body">
+            <h2 className="ourstory-idea__heading">
+              The Idea Behind SHROOOMS
+            </h2>
+            <p className="ourstory-idea__text">
+              Mushrooms are often presented only as generic ingredients or isolated
+              products without context. Finding reliable information about specific
+              varieties, understanding how to use them, or accessing premium
+              cultivars can be surprisingly difficult.
+            </p>
+            <p className="ourstory-idea__text">
+              SHROOOMS aims to create a clearer experience — a single place where
+              people can discover different mushroom varieties, understand what
+              makes each one distinct, explore recipes and culinary applications,
+              access grow-at-home offerings, and connect directly for wholesale
+              inquiries.
+            </p>
           </div>
+        </div>
+      </section>
 
-          <div className="story-image-column">
-            <div className="story-img-card">
-              <img 
-                src="/shroooms_farm_story.png" 
-                alt="Shroooms Sustainable Greenhouse Cultivation" 
-                className="story-farm-image"
-              />
-              <div className="story-img-caption">
-                <i className="fa fa-leaf"></i>
-                <p>Misting cycle inside our automated Fruiting Chamber, maintaining optimal growing conditions.</p>
+      {/* ─── divider ─── */}
+      <div className="ourstory-divider"><div className="ourstory-divider__line" /></div>
+
+      {/* ═══ 3. WHAT WE ARE BUILDING ═══ */}
+      <section className="ourstory-section">
+        <div className="ourstory-building">
+          <h2 className="ourstory-building__statement">
+            What We Are Building
+          </h2>
+          <div className="ourstory-building__pillars">
+            <div className="ourstory-pillar">
+              <span className="ourstory-pillar__number">01</span>
+              <div>
+                <p className="ourstory-pillar__title">
+                  Gourmet Mushroom Discovery
+                </p>
+                <p className="ourstory-pillar__desc">
+                  A curated catalog of premium gourmet cultivars — from Lion's Mane
+                  and King Oyster to Pink and Blue Oyster — with clear product
+                  information and variety-specific detail.
+                </p>
+              </div>
+            </div>
+            <div className="ourstory-pillar">
+              <span className="ourstory-pillar__number">02</span>
+              <div>
+                <p className="ourstory-pillar__title">
+                  Recipes &amp; Culinary Education
+                </p>
+                <p className="ourstory-pillar__desc">
+                  Practical recipes and preparation guidance that show how each
+                  mushroom variety can be used in everyday cooking.
+                </p>
+              </div>
+            </div>
+            <div className="ourstory-pillar">
+              <span className="ourstory-pillar__number">03</span>
+              <div>
+                <p className="ourstory-pillar__title">
+                  Grow-at-Home Offerings
+                </p>
+                <p className="ourstory-pillar__desc">
+                  Fully colonized substrate fruiting blocks that allow customers
+                  to grow fresh mushrooms at home.
+                </p>
+              </div>
+            </div>
+            <div className="ourstory-pillar">
+              <span className="ourstory-pillar__number">04</span>
+              <div>
+                <p className="ourstory-pillar__title">
+                  Wholesale Access
+                </p>
+                <p className="ourstory-pillar__desc">
+                  A direct inquiry route for restaurants, chefs, and businesses
+                  looking for consistent, quality mushroom supply.
+                </p>
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ── FEATURED VARIETIES GRID ── */}
-        <section className="story-varieties-section">
-          <h3 className="section-title">Specializing in Premium Cultivars</h3>
-          <div className="varieties-grid">
-            {[
-              { 
-                name: "Lion's Mane", 
-                img: "/cultivar_lions_mane.jpg", 
-                desc: "Supports brain health, focus, and memory. Celebrated as the ultimate natural cognitive enhancer and nerve support guide.", 
-                bg: "#fcf8ee" 
-              },
-              { 
-                name: "Reishi", 
-                img: "/cultivar_reishi.jpg", 
-                desc: "Known as the 'Mushroom of Immortality' for stress relief, immune support, sleep quality, and holistic longevity.", 
-                bg: "#fdf3f2" 
-              },
-              { 
-                name: "Cordyceps", 
-                img: "/cultivar_cordyceps.jpg", 
-                desc: "Boosts energy, stamina, and respiratory health. Highly valued by athletes for natural endurance and vitality.", 
-                bg: "#fdf6eb" 
-              },
-              { 
-                name: "Chaga", 
-                img: "/cultivar_chaga.jpg", 
-                desc: "A powerhouse of antioxidants that strengthens the body's natural defense, promoting vitality and cellular health.", 
-                bg: "#f3f4f1" 
-              },
-              { 
-                name: "Turkey Tail", 
-                img: "/cultivar_turkey_tail.jpg", 
-                desc: "Rich in polysaccharopeptides to nurture gut microbiome diversity and build robust immune response.", 
-                bg: "#edf3f6" 
-              },
-              { 
-                name: "Maitake", 
-                img: "/cultivar_maitake.jpg", 
-                desc: "The 'Mushroom of Harmony' that helps balance wellness, regulate blood sugar, and provide adaptogenic support.", 
-                bg: "#f8f7f2" 
-              }
-            ].map(m => (
-              <div className="variety-card" style={{ backgroundColor: m.bg }} key={m.name}>
-                <div className="variety-image-wrapper">
-                  <img src={m.img} alt={m.name} className="variety-img" />
-                </div>
-                <h4>{m.name}</h4>
-                <p>{m.desc}</p>
+      {/* ─── divider ─── */}
+      <div className="ourstory-divider"><div className="ourstory-divider__line" /></div>
+
+      {/* ═══ 4. FROM DISCOVERY TO EXPERIENCE ═══ */}
+      <section className="ourstory-section">
+        <h2 className="ourstory-idea__heading" style={{ marginBottom: "4.8rem" }}>
+          From Discovery to Experience
+        </h2>
+        <div className="ourstory-journey">
+          <div className="ourstory-journey__step">
+            <span className="ourstory-journey__num">01</span>
+            <h3 className="ourstory-journey__title">Discover</h3>
+            <p className="ourstory-journey__desc">
+              Explore available mushroom varieties and products through the
+              SHROOOMS catalog. Browse by type, understand what makes each
+              cultivar distinct.
+            </p>
+          </div>
+          <div className="ourstory-journey__step">
+            <span className="ourstory-journey__num">02</span>
+            <h3 className="ourstory-journey__title">Understand</h3>
+            <p className="ourstory-journey__desc">
+              Use product information, recipes, and educational content to learn
+              how each mushroom variety can be prepared and enjoyed.
+            </p>
+          </div>
+          <div className="ourstory-journey__step">
+            <span className="ourstory-journey__num">03</span>
+            <h3 className="ourstory-journey__title">Choose</h3>
+            <p className="ourstory-journey__desc">
+              Select fresh gourmet products or grow-at-home fruiting blocks based
+              on your culinary interest and experience level.
+            </p>
+          </div>
+          <div className="ourstory-journey__step">
+            <span className="ourstory-journey__num">04</span>
+            <h3 className="ourstory-journey__title">Experience</h3>
+            <p className="ourstory-journey__desc">
+              Cook, grow, explore, or contact SHROOOMS for wholesale requirements.
+              Each product is part of a broader mushroom experience.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── divider ─── */}
+      <div className="ourstory-divider"><div className="ourstory-divider__line" /></div>
+
+      {/* ═══ 5. HOW WE APPROACH THE PRODUCT ═══ */}
+      <section className="ourstory-section">
+        <div className="ourstory-approach">
+          <img
+            src="/shroooms_farm_story.png"
+            alt="SHROOOMS controlled-environment cultivation facility in Indore"
+            className="ourstory-approach__image"
+            loading="lazy"
+          />
+          <div className="ourstory-approach__content">
+            <h2 className="ourstory-approach__heading">
+              How We Approach the Product
+            </h2>
+            <p className="ourstory-approach__text">
+              SHROOOMS cultivates gourmet mushrooms in Indore using indoor
+              controlled-environment vertical farming. Every stage — from substrate
+              preparation to harvest and packaging — is managed to prioritize
+              product quality and food safety.
+            </p>
+            <div className="ourstory-approach__markers">
+              <div className="ourstory-approach__marker">
+                <div className="ourstory-approach__marker-dot" />
+                <span className="ourstory-approach__marker-text">
+                  Indoor vertical cultivation in Indore
+                </span>
               </div>
-            ))}
+              <div className="ourstory-approach__marker">
+                <div className="ourstory-approach__marker-dot" />
+                <span className="ourstory-approach__marker-text">
+                  Careful cluster selection at optimal density
+                </span>
+              </div>
+              <div className="ourstory-approach__marker">
+                <div className="ourstory-approach__marker-dot" />
+                <span className="ourstory-approach__marker-text">
+                  Hygienic packing in food-grade containers
+                </span>
+              </div>
+            </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ── WHY WE EXIST & OUR PROMISE ── */}
-        <section className="story-purpose-grid">
-          <div className="purpose-card">
-            <h3>Why We Exist</h3>
-            <p>
-              Modern lifestyles demand food that is not only delicious but also naturally nutritious.
-            </p>
-            <p>
-              We believe gourmet mushrooms deserve a place in every kitchen—not just for their incredible flavor but for their versatility, freshness, and culinary excellence.
-            </p>
-            <p>
-              Our mission is to bridge the gap between nature and modern living by delivering mushrooms that inspire healthier meals, creative recipes, and memorable dining experiences.
-            </p>
-          </div>
+      {/* ─── divider ─── */}
+      <div className="ourstory-divider"><div className="ourstory-divider__line" /></div>
 
-          <div className="promise-card">
-            <h3>Our Promise</h3>
-            <p className="promise-intro">At Shroooms, quality is never compromised. Every harvest is:</p>
-            <ul className="promise-list">
-              <li><i className="fa fa-check-circle"></i> Carefully cultivated</li>
-              <li><i className="fa fa-check-circle"></i> Freshly harvested</li>
-              <li><i className="fa fa-check-circle"></i> Hygienically packed</li>
-              <li><i className="fa fa-check-circle"></i> Sustainably grown</li>
-              <li><i className="fa fa-check-circle"></i> Delivered with care</li>
-            </ul>
-            <p className="promise-footer">
-              Our commitment extends beyond producing premium mushrooms—we are building a brand that values trust, transparency, and long-term relationships with our customers.
-            </p>
-          </div>
-        </section>
-
-        {/* ── WHAT MAKES US DIFFERENT ── */}
-        <section className="story-difference-card">
-          <div className="difference-inner">
-            <div className="diff-icon"><i className="fa fa-star"></i></div>
-            <div className="diff-content">
-              <h3>What Makes Us Different</h3>
-              <p>
-                Unlike conventional mushroom suppliers, Shroooms focuses exclusively on premium gourmet varieties. Whether you're a home cook exploring new recipes, a professional chef creating exceptional dishes, or someone looking for high-quality natural ingredients, our mushrooms are cultivated to meet the highest standards.
+      {/* ═══ 6. PRINCIPLES THAT GUIDE SHROOOMS ═══ */}
+      <section className="ourstory-section">
+        <div className="ourstory-principles">
+          <h2 className="ourstory-principles__heading">
+            Principles That Guide SHROOOMS
+          </h2>
+          <div className="ourstory-principles__list">
+            <div className="ourstory-principle">
+              <p className="ourstory-principle__number">01</p>
+              <p className="ourstory-principle__title">
+                Clear Product Information
+              </p>
+              <p className="ourstory-principle__desc">
+                Every mushroom variety is presented with honest, specific detail
+                about its characteristics, culinary use, and available formats.
+              </p>
+            </div>
+            <div className="ourstory-principle">
+              <p className="ourstory-principle__number">02</p>
+              <p className="ourstory-principle__title">
+                Practical Discovery
+              </p>
+              <p className="ourstory-principle__desc">
+                Products are organized so customers can browse by type, explore
+                related recipes, and understand what they are purchasing.
+              </p>
+            </div>
+            <div className="ourstory-principle">
+              <p className="ourstory-principle__number">03</p>
+              <p className="ourstory-principle__title">
+                Culinary Exploration
+              </p>
+              <p className="ourstory-principle__desc">
+                Recipes and preparation guidance help customers use mushroom
+                products in everyday cooking — not just as specialty ingredients.
+              </p>
+            </div>
+            <div className="ourstory-principle">
+              <p className="ourstory-principle__number">04</p>
+              <p className="ourstory-principle__title">
+                Accessible Product Experiences
+              </p>
+              <p className="ourstory-principle__desc">
+                From fresh gourmet mushrooms to grow-at-home blocks, the product
+                range aims to make mushroom experiences approachable for everyone.
               </p>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ── VISION & MISSION ── */}
-        <section className="story-vision-mission">
-          <div className="vision-box">
-            <div className="box-icon"><i className="fa fa-eye"></i></div>
-            <h4>Our Vision</h4>
-            <p>
-              To become India's most trusted premium gourmet mushroom brand by making exotic mushrooms a part of everyday healthy living while promoting sustainable agriculture and responsible food production.
-            </p>
-          </div>
-          <div className="mission-box">
-            <div className="box-icon"><i className="fa fa-rocket"></i></div>
-            <h4>Our Mission</h4>
-            <p>
-              To cultivate and deliver premium gourmet mushrooms that combine exceptional freshness, superior quality, and sustainable farming practices, creating memorable culinary experiences for every customer.
-            </p>
-          </div>
-        </section>
+      {/* ─── divider ─── */}
+      <div className="ourstory-divider"><div className="ourstory-divider__line" /></div>
 
-        {/* ── VALUES SECTION ── */}
-        <section className="story-values-section">
-          <h3 className="section-title">Our Values</h3>
-          <div className="values-grid">
-            {[
-              { name: "Sustainability", img: "/value_sustainability.jpg", desc: "We cultivate responsibly while respecting nature in every step." },
-              { name: "Premium Quality", img: "/value_premium_quality.jpg", desc: "Only the absolute finest mushrooms reach our customers' kitchens." },
-              { name: "Freshness", img: "/value_freshness.jpg", desc: "Harvested with precision and delivered at peak nutritional quality." },
-              { name: "Trust", img: "/value_trust.jpg", desc: "Honest farming, transparent practices, and dependable, reliable service." },
-              { name: "Innovation", img: "/value_innovation.jpg", desc: "Bringing exotic culinary gourmet mushroom culture to homes and chefs across India." }
-            ].map(v => (
-              <div className="value-card-premium" key={v.name}>
-                <div className="value-icon-image-wrapper">
-                  <img src={v.img} alt={v.name} className="value-icon-img" />
-                </div>
-                <h5>{v.name}</h5>
-                <p>{v.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+      {/* ═══ 7. FUTURE DIRECTION ═══ */}
+      <section className="ourstory-section ourstory-section--narrow">
+        <div className="ourstory-future">
+          <span className="ourstory-future__eyebrow">Looking Ahead</span>
+          <h2 className="ourstory-future__heading">
+            What SHROOOMS Aims to Explore Next
+          </h2>
+          <p className="ourstory-future__text">
+            SHROOOMS intends to continue improving how people discover mushroom
+            varieties, access product information, explore culinary uses, and
+            connect with mushroom products and grow-at-home experiences. The focus
+            remains on building a clearer, more useful platform for mushroom
+            discovery and commerce.
+          </p>
+        </div>
+      </section>
 
-      </div>
-    </div>
+      {/* ═══ FINAL CTA ═══ */}
+      <section className="ourstory-cta">
+        <div className="ourstory-cta__inner">
+          <h2 className="ourstory-cta__heading">
+            Explore What SHROOOMS Is Growing.
+          </h2>
+          <div className="ourstory-cta__actions">
+            <Link
+              to="/#produce-list"
+              className="ourstory-cta__btn ourstory-cta__btn--primary"
+            >
+              Explore Products
+            </Link>
+            <Link
+              to="/wholesale"
+              className="ourstory-cta__btn ourstory-cta__btn--secondary"
+            >
+              Wholesale Inquiries
+            </Link>
+          </div>
+        </div>
+      </section>
+
+    </main>
   );
 };
 

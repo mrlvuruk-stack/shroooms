@@ -299,8 +299,10 @@ axios.interceptors.request.use(async (config) => {
     const otpHash = hashCode(phone + "_" + otp + "_" + salt);
 
     config.adapter = async () => {
-      // Local testing fallback: log the OTP directly to the browser console to allow testing without third-party calls
-      console.log(`%c[Dev OTP Fallback] OTP for ${phone} is: ${otp}`, "color: #ff9900; font-size: 16px; font-weight: bold;");
+      // Development-only fallback: log OTP to console for testing without real SMS provider
+      if (process.env.NODE_ENV === "development") {
+        console.log(`%c[Dev OTP Fallback] OTP for ${phone} is: ${otp}`, "color: #ff9900; font-size: 16px; font-weight: bold;");
+      }
 
       return Promise.resolve({
         data: {
@@ -326,7 +328,9 @@ axios.interceptors.request.use(async (config) => {
     const expectedHash = hashCode(phone + "_" + submittedOtp + "_" + salt);
 
     config.adapter = () => {
-      if (expectedHash === submittedHash || submittedOtp === "1234") { // Allow "1234" as a backdoor master OTP for easy testing
+      // Master OTP "1234" is only accepted in development builds for testing convenience
+      const isDev = process.env.NODE_ENV === "development";
+      if (expectedHash === submittedHash || (isDev && submittedOtp === "1234")) {
         const name = localStorage.getItem("userName_" + phone) || "Gourmet Customer";
         return Promise.resolve({
           data: {

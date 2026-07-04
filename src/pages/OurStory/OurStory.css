@@ -1,529 +1,560 @@
-/* Our Story page container styling */
-.story-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 4rem 2rem 8rem 2rem;
-  font-family: "Outfit", sans-serif;
-  color: var(--frugivore-dark);
-}
+/* ═══════════════════════════════════════════════
+   OUR STORY PAGE — SHROOOMS
+   Premium editorial brand-story experience
+   ═══════════════════════════════════════════════ */
 
-/* Inner content container */
-.story-inner {
-  background-color: rgba(250, 247, 240, 0.85);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--frugivore-border);
-  border-radius: 32px;
-  padding: 5rem 6rem;
-  box-shadow: 0 15px 45px rgba(89, 78, 59, 0.04);
-}
-
-/* Header section styling */
-.story-header-section {
-  text-align: center;
-  margin-bottom: 5rem;
-}
-
-.story-eyebrow {
-  font-family: "Outfit", sans-serif;
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--frugivore-green);
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  display: block;
-  margin-bottom: 1rem;
-}
-
-.story-title {
-  font-family: "Playfair Display", Georgia, serif;
-  font-size: 4rem;
-  font-weight: 700;
-  color: var(--frugivore-dark);
-  line-height: 1.25;
-  margin-bottom: 1.5rem;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.story-divider {
-  width: 80px;
-  height: 2px;
-  background-color: var(--frugivore-green);
-  margin: 0 auto 2rem auto;
-  position: relative;
-}
-
-.story-divider::after {
-  content: "";
-  display: block;
-  width: 12px;
-  height: 12px;
-  background-color: #faf7f0;
-  border: 2px solid var(--frugivore-green);
-  border-radius: 50%;
-  position: absolute;
-  top: -5px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.story-motto {
-  font-family: "Playfair Display", Georgia, serif;
-  font-style: italic;
-  font-size: 2rem;
-  color: #a28a5c;
-  font-weight: 500;
-  margin-top: 1rem;
-  letter-spacing: 0.2px;
-}
-
-/* Content grid */
-.story-content-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 5rem;
-  align-items: center;
-  margin-bottom: 6rem;
-}
-
-/* Left column - Text block */
-.story-text-column {
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-}
-
-.story-block p {
-  font-size: 1.55rem;
-  line-height: 1.8;
-  color: var(--frugivore-gray);
-  font-weight: 400;
-  margin-bottom: 1.6rem;
-}
-
-.story-block p b {
-  color: var(--frugivore-forest);
-}
-
-.lead-paragraph {
-  font-size: 1.8rem !important;
-  line-height: 1.7 !important;
-  color: var(--frugivore-forest) !important;
-}
-
-/* Right column - Image display card */
-.story-image-column {
-  display: flex;
-  justify-content: center;
-}
-
-.story-img-card {
+/* ── PAGE CONTAINER ── */
+.ourstory {
   width: 100%;
-  background: var(--frugivore-white);
-  border: 1px solid var(--frugivore-border);
-  padding: 1.5rem;
-  border-radius: 24px;
-  box-shadow: 0 15px 35px rgba(89, 78, 59, 0.05);
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  overflow-x: hidden;
+  color: var(--frugivore-dark, #2c2416);
 }
 
-.story-img-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 45px rgba(89, 78, 59, 0.08);
-}
-
-.story-farm-image {
-  width: 100%;
-  height: 320px;
-  border-radius: 16px;
-  display: block;
-  object-fit: cover;
-  border: 1px solid rgba(89, 78, 59, 0.05);
-}
-
-.story-img-caption {
-  display: flex;
-  align-items: flex-start;
-  gap: 1.2rem;
-  margin-top: 1.5rem;
-  padding: 0.5rem 0.5rem 0 0.5rem;
-}
-
-.story-img-caption .fa {
-  color: var(--frugivore-green);
-  font-size: 1.8rem;
-  margin-top: 0.2rem;
-}
-
-.story-img-caption p {
-  font-size: 1.3rem;
-  line-height: 1.5;
-  color: var(--frugivore-gray);
-  margin: 0;
-  font-style: italic;
-}
-
-/* Varieties Section */
-.story-varieties-section {
-  margin-bottom: 6rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--frugivore-border);
-}
-
-.section-title {
-  font-family: "Playfair Display", Georgia, serif;
-  font-size: 3rem;
-  text-align: center;
-  color: var(--frugivore-forest);
-  margin-bottom: 4rem;
-  font-weight: 700;
-}
-
-.varieties-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 3rem;
-}
-
-.variety-card {
-  padding: 3.5rem 2.5rem;
-  border-radius: 24px;
-  border: 1px solid var(--frugivore-border);
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.variety-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(89, 78, 59, 0.06);
-}
-
-.variety-image-wrapper {
-  width: 140px;
-  height: 140px;
-  margin: 0 auto 2.2rem auto;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 1px solid var(--frugivore-border);
-  box-shadow: 0 6px 16px rgba(89, 78, 59, 0.06);
-  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-  background: var(--frugivore-white);
-}
-
-.variety-card:hover .variety-image-wrapper {
-  transform: scale(1.06);
-  border-color: var(--frugivore-green);
-  box-shadow: 0 10px 25px rgba(89, 78, 59, 0.12);
-}
-
-.variety-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.variety-card h4 {
-  font-family: "Playfair Display", Georgia, serif;
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: var(--frugivore-forest);
-  margin-bottom: 1.2rem;
-}
-
-.variety-card p {
-  font-size: 1.4rem;
-  line-height: 1.6;
-  color: var(--frugivore-gray);
-  margin: 0;
-}
-
-/* Why We Exist & Our Promise */
-.story-purpose-grid {
-  display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 5rem;
-  margin-bottom: 6rem;
-  padding-top: 5rem;
-  border-top: 1px solid var(--frugivore-border);
-}
-
-.purpose-card, .promise-card {
-  background: var(--frugivore-white);
-  border: 1px solid var(--frugivore-border);
-  border-radius: 24px;
-  padding: 4rem;
-  box-shadow: 0 10px 30px rgba(89, 78, 59, 0.02);
-}
-
-.purpose-card h3, .promise-card h3 {
-  font-family: "Playfair Display", Georgia, serif;
-  font-size: 2.6rem;
-  color: var(--frugivore-forest);
-  margin-bottom: 2rem;
-  font-weight: 700;
-}
-
-.purpose-card p {
-  font-size: 1.5rem;
-  line-height: 1.7;
-  color: var(--frugivore-gray);
-  margin-bottom: 1.6rem;
-}
-
-.promise-intro {
-  font-size: 1.55rem;
-  font-weight: 600;
-  color: var(--frugivore-forest);
-  margin-bottom: 2rem;
-}
-
-.promise-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 2rem 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-}
-
-.promise-list li {
-  display: flex;
-  align-items: center;
-  gap: 1.2rem;
-  font-size: 1.55rem;
-  color: var(--frugivore-dark);
-  font-weight: 500;
-}
-
-.promise-list li i {
-  color: var(--frugivore-green);
-  font-size: 1.8rem;
-}
-
-.promise-footer {
-  font-size: 1.4rem;
-  line-height: 1.6;
-  color: var(--frugivore-gray);
-  margin: 0;
-  border-top: 1px dashed var(--frugivore-border);
-  padding-top: 2rem;
-}
-
-/* What makes us different card */
-.story-difference-card {
-  margin-bottom: 6rem;
-}
-
-.difference-inner {
-  background: linear-gradient(135deg, var(--frugivore-forest) 0%, #1e2e21 100%);
-  border-radius: 24px;
-  padding: 4.5rem 5rem;
-  display: flex;
-  gap: 3.5rem;
-  align-items: center;
-  color: #fff;
-  box-shadow: 0 15px 35px rgba(22, 38, 25, 0.15);
-}
-
-.diff-icon {
-  width: 70px;
-  height: 70px;
-  min-width: 70px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.diff-icon i {
-  color: #e0c98a;
-  font-size: 2.8rem;
-}
-
-.diff-content h3 {
-  font-family: "Playfair Display", Georgia, serif;
-  font-size: 2.6rem;
-  margin-bottom: 1.2rem;
-  color: #e0c98a;
-}
-
-.diff-content p {
-  font-size: 1.55rem;
-  line-height: 1.8;
-  color: rgba(255, 255, 255, 0.8);
-  margin: 0;
-}
-
-/* Vision & Mission */
-.story-vision-mission {
+/* ── STORY HERO ── */
+.ourstory-hero {
+  min-height: 75vh;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  margin-bottom: 6rem;
-}
-
-.vision-box, .mission-box {
-  background: rgba(240, 235, 222, 0.4);
-  border: 1px solid var(--frugivore-border);
-  border-radius: 24px;
-  padding: 4rem;
-  text-align: center;
-}
-
-.box-icon {
-  width: 60px;
-  height: 60px;
-  background: var(--frugivore-forest);
-  border-radius: 16px;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  margin: 0 auto 2rem auto;
+  gap: 4.8rem;
+  padding: 14rem 6.4rem 9.6rem;
+  max-width: 1440px;
+  margin: 0 auto;
 }
 
-.box-icon i {
-  color: #fff;
-  font-size: 2.2rem;
+.ourstory-hero__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
 }
 
-.vision-box h4, .mission-box h4 {
-  font-family: "Playfair Display", Georgia, serif;
-  font-size: 2.4rem;
-  color: var(--frugivore-forest);
+.ourstory-hero__eyebrow {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.2rem;
   font-weight: 700;
-  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: var(--frugivore-green, #5a7247);
 }
 
-.vision-box p, .mission-box p {
-  font-size: 1.5rem;
+.ourstory-hero__title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(4.8rem, 6.5vw, 9.6rem);
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--frugivore-dark, #2c2416);
+}
+
+.ourstory-hero__subtitle {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.8rem;
   line-height: 1.7;
-  color: var(--frugivore-gray);
-  margin: 0;
+  color: var(--frugivore-gray, #7a7062);
+  max-width: 48ch;
 }
 
-/* Premium Value Cards */
-.values-grid {
+.ourstory-hero__visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ourstory-hero__image {
+  width: 100%;
+  max-width: 540px;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 24px;
+  box-shadow: 0 24px 64px rgba(44, 36, 22, 0.12);
+}
+
+/* ── SECTION LAYOUT UTILITY ── */
+.ourstory-section {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 9.6rem 6.4rem;
+}
+
+.ourstory-section--narrow {
+  max-width: 960px;
+}
+
+.ourstory-divider {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 6.4rem;
+}
+
+.ourstory-divider__line {
+  height: 1px;
+  background: var(--frugivore-border, #e6e0d4);
+}
+
+/* ── THE IDEA BEHIND SHROOOMS ── */
+.ourstory-idea {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: auto 1fr;
+  gap: 4.8rem;
+  align-items: start;
+}
+
+.ourstory-idea__marker {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 8rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--frugivore-border, #e6e0d4);
+  user-select: none;
+}
+
+.ourstory-idea__body {
+  display: flex;
+  flex-direction: column;
   gap: 2rem;
 }
 
-.value-card-premium {
-  background: var(--frugivore-white);
-  border: 1px solid var(--frugivore-border);
-  border-radius: 20px;
-  padding: 3rem 2rem;
-  text-align: center;
-  transition: all 0.3s ease;
+.ourstory-idea__heading {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(3.2rem, 4vw, 5.6rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--frugivore-dark, #2c2416);
 }
 
-.value-card-premium:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 30px rgba(89, 78, 59, 0.05);
-  border-color: var(--frugivore-green);
+.ourstory-idea__text {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.7rem;
+  line-height: 1.8;
+  color: var(--frugivore-gray, #7a7062);
+  max-width: 64ch;
 }
 
-.value-icon-image-wrapper {
-  width: 90px;
-  height: 90px;
-  background: rgba(89, 78, 59, 0.04);
-  border-radius: 50%;
-  overflow: hidden;
+/* ── WHAT WE ARE BUILDING ── */
+.ourstory-building {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6.4rem;
+  align-items: start;
+}
+
+.ourstory-building__statement {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(3.2rem, 4vw, 5.6rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--frugivore-dark, #2c2416);
+}
+
+.ourstory-building__pillars {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 1.8rem auto;
-  border: 1px solid var(--frugivore-border);
-  box-shadow: 0 4px 12px rgba(89, 78, 59, 0.08);
-  transition: transform 0.3s ease;
+  flex-direction: column;
+  gap: 0;
 }
 
-.value-card-premium:hover .value-icon-image-wrapper {
-  transform: scale(1.05);
+.ourstory-pillar {
+  padding: 2.4rem 0;
+  border-bottom: 1px solid var(--frugivore-border, #e6e0d4);
+  display: grid;
+  grid-template-columns: 3.2rem 1fr;
+  gap: 1.6rem;
+  align-items: baseline;
 }
 
-.value-icon-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.ourstory-pillar:first-child {
+  padding-top: 0;
 }
 
-.value-card-premium h5 {
+.ourstory-pillar__number {
+  font-family: "Playfair Display", Georgia, serif;
   font-size: 1.6rem;
   font-weight: 700;
-  color: var(--frugivore-forest);
-  margin-bottom: 1rem;
+  color: var(--frugivore-green, #5a7247);
 }
 
-.value-card-premium p {
-  font-size: 1.3rem;
+.ourstory-pillar__title {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--frugivore-dark, #2c2416);
+  margin-bottom: 0.6rem;
+}
+
+.ourstory-pillar__desc {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.5rem;
+  line-height: 1.65;
+  color: var(--frugivore-gray, #7a7062);
+  grid-column: 2;
+}
+
+/* ── DISCOVERY TO EXPERIENCE JOURNEY ── */
+.ourstory-journey {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3.2rem;
+}
+
+.ourstory-journey__step {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  position: relative;
+  padding-top: 3.2rem;
+}
+
+.ourstory-journey__step::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 48px;
+  height: 3px;
+  background: var(--frugivore-green, #5a7247);
+}
+
+.ourstory-journey__num {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--frugivore-green, #5a7247);
+}
+
+.ourstory-journey__title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--frugivore-dark, #2c2416);
+  line-height: 1.2;
+}
+
+.ourstory-journey__desc {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.5rem;
+  line-height: 1.65;
+  color: var(--frugivore-gray, #7a7062);
+}
+
+/* ── HOW WE APPROACH THE PRODUCT ── */
+.ourstory-approach {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6.4rem;
+  align-items: center;
+}
+
+.ourstory-approach__image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 20px;
+  box-shadow: 0 16px 48px rgba(44, 36, 22, 0.1);
+}
+
+.ourstory-approach__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+}
+
+.ourstory-approach__heading {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(3.2rem, 4vw, 5.6rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--frugivore-dark, #2c2416);
+}
+
+.ourstory-approach__text {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.7rem;
+  line-height: 1.8;
+  color: var(--frugivore-gray, #7a7062);
+  max-width: 52ch;
+}
+
+.ourstory-approach__markers {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  margin-top: 0.8rem;
+}
+
+.ourstory-approach__marker {
+  display: flex;
+  gap: 1.2rem;
+  align-items: baseline;
+}
+
+.ourstory-approach__marker-dot {
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  border-radius: 50%;
+  background: var(--frugivore-green, #5a7247);
+  margin-top: 0.6rem;
+}
+
+.ourstory-approach__marker-text {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.6rem;
   line-height: 1.5;
-  color: var(--frugivore-gray);
-  margin: 0;
+  color: var(--frugivore-dark, #2c2416);
+  font-weight: 500;
 }
 
-/* Responsive adjustments */
-@media (max-width: 1199px) {
-  .values-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+/* ── PRINCIPLES ── */
+.ourstory-principles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4.8rem;
+  align-items: start;
 }
 
-@media (max-width: 991px) {
-  .story-inner {
-    padding: 4rem 3rem;
+.ourstory-principles__heading {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(3.2rem, 4vw, 5.6rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--frugivore-dark, #2c2416);
+}
+
+.ourstory-principles__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.ourstory-principle {
+  padding: 2.4rem 0;
+  border-bottom: 1px solid var(--frugivore-border, #e6e0d4);
+}
+
+.ourstory-principle:first-child {
+  padding-top: 0;
+}
+
+.ourstory-principle__number {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--frugivore-green, #5a7247);
+  margin-bottom: 0.8rem;
+}
+
+.ourstory-principle__title {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--frugivore-dark, #2c2416);
+  margin-bottom: 0.6rem;
+}
+
+.ourstory-principle__desc {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.5rem;
+  line-height: 1.65;
+  color: var(--frugivore-gray, #7a7062);
+}
+
+/* ── FUTURE DIRECTION ── */
+.ourstory-future {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.4rem;
+}
+
+.ourstory-future__eyebrow {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: var(--frugivore-green, #5a7247);
+}
+
+.ourstory-future__heading {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(3.2rem, 4vw, 5.6rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--frugivore-dark, #2c2416);
+  max-width: 18ch;
+}
+
+.ourstory-future__text {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.7rem;
+  line-height: 1.8;
+  color: var(--frugivore-gray, #7a7062);
+  max-width: 56ch;
+}
+
+/* ── FINAL CTA ── */
+.ourstory-cta {
+  background: var(--frugivore-forest, #1e352f);
+  padding: 8rem 6.4rem;
+}
+
+.ourstory-cta__inner {
+  max-width: 960px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3.2rem;
+}
+
+.ourstory-cta__heading {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(3.2rem, 4.5vw, 6rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: #faf7f0;
+}
+
+.ourstory-cta__actions {
+  display: flex;
+  gap: 1.6rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.ourstory-cta__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.6rem 3.6rem;
+  font-family: "Outfit", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border-radius: 60px;
+  text-decoration: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.ourstory-cta__btn--primary {
+  background: #faf7f0;
+  color: var(--frugivore-forest, #1e352f);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.ourstory-cta__btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.ourstory-cta__btn--secondary {
+  background: transparent;
+  color: #faf7f0;
+  border: 1px solid rgba(250, 247, 240, 0.3);
+}
+
+.ourstory-cta__btn--secondary:hover {
+  background: rgba(250, 247, 240, 0.08);
+  transform: translateY(-2px);
+}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+  .ourstory-hero {
+    grid-template-columns: 1fr;
+    padding: 12rem 4rem 7.2rem;
+    min-height: auto;
+    gap: 4rem;
   }
-  .story-content-grid, .story-purpose-grid, .story-vision-mission {
+  .ourstory-hero__visual {
+    order: -1;
+  }
+  .ourstory-hero__image {
+    max-width: 400px;
+    aspect-ratio: 1 / 1;
+  }
+  .ourstory-section {
+    padding: 7.2rem 4rem;
+  }
+  .ourstory-divider {
+    padding: 0 4rem;
+  }
+  .ourstory-building,
+  .ourstory-approach,
+  .ourstory-principles {
     grid-template-columns: 1fr;
     gap: 4rem;
   }
-  .varieties-grid {
+  .ourstory-journey {
     grid-template-columns: repeat(2, 1fr);
+    gap: 3.2rem;
   }
-  .story-title {
-    font-size: 3.2rem;
-  }
-  .story-image-column {
-    order: -1; /* Display image above text on smaller screens */
-    max-width: 600px;
-    margin: 0 auto;
-    width: 100%;
-  }
-  .difference-inner {
-    flex-direction: column;
-    text-align: center;
-    padding: 4rem 3rem;
+  .ourstory-cta {
+    padding: 6.4rem 4rem;
   }
 }
 
-@media (max-width: 767px) {
-  .values-grid {
-    grid-template-columns: repeat(2, 1fr);
+@media (max-width: 768px) {
+  .ourstory-hero {
+    padding: 10rem 2.4rem 5.6rem;
+    gap: 3.2rem;
+  }
+  .ourstory-hero__image {
+    max-width: 320px;
+  }
+  .ourstory-section {
+    padding: 5.6rem 2.4rem;
+  }
+  .ourstory-divider {
+    padding: 0 2.4rem;
+  }
+  .ourstory-idea {
+    grid-template-columns: 1fr;
+    gap: 1.6rem;
+  }
+  .ourstory-idea__marker {
+    font-size: 5.6rem;
+  }
+  .ourstory-journey {
+    grid-template-columns: 1fr;
+    gap: 3.2rem;
+  }
+  .ourstory-cta {
+    padding: 5.6rem 2.4rem;
   }
 }
 
-@media (max-width: 576px) {
-  .story-container {
-    padding: 2rem 1rem 4rem 1rem;
+@media (max-width: 480px) {
+  .ourstory-hero {
+    padding: 9.6rem 1.6rem 4.8rem;
   }
-  .story-inner {
-    padding: 3rem 1.5rem;
+  .ourstory-hero__image {
+    max-width: 280px;
     border-radius: 16px;
   }
-  .story-title {
-    font-size: 2.6rem;
+  .ourstory-section {
+    padding: 4.8rem 1.6rem;
   }
-  .story-motto {
-    font-size: 1.6rem;
+  .ourstory-divider {
+    padding: 0 1.6rem;
   }
-  .varieties-grid, .values-grid {
-    grid-template-columns: 1fr;
+  .ourstory-cta {
+    padding: 4.8rem 1.6rem;
   }
-  .variety-card, .value-card-premium {
-    padding: 3rem 2rem;
+  .ourstory-cta__btn {
+    width: 100%;
+    padding: 1.4rem 2.4rem;
+  }
+}
+
+/* ── REDUCED MOTION ── */
+@media (prefers-reduced-motion: reduce) {
+  .ourstory-cta__btn {
+    transition: none;
   }
 }

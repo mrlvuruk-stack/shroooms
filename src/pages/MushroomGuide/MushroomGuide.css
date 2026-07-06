@@ -310,6 +310,7 @@
 
 /* ── SPECIES CARD ── */
 .guide-card {
+  scroll-margin-top: 100px;
   background: #ffffff;
   border: 1px solid var(--frugivore-border, #e6e0d4);
   border-radius: 20px;

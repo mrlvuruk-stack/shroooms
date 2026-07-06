@@ -6,39 +6,11 @@ import {
   MUSHROOM_GUIDE_DATA,
   MUSHROOM_GUIDE_CATEGORIES
 } from "../../config/mushroomGuideConfig";
+import { resolveProductForGuideItem } from "./mushroomGuideUtils";
+import GuideFeaturedSpecies from "../../components/GuideFeaturedSpecies/GuideFeaturedSpecies";
+import GuideHowToChoose from "../../components/GuideHowToChoose/GuideHowToChoose";
+import GuideHandlingStorage from "../../components/GuideHandlingStorage/GuideHandlingStorage";
 import "./MushroomGuide.css";
-
-/* ── Runtime product resolution utility ── */
-const resolveProductForGuideItem = (item, productsList) => {
-  if (!productsList || !Array.isArray(productsList) || !item.productMatchNames) {
-    return null;
-  }
-
-  const matches = productsList.filter((prod) => {
-    const rawProdName = prod.name || "";
-    // Normalize catalog product name
-    const normalizedProdName = rawProdName
-      .toLowerCase()
-      .replace(/\(.*?\)/g, "")
-      .replace(/[^a-z0-9]/g, "")
-      .trim();
-
-    return item.productMatchNames.some((matchName) => {
-      const normalizedMatchName = matchName
-        .toLowerCase()
-        .replace(/\(.*?\)/g, "")
-        .replace(/[^a-z0-9]/g, "")
-        .trim();
-      return normalizedProdName.includes(normalizedMatchName);
-    });
-  });
-
-  // Strict matching: Only return if exactly one product resolves
-  if (matches.length === 1) {
-    return matches[0];
-  }
-  return null;
-};
 
 const MushroomGuide = () => {
   const dispatch = useDispatch();
@@ -59,7 +31,7 @@ const MushroomGuide = () => {
     if (metaDesc) {
       metaDesc.setAttribute(
         "content",
-        "Explore gourmet mushroom varieties, culinary flavor profiles, textures, best cooking methods, and available SHROOOMS products."
+        "Explore gourmet mushroom varieties, culinary flavor profiles, textures, best cooking methods, decision guides, and handling advice."
       );
     }
     window.scrollTo(0, 0);
@@ -99,7 +71,7 @@ const MushroomGuide = () => {
       {/* ─── divider ─── */}
       <div className="guide-divider"><div className="guide-divider__line" /></div>
 
-      {/* ═══ 2. CATEGORY FILTERS & GRID HEADER ═══ */}
+      {/* ═══ 2 & 3. CATEGORY FILTERS & SPECIES DISCOVERY GRID ═══ */}
       <section className="guide-section" aria-label="Mushroom Species Discovery">
         <div className="guide-filter-bar">
           <div className="guide-filter-chips" role="group" aria-label="Filter varieties by type">
@@ -120,13 +92,17 @@ const MushroomGuide = () => {
           </span>
         </div>
 
-        {/* ═══ 3. SPECIES DISCOVERY GRID ═══ */}
+        {/* ═══ SPECIES DISCOVERY GRID ═══ */}
         <div className="guide-grid">
           {filteredItems.map((item) => {
             const resolvedProduct = resolveProductForGuideItem(item, products);
 
             return (
-              <article key={item.id} className="guide-card">
+              <article
+                key={item.id}
+                id={`guide-species-${item.slug}`}
+                className="guide-card"
+              >
                 <div className="guide-card__media">
                   <img
                     src={item.image}
@@ -177,6 +153,24 @@ const MushroomGuide = () => {
           })}
         </div>
       </section>
+
+      {/* ─── divider ─── */}
+      <div className="guide-divider"><div className="guide-divider__line" /></div>
+
+      {/* ═══ 4. FEATURED SPECIES EDITORIAL SPOTLIGHT ═══ */}
+      <GuideFeaturedSpecies products={products} />
+
+      {/* ─── divider ─── */}
+      <div className="guide-divider"><div className="guide-divider__line" /></div>
+
+      {/* ═══ 5. HOW TO CHOOSE ═══ */}
+      <GuideHowToChoose />
+
+      {/* ─── divider ─── */}
+      <div className="guide-divider"><div className="guide-divider__line" /></div>
+
+      {/* ═══ 6. HANDLING & STORAGE ═══ */}
+      <GuideHandlingStorage />
 
     </main>
   );

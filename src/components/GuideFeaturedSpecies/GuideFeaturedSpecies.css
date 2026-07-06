@@ -1,0 +1,208 @@
+/* ═══════════════════════════════════════════════
+   GUIDE FEATURED SPECIES SPOTLIGHT — SHROOOMS
+   Editorial visual spotlight layout
+   ═══════════════════════════════════════════════ */
+
+.guide-featured-section {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: clamp(3.2rem, 6vw, 6.4rem) 1.6rem;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .guide-featured-section {
+    padding: 6.4rem 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .guide-featured-section {
+    padding: 8rem 6.4rem;
+  }
+}
+
+.guide-featured {
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+  background: #ffffff;
+  border: 1px solid var(--frugivore-border, #e6e0d4);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(44, 36, 22, 0.05);
+}
+
+@media (min-width: 1024px) {
+  .guide-featured {
+    display: grid;
+    grid-template-columns: 55% 45%;
+    align-items: center;
+    gap: 0;
+  }
+}
+
+/* Media column */
+.guide-featured__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #f4efe6;
+}
+
+@media (min-width: 1024px) {
+  .guide-featured__media {
+    height: 100%;
+    aspect-ratio: auto;
+    min-height: 480px;
+  }
+}
+
+.guide-featured__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.guide-featured__badge {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  background: var(--frugivore-forest, #1e352f);
+  color: #faf7f0;
+  font-family: "Outfit", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 0.6rem 1.6rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Content column */
+.guide-featured__content {
+  padding: 2.8rem 2.4rem 3.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+@media (min-width: 768px) {
+  .guide-featured__content {
+    padding: 4rem 3.6rem;
+    gap: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .guide-featured__content {
+    padding: 4.8rem 4.8rem;
+    gap: 2.4rem;
+  }
+}
+
+.guide-featured__eyebrow {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--frugivore-green, #5a7247);
+}
+
+.guide-featured__title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(3rem, 4vw, 4.4rem);
+  font-weight: 700;
+  color: var(--frugivore-dark, #2c2416);
+  line-height: 1.1;
+  margin: 0;
+}
+
+.guide-featured__scientific {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.4rem;
+  font-style: italic;
+  color: var(--frugivore-green, #5a7247);
+  margin-top: -0.8rem;
+}
+
+.guide-featured__desc {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.55rem;
+  line-height: 1.65;
+  color: var(--frugivore-gray, #7a7062);
+  margin: 0;
+}
+
+/* Specs list */
+.guide-featured__specs {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  padding: 1.6rem 0;
+  border-top: 1px solid var(--frugivore-border, #e6e0d4);
+  border-bottom: 1px solid var(--frugivore-border, #e6e0d4);
+  margin: 0;
+}
+
+.guide-featured__spec-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.guide-featured__spec-label {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--frugivore-dark, #2c2416);
+}
+
+.guide-featured__spec-value {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.45rem;
+  color: var(--frugivore-gray, #7a7062);
+  margin: 0;
+}
+
+/* CTA */
+.guide-featured__action {
+  margin-top: 0.8rem;
+}
+
+.guide-featured__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  padding: 1.3rem 2.4rem;
+  font-family: "Outfit", sans-serif;
+  font-size: 1.45rem;
+  font-weight: 600;
+  color: #faf7f0;
+  background: var(--frugivore-forest, #1e352f);
+  border: 1px solid var(--frugivore-forest, #1e352f);
+  border-radius: 30px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-sizing: border-box;
+}
+
+.guide-featured__cta:hover {
+  background: var(--frugivore-green, #5a7247);
+  border-color: var(--frugivore-green, #5a7247);
+  box-shadow: 0 6px 20px rgba(90, 114, 71, 0.25);
+}
+
+.guide-featured__cta:focus-visible {
+  outline: 2.5px solid var(--frugivore-green, #5a7247);
+  outline-offset: 2px;
+}

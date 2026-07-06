@@ -1,0 +1,138 @@
+/* ═══════════════════════════════════════════════
+   GUIDE HANDLING & STORAGE — SHROOOMS
+   Editorial rows / care principles layout
+   ═══════════════════════════════════════════════ */
+
+.guide-storage-section {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: clamp(3.2rem, 6vw, 6.4rem) 1.6rem clamp(4.8rem, 8vw, 8rem);
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .guide-storage-section {
+    padding: 6.4rem 4rem 9.6rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .guide-storage-section {
+    padding: 8rem 6.4rem 11.2rem;
+  }
+}
+
+/* Header */
+.guide-storage-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  max-width: 64ch;
+  margin-bottom: 4rem;
+}
+
+@media (min-width: 768px) {
+  .guide-storage-header {
+    margin-bottom: 4.8rem;
+  }
+}
+
+.guide-storage-eyebrow {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--frugivore-green, #5a7247);
+}
+
+.guide-storage-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(3rem, 4vw, 4.4rem);
+  font-weight: 700;
+  color: var(--frugivore-dark, #2c2416);
+  line-height: 1.1;
+  margin: 0;
+}
+
+.guide-storage-subtitle {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.55rem;
+  line-height: 1.65;
+  color: var(--frugivore-gray, #7a7062);
+  margin: 0;
+}
+
+/* Grid / List */
+.guide-storage-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .guide-storage-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.8rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .guide-storage-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2.4rem;
+  }
+}
+
+/* Card */
+.guide-storage-card {
+  background: #ffffff;
+  border: 1px solid var(--frugivore-border, #e6e0d4);
+  border-radius: 20px;
+  padding: 2.8rem 2.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  box-shadow: 0 4px 16px rgba(44, 36, 22, 0.03);
+}
+
+.guide-storage-card__number {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 3.2rem;
+  font-weight: 700;
+  color: var(--frugivore-green, #5a7247);
+  line-height: 1;
+}
+
+.guide-storage-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.guide-storage-card__title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: var(--frugivore-dark, #2c2416);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.guide-storage-card__summary {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--frugivore-forest, #1e352f);
+}
+
+.guide-storage-card__detail {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.4rem;
+  line-height: 1.6;
+  color: var(--frugivore-gray, #7a7062);
+  margin: 0;
+}

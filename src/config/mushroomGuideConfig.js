@@ -3,6 +3,10 @@
    Centralized, safe, evidence-based species data
    ═══════════════════════════════════════════════ */
 
+export const MUSHROOM_GUIDE_CONFIG = {
+  featuredSpeciesSlug: "lions-mane"
+};
+
 export const MUSHROOM_GUIDE_DATA = [
   {
     id: "g1",
@@ -11,6 +15,7 @@ export const MUSHROOM_GUIDE_DATA = [
     scientificName: "Hericium erinaceus",
     category: "gourmet",
     categoryLabel: "Gourmet & Culinary",
+    choiceGroup: "meaty-substantial",
     shortDescription: "Distinctive white shaggy clusters with a tender, lobster-like texture and sweet umami aroma.",
     flavor: "Sweet, subtle, seafood-like notes",
     texture: "Meaty, fibrous, tender",
@@ -26,6 +31,7 @@ export const MUSHROOM_GUIDE_DATA = [
     scientificName: "Pleurotus eryngii",
     category: "gourmet",
     categoryLabel: "Gourmet & Culinary",
+    choiceGroup: "meaty-substantial",
     shortDescription: "Regal species featuring thick, dense stems that caramelize beautifully when seared.",
     flavor: "Rich, savory umami",
     texture: "Dense, firm, scallop-like",
@@ -41,6 +47,7 @@ export const MUSHROOM_GUIDE_DATA = [
     scientificName: "Pleurotus djamor",
     category: "oyster",
     categoryLabel: "Oyster Varieties",
+    choiceGroup: "delicate-distinctive",
     shortDescription: "Striking tropical oyster variety featuring vibrant pink clusters and a pleasant woodsy profile.",
     flavor: "Woodsy, savory, warm notes",
     texture: "Crisp edges, velvety center",
@@ -56,6 +63,7 @@ export const MUSHROOM_GUIDE_DATA = [
     scientificName: "Pleurotus ostreatus",
     category: "oyster",
     categoryLabel: "Oyster Varieties",
+    choiceGroup: "mild-versatile",
     shortDescription: "Artisan cultivar featuring deep steel-blue caps and tender, quick-cooking clusters.",
     flavor: "Mild, earthy, subtle anise aroma",
     texture: "Soft, silky, tender",
@@ -71,6 +79,7 @@ export const MUSHROOM_GUIDE_DATA = [
     scientificName: "Pleurotus citrinopileatus",
     category: "oyster",
     categoryLabel: "Oyster Varieties",
+    choiceGroup: "delicate-distinctive",
     shortDescription: "Eye-catching yellow clusters offering a delicate aroma and gentle nutty finish.",
     flavor: "Nutty, light, delicate",
     texture: "Thin, tender caps",
@@ -86,6 +95,7 @@ export const MUSHROOM_GUIDE_DATA = [
     scientificName: "Ganoderma lucidum",
     category: "traditional",
     categoryLabel: "Traditional Use",
+    choiceGroup: "traditional-prep",
     shortDescription: "Traditional species with a firm, lacquered cap, historically prepared as an infused warm brew.",
     flavor: "Deeply earthy, pleasantly bitter",
     texture: "Hard, corky, woody",
@@ -101,6 +111,7 @@ export const MUSHROOM_GUIDE_DATA = [
     scientificName: "Grifola frondosa",
     category: "gourmet",
     categoryLabel: "Gourmet & Culinary",
+    choiceGroup: "meaty-substantial",
     shortDescription: "Feathered cluster formation offering rich, earthy depth and excellent roasting qualities.",
     flavor: "Deeply earthy, rich umami",
     texture: "Feathery, tender-crisp",
@@ -116,4 +127,27 @@ export const MUSHROOM_GUIDE_CATEGORIES = [
   { id: "gourmet", label: "Gourmet & Culinary" },
   { id: "oyster", label: "Oyster Varieties" },
   { id: "traditional", label: "Traditional Use" }
+];
+
+export const MUSHROOM_GUIDE_CHOICE_GROUPS = [
+  {
+    id: "mild-versatile",
+    title: "Mild & Versatile",
+    description: "Accessible varieties with delicate flavors that pair effortlessly with everyday pasta, grain, and sauté dishes."
+  },
+  {
+    id: "meaty-substantial",
+    title: "Meaty & Substantial",
+    description: "Dense, firm cultivars that hold their structure and sear beautifully into steaks, thick rounds, or hearty roasts."
+  },
+  {
+    id: "delicate-distinctive",
+    title: "Delicate & Distinctive",
+    description: "Vibrant, eye-catching clusters featuring unique aromas and light textures best suited for gentle flash sautés."
+  },
+  {
+    id: "traditional-prep",
+    title: "Traditional Preparation",
+    description: "Woody, structured species historically sliced, dried, and simmered into warm infused teas and herbal broths."
+  }
 ];

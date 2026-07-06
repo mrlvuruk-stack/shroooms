@@ -9,24 +9,30 @@
   overflow-x: hidden;
   color: var(--frugivore-dark, #2c2416);
   background: var(--frugivore-cream, #faf7f0);
+  box-sizing: border-box;
 }
 
 /* ── STORY HERO ── */
 .ourstory-hero {
-  min-height: 78vh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: 4.8rem;
-  padding: 14rem 6.4rem 9.6rem;
-  max-width: 1440px;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+  padding: 3.2rem 2rem 4rem;
+  width: 100%;
+  max-width: 1280px;
   margin: 0 auto;
+  height: auto;
+  min-height: auto;
+  box-sizing: border-box;
+  position: relative;
+  grid-area: auto;
 }
 
 .ourstory-hero__content {
   display: flex;
   flex-direction: column;
-  gap: 2.4rem;
+  gap: 1.6rem;
+  width: 100%;
 }
 
 .ourstory-hero__eyebrow {
@@ -34,81 +40,191 @@
   font-size: 1.2rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 4px;
+  letter-spacing: 3px;
   color: var(--frugivore-green, #5a7247);
 }
 
 .ourstory-hero__title {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(3.6rem, 7vw, 10rem);
+  font-size: clamp(3.2rem, 8vw, 4.8rem);
   font-weight: 700;
-  line-height: 1.05;
+  line-height: 1.08;
   color: var(--frugivore-dark, #2c2416);
+  word-break: break-word;
 }
 
 .ourstory-hero__subtitle {
   font-family: "Outfit", sans-serif;
-  font-size: 1.6rem;
-  line-height: 1.7;
+  font-size: 1.5rem;
+  line-height: 1.65;
   color: var(--frugivore-gray, #7a7062);
-  max-width: 48ch;
+  max-width: 100%;
 }
 
 .ourstory-hero__visual {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  margin-top: 0.8rem;
 }
 
 .ourstory-hero__image {
   width: 100%;
-  max-width: 560px;
+  max-width: 320px;
   height: auto;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
-  border-radius: 24px;
-  box-shadow: 0 24px 64px rgba(44, 36, 22, 0.12);
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(44, 36, 22, 0.08);
+  display: block;
+}
+
+/* Tablet (768px+) */
+@media (min-width: 768px) {
+  .ourstory-hero {
+    gap: 3.2rem;
+    padding: 4.8rem 4rem 5.6rem;
+  }
+
+  .ourstory-hero__content {
+    gap: 2rem;
+  }
+
+  .ourstory-hero__title {
+    font-size: clamp(4.4rem, 6.5vw, 6rem);
+  }
+
+  .ourstory-hero__subtitle {
+    font-size: 1.6rem;
+    max-width: 54ch;
+  }
+
+  .ourstory-hero__image {
+    max-width: 480px;
+    aspect-ratio: 16 / 10;
+    border-radius: 20px;
+  }
+}
+
+/* Desktop (1024px+) */
+@media (min-width: 1024px) {
+  .ourstory-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 5.6rem;
+    padding: 6.4rem 6.4rem 8rem;
+    min-height: 70vh;
+  }
+
+  .ourstory-hero__content {
+    gap: 2.4rem;
+  }
+
+  .ourstory-hero__title {
+    font-size: clamp(5.6rem, 5.5vw, 8.8rem);
+    line-height: 1.02;
+  }
+
+  .ourstory-hero__subtitle {
+    font-size: 1.8rem;
+    line-height: 1.7;
+    max-width: 48ch;
+  }
+
+  .ourstory-hero__visual {
+    margin-top: 0;
+  }
+
+  .ourstory-hero__image {
+    max-width: 540px;
+    aspect-ratio: 4 / 5;
+    border-radius: 24px;
+    box-shadow: 0 24px 64px rgba(44, 36, 22, 0.12);
+  }
 }
 
 /* ── SECTION LAYOUT ── */
 .ourstory-section {
+  width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 9.6rem 6.4rem;
+  padding: 4.8rem 2rem;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .ourstory-section {
+    padding: 7.2rem 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ourstory-section {
+    padding: 9.6rem 6.4rem;
+  }
 }
 
 .ourstory-section__heading {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(2.8rem, 4vw, 5.6rem);
+  font-size: 2.4rem;
   font-weight: 700;
   line-height: 1.15;
   color: var(--frugivore-dark, #2c2416);
-  margin-bottom: 4.8rem;
+  margin-bottom: 3.2rem;
+}
+
+@media (min-width: 768px) {
+  .ourstory-section__heading {
+    font-size: 3.2rem;
+    margin-bottom: 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ourstory-section__heading {
+    font-size: clamp(3.2rem, 4vw, 5.6rem);
+    margin-bottom: 4.8rem;
+  }
 }
 
 .ourstory-divider {
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 6.4rem;
+  padding: 0 2rem;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .ourstory-divider {
+    padding: 0 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ourstory-divider {
+    padding: 0 6.4rem;
+  }
 }
 
 .ourstory-divider__line {
   height: 1px;
+  width: 100%;
   background: var(--frugivore-border, #e6e0d4);
 }
 
 /* ── THE IDEA BEHIND SHROOOMS ── */
 .ourstory-idea {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 4.8rem;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
 }
 
 .ourstory-idea__marker {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: 6.4rem;
+  font-size: 3.6rem;
   font-weight: 700;
   line-height: 1;
   color: var(--frugivore-border, #e6e0d4);
@@ -118,12 +234,12 @@
 .ourstory-idea__body {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.6rem;
 }
 
 .ourstory-idea__heading {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(2.8rem, 4vw, 5.6rem);
+  font-size: 2.4rem;
   font-weight: 700;
   line-height: 1.15;
   color: var(--frugivore-dark, #2c2416);
@@ -131,26 +247,86 @@
 
 .ourstory-idea__text {
   font-family: "Outfit", sans-serif;
-  font-size: 1.6rem;
-  line-height: 1.8;
+  font-size: 1.5rem;
+  line-height: 1.75;
   color: var(--frugivore-gray, #7a7062);
-  max-width: 64ch;
+}
+
+@media (min-width: 768px) {
+  .ourstory-idea {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 3.6rem;
+    align-items: start;
+  }
+
+  .ourstory-idea__marker {
+    font-size: 5.6rem;
+  }
+
+  .ourstory-idea__heading {
+    font-size: 3.2rem;
+  }
+
+  .ourstory-idea__text {
+    font-size: 1.6rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ourstory-idea {
+    gap: 4.8rem;
+  }
+
+  .ourstory-idea__marker {
+    font-size: 6.4rem;
+  }
+
+  .ourstory-idea__heading {
+    font-size: clamp(3.2rem, 4vw, 5.6rem);
+  }
+
+  .ourstory-idea__text {
+    font-size: 1.7rem;
+    line-height: 1.8;
+    max-width: 64ch;
+  }
 }
 
 /* ── CINEMATIC BRAND MOMENT ── */
 .ourstory-cinematic {
+  width: 100%;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 9.6rem 4rem;
+  padding: 4.8rem 2rem;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .ourstory-cinematic {
+    padding: 7.2rem 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ourstory-cinematic {
+    padding: 9.6rem 6.4rem;
+  }
 }
 
 .ourstory-cinematic__container {
   width: 100%;
-  height: clamp(420px, 55vw, 720px);
-  border-radius: 20px;
+  height: clamp(220px, 45vw, 680px);
+  border-radius: 16px;
   overflow: hidden;
   background: var(--frugivore-dark, #2c2416);
   position: relative;
+}
+
+@media (min-width: 1024px) {
+  .ourstory-cinematic__container {
+    border-radius: 24px;
+  }
 }
 
 .ourstory-cinematic__video,
@@ -163,15 +339,14 @@
 
 /* ── WHAT WE ARE BUILDING ── */
 .ourstory-building {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6.4rem;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
 }
 
 .ourstory-building__statement {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(2.8rem, 4vw, 5.6rem);
+  font-size: 2.4rem;
   font-weight: 700;
   line-height: 1.15;
   color: var(--frugivore-dark, #2c2416);
@@ -183,11 +358,11 @@
 }
 
 .ourstory-pillar {
-  padding: 2.4rem 0;
+  padding: 2rem 0;
   border-bottom: 1px solid var(--frugivore-border, #e6e0d4);
   display: grid;
-  grid-template-columns: 3.2rem 1fr;
-  gap: 1.6rem;
+  grid-template-columns: 2.8rem 1fr;
+  gap: 1.2rem;
   align-items: baseline;
 }
 
@@ -197,32 +372,71 @@
 
 .ourstory-pillar__number {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: 700;
   color: var(--frugivore-green, #5a7247);
 }
 
 .ourstory-pillar__title {
   font-family: "Outfit", sans-serif;
-  font-size: 1.7rem;
+  font-size: 1.6rem;
   font-weight: 600;
   color: var(--frugivore-dark, #2c2416);
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.4rem;
 }
 
 .ourstory-pillar__desc {
   font-family: "Outfit", sans-serif;
-  font-size: 1.5rem;
-  line-height: 1.65;
+  font-size: 1.4rem;
+  line-height: 1.6;
   color: var(--frugivore-gray, #7a7062);
   grid-column: 2;
 }
 
+@media (min-width: 768px) {
+  .ourstory-building__statement {
+    font-size: 3.2rem;
+  }
+
+  .ourstory-pillar {
+    padding: 2.4rem 0;
+    grid-template-columns: 3.2rem 1fr;
+    gap: 1.6rem;
+  }
+
+  .ourstory-pillar__number {
+    font-size: 1.6rem;
+  }
+
+  .ourstory-pillar__title {
+    font-size: 1.7rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .ourstory-pillar__desc {
+    font-size: 1.5rem;
+    line-height: 1.65;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ourstory-building {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6.4rem;
+    align-items: start;
+  }
+
+  .ourstory-building__statement {
+    font-size: clamp(3.2rem, 4vw, 5.6rem);
+  }
+}
+
 /* ── JOURNEY ── */
 .ourstory-journey {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 3.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
 }
 
 .ourstory-journey__step {
@@ -230,7 +444,7 @@
   flex-direction: column;
   gap: 1.2rem;
   position: relative;
-  padding-top: 2.4rem;
+  padding-top: 2rem;
 }
 
 .ourstory-journey__step::before {
@@ -238,7 +452,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 48px;
+  width: 40px;
   height: 3px;
   background: var(--frugivore-green, #5a7247);
 }
@@ -252,7 +466,7 @@
 
 .ourstory-journey__title {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: 2.2rem;
+  font-size: 2rem;
   font-weight: 700;
   color: var(--frugivore-dark, #2c2416);
   line-height: 1.2;
@@ -261,17 +475,47 @@
 .ourstory-journey__desc {
   font-family: "Outfit", sans-serif;
   font-size: 1.4rem;
-  line-height: 1.65;
+  line-height: 1.6;
   color: var(--frugivore-gray, #7a7062);
+}
+
+@media (min-width: 768px) {
+  .ourstory-journey {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3.2rem;
+  }
+
+  .ourstory-journey__step {
+    padding-top: 2.4rem;
+  }
+
+  .ourstory-journey__step::before {
+    width: 48px;
+  }
+
+  .ourstory-journey__title {
+    font-size: 2.2rem;
+  }
+
+  .ourstory-journey__desc {
+    font-size: 1.45rem;
+    line-height: 1.65;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ourstory-journey {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 /* ── PRODUCT APPROACH ── */
 .ourstory-approach {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6.4rem;
-  align-items: center;
-  margin-bottom: 9.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+  margin-bottom: 4.8rem;
 }
 
 .ourstory-approach__image {
@@ -279,19 +523,19 @@
   height: auto;
   aspect-ratio: 4 / 3;
   object-fit: cover;
-  border-radius: 20px;
-  box-shadow: 0 16px 48px rgba(44, 36, 22, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(44, 36, 22, 0.08);
 }
 
 .ourstory-approach__content {
   display: flex;
   flex-direction: column;
-  gap: 2.4rem;
+  gap: 2rem;
 }
 
 .ourstory-approach__heading {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(2.8rem, 4vw, 5.6rem);
+  font-size: 2.4rem;
   font-weight: 700;
   line-height: 1.15;
   color: var(--frugivore-dark, #2c2416);
@@ -299,17 +543,16 @@
 
 .ourstory-approach__text {
   font-family: "Outfit", sans-serif;
-  font-size: 1.6rem;
-  line-height: 1.8;
+  font-size: 1.5rem;
+  line-height: 1.75;
   color: var(--frugivore-gray, #7a7062);
-  max-width: 52ch;
 }
 
 .ourstory-approach__markers {
   display: flex;
   flex-direction: column;
-  gap: 1.4rem;
-  margin-top: 0.8rem;
+  gap: 1.2rem;
+  margin-top: 0.4rem;
 }
 
 .ourstory-approach__marker {
@@ -328,25 +571,66 @@
 
 .ourstory-approach__marker-text {
   font-family: "Outfit", sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   line-height: 1.5;
   color: var(--frugivore-dark, #2c2416);
   font-weight: 500;
 }
 
+@media (min-width: 768px) {
+  .ourstory-approach {
+    margin-bottom: 6.4rem;
+  }
+
+  .ourstory-approach__heading {
+    font-size: 3.2rem;
+  }
+
+  .ourstory-approach__text {
+    font-size: 1.6rem;
+  }
+
+  .ourstory-approach__marker-text {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ourstory-approach {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6.4rem;
+    align-items: center;
+    margin-bottom: 9.6rem;
+  }
+
+  .ourstory-approach__image {
+    border-radius: 20px;
+  }
+
+  .ourstory-approach__heading {
+    font-size: clamp(3.2rem, 4vw, 5.6rem);
+  }
+
+  .ourstory-approach__text {
+    font-size: 1.7rem;
+    line-height: 1.8;
+    max-width: 52ch;
+  }
+}
+
 /* ── PRINCIPLES (integrated) ── */
 .ourstory-principles {
   border-top: 1px solid var(--frugivore-border, #e6e0d4);
-  padding-top: 7.2rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4.8rem;
-  align-items: start;
+  padding-top: 4.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
 }
 
 .ourstory-principles__heading {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(2.4rem, 3.5vw, 4.8rem);
+  font-size: 2.2rem;
   font-weight: 700;
   line-height: 1.15;
   color: var(--frugivore-dark, #2c2416);
@@ -358,10 +642,10 @@
 }
 
 .ourstory-principle {
-  padding: 2rem 0;
+  padding: 1.6rem 0;
   border-bottom: 1px solid var(--frugivore-border, #e6e0d4);
   display: grid;
-  grid-template-columns: 3.2rem 1fr;
+  grid-template-columns: 2.8rem 1fr;
   gap: 1.2rem;
   align-items: baseline;
 }
@@ -379,24 +663,64 @@
 
 .ourstory-principle__title {
   font-family: "Outfit", sans-serif;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: var(--frugivore-dark, #2c2416);
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.3rem;
 }
 
 .ourstory-principle__desc {
   font-family: "Outfit", sans-serif;
-  font-size: 1.4rem;
-  line-height: 1.6;
+  font-size: 1.35rem;
+  line-height: 1.55;
   color: var(--frugivore-gray, #7a7062);
   grid-column: 2;
+}
+
+@media (min-width: 768px) {
+  .ourstory-principles {
+    padding-top: 6.4rem;
+  }
+
+  .ourstory-principles__heading {
+    font-size: 2.8rem;
+  }
+
+  .ourstory-principle {
+    padding: 2rem 0;
+    grid-template-columns: 3.2rem 1fr;
+  }
+
+  .ourstory-principle__title {
+    font-size: 1.6rem;
+  }
+
+  .ourstory-principle__desc {
+    font-size: 1.4rem;
+    line-height: 1.6;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ourstory-principles {
+    padding-top: 7.2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4.8rem;
+    align-items: start;
+  }
+
+  .ourstory-principles__heading {
+    font-size: clamp(2.4rem, 3.5vw, 4.8rem);
+  }
 }
 
 /* ── FINAL CTA ── */
 .ourstory-cta {
   background: var(--frugivore-forest, #1e352f);
-  padding: 9.6rem 6.4rem;
+  padding: 5.6rem 2rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .ourstory-cta__inner {
@@ -411,16 +735,16 @@
 
 .ourstory-cta__eyebrow {
   font-family: "Outfit", sans-serif;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 4px;
+  letter-spacing: 3px;
   color: rgba(250, 247, 240, 0.5);
 }
 
 .ourstory-cta__heading {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(2.8rem, 4.5vw, 6rem);
+  font-size: 2.4rem;
   font-weight: 700;
   line-height: 1.15;
   color: #faf7f0;
@@ -428,18 +752,19 @@
 
 .ourstory-cta__text {
   font-family: "Outfit", sans-serif;
-  font-size: 1.5rem;
-  line-height: 1.7;
+  font-size: 1.4rem;
+  line-height: 1.65;
   color: rgba(250, 247, 240, 0.65);
   max-width: 52ch;
 }
 
 .ourstory-cta__actions {
   display: flex;
-  gap: 1.6rem;
+  gap: 1.2rem;
   flex-wrap: wrap;
   justify-content: center;
   margin-top: 0.8rem;
+  width: 100%;
 }
 
 .ourstory-cta__btn {
@@ -455,6 +780,7 @@
   transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
   cursor: pointer;
   border: none;
+  box-sizing: border-box;
 }
 
 .ourstory-cta__btn--primary {
@@ -479,228 +805,42 @@
   transform: translateY(-2px);
 }
 
-/* ═══════════════════════════════════════════════
-   RESPONSIVE — TABLET
-   ═══════════════════════════════════════════════ */
-
-@media (max-width: 1024px) {
-  .ourstory-hero {
-    grid-template-columns: 1fr;
-    padding: 12rem 4rem 6.4rem;
-    min-height: auto;
-    gap: 3.2rem;
-  }
-  .ourstory-hero__visual {
-    order: -1;
-  }
-  .ourstory-hero__image {
-    max-width: 360px;
-    aspect-ratio: 1 / 1;
-  }
-  .ourstory-section {
-    padding: 6.4rem 4rem;
-  }
-  .ourstory-divider {
-    padding: 0 4rem;
-  }
-  .ourstory-building,
-  .ourstory-approach,
-  .ourstory-principles {
-    grid-template-columns: 1fr;
-    gap: 3.2rem;
-  }
-  .ourstory-approach {
-    margin-bottom: 6.4rem;
-  }
-  .ourstory-journey {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .ourstory-cinematic {
-    padding: 6.4rem 4rem;
-  }
-  .ourstory-cinematic__container {
-    height: clamp(260px, 45vw, 420px);
-    border-radius: 16px;
-  }
-  .ourstory-cta {
-    padding: 6.4rem 4rem;
-  }
-}
-
-/* ═══════════════════════════════════════════════
-   RESPONSIVE — MOBILE LARGE
-   ═══════════════════════════════════════════════ */
-
-@media (max-width: 768px) {
-  .ourstory-hero {
-    padding: 9.6rem 2rem 4.8rem;
-    gap: 2.4rem;
-  }
-  .ourstory-hero__title {
-    font-size: clamp(3.2rem, 9vw, 4.8rem);
-  }
-  .ourstory-hero__subtitle {
-    font-size: 1.5rem;
-  }
-  .ourstory-hero__image {
-    max-width: 260px;
-    border-radius: 16px;
-  }
-  .ourstory-section {
-    padding: 4.8rem 2rem;
-  }
-  .ourstory-section__heading {
-    font-size: 2.4rem;
-    margin-bottom: 3.2rem;
-  }
-  .ourstory-divider {
-    padding: 0 2rem;
-  }
-  .ourstory-idea {
-    grid-template-columns: 1fr;
-    gap: 1.2rem;
-  }
-  .ourstory-idea__marker {
-    font-size: 4rem;
-  }
-  .ourstory-idea__heading {
-    font-size: 2.4rem;
-  }
-  .ourstory-idea__text {
-    font-size: 1.5rem;
-    line-height: 1.7;
-  }
-  .ourstory-building__statement {
-    font-size: 2.4rem;
-  }
-  .ourstory-journey {
-    grid-template-columns: 1fr;
-    gap: 2.4rem;
-  }
-  .ourstory-cinematic {
-    padding: 4.8rem 2rem;
-  }
-  .ourstory-cinematic__container {
-    height: clamp(200px, 56vw, 320px);
-    border-radius: 12px;
-  }
-  .ourstory-approach {
-    margin-bottom: 4.8rem;
-  }
-  .ourstory-approach__heading {
-    font-size: 2.4rem;
-  }
-  .ourstory-approach__text {
-    font-size: 1.5rem;
-  }
-  .ourstory-principles {
-    padding-top: 4.8rem;
-  }
-  .ourstory-principles__heading {
-    font-size: 2.2rem;
-  }
-  .ourstory-cta {
-    padding: 4.8rem 2rem;
-  }
-  .ourstory-cta__heading {
-    font-size: 2.4rem;
-  }
-  .ourstory-cta__text {
-    font-size: 1.4rem;
-  }
-}
-
-/* ═══════════════════════════════════════════════
-   RESPONSIVE — MOBILE SMALL
-   ═══════════════════════════════════════════════ */
-
 @media (max-width: 480px) {
-  .ourstory-hero {
-    padding: 8.8rem 1.6rem 3.6rem;
-    gap: 2rem;
-  }
-  .ourstory-hero__eyebrow {
-    font-size: 1.1rem;
-    letter-spacing: 3px;
-  }
-  .ourstory-hero__title {
-    font-size: 3.2rem;
-    line-height: 1.1;
-  }
-  .ourstory-hero__subtitle {
-    font-size: 1.4rem;
-    line-height: 1.65;
-  }
-  .ourstory-hero__image {
-    max-width: 220px;
-    border-radius: 14px;
-    box-shadow: 0 12px 32px rgba(44, 36, 22, 0.1);
-  }
-  .ourstory-section {
-    padding: 3.6rem 1.6rem;
-  }
-  .ourstory-section__heading {
-    font-size: 2.2rem;
-    margin-bottom: 2.4rem;
-  }
-  .ourstory-divider {
-    padding: 0 1.6rem;
-  }
-  .ourstory-idea__marker {
-    font-size: 3.2rem;
-  }
-  .ourstory-idea__heading {
-    font-size: 2.2rem;
-  }
-  .ourstory-idea__text {
-    font-size: 1.4rem;
-  }
-  .ourstory-building__statement {
-    font-size: 2.2rem;
-  }
-  .ourstory-pillar__title {
-    font-size: 1.6rem;
-  }
-  .ourstory-pillar__desc {
-    font-size: 1.4rem;
-  }
-  .ourstory-journey__title {
-    font-size: 2rem;
-  }
-  .ourstory-cinematic {
-    padding: 3.6rem 1.6rem;
-  }
-  .ourstory-cinematic__container {
-    height: clamp(180px, 56vw, 260px);
-    border-radius: 10px;
-  }
-  .ourstory-approach {
-    margin-bottom: 3.6rem;
-  }
-  .ourstory-approach__heading {
-    font-size: 2.2rem;
-  }
-  .ourstory-approach__text {
-    font-size: 1.4rem;
-  }
-  .ourstory-approach__marker-text {
-    font-size: 1.4rem;
-  }
-  .ourstory-principles {
-    padding-top: 3.6rem;
-  }
-  .ourstory-principles__heading {
-    font-size: 2rem;
-  }
-  .ourstory-cta {
-    padding: 4rem 1.6rem;
-  }
-  .ourstory-cta__heading {
-    font-size: 2.2rem;
+  .ourstory-cta__actions {
+    flex-direction: column;
   }
   .ourstory-cta__btn {
     width: 100%;
-    padding: 1.4rem 2.4rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .ourstory-cta {
+    padding: 7.2rem 4rem;
+  }
+
+  .ourstory-cta__eyebrow {
+    font-size: 1.2rem;
+    letter-spacing: 4px;
+  }
+
+  .ourstory-cta__heading {
+    font-size: 3.6rem;
+  }
+
+  .ourstory-cta__text {
+    font-size: 1.5rem;
+    line-height: 1.7;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ourstory-cta {
+    padding: 9.6rem 6.4rem;
+  }
+
+  .ourstory-cta__heading {
+    font-size: clamp(3.6rem, 4.5vw, 6rem);
   }
 }
 

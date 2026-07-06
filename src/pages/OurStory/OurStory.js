@@ -81,7 +81,7 @@ const OurStory = () => {
     <main className="ourstory">
 
       {/* ═══ 1. STORY HERO ═══ */}
-      <header className="ourstory-hero">
+      <section className="ourstory-hero">
         <div className="ourstory-hero__content">
           <span className="ourstory-hero__eyebrow">The SHROOOMS Story</span>
           <h1 className="ourstory-hero__title">
@@ -100,7 +100,7 @@ const OurStory = () => {
             className="ourstory-hero__image"
           />
         </div>
-      </header>
+      </section>
 
       {/* ─── divider ─── */}
       <div className="ourstory-divider"><div className="ourstory-divider__line" /></div>

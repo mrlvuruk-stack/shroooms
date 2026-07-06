@@ -120,7 +120,7 @@ body {
   grid-template-rows: auto 1fr auto;
   min-height: 100vh;
 }
-header {
+.grid-container > header {
   grid-area: header;
   height: 14.5rem;
 }
@@ -246,7 +246,7 @@ img.medium {
 }
 
 @media (max-width: 823px) {
-  header {
+  .grid-container > header {
     height: 13rem;
   }
   main {
@@ -254,7 +254,7 @@ img.medium {
   }
 }
 @media (max-width: 600px) {
-  header {
+  .grid-container > header {
     height: 17.5rem;
   }
   main {

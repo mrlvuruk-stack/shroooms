@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import vegetablesList from "../../store/actions/actionCreators/productsListAction";
 import "./Recipes.css";
 
 export const RECIPES_DATA = [
@@ -7,10 +9,10 @@ export const RECIPES_DATA = [
     id: "lions-mane-steaks",
     name: "Pan-Seared Lion's Mane Steaks",
     mushroom: "Lion's Mane",
-    category: "main",
+    category: "mains",
     time: "20 mins",
     difficulty: "Easy",
-    icon: "fa-cutlery",
+    image: "/cultivar_lions_mane.jpg",
     summary: "Thick-cut Lion's Mane steaks seared to golden perfection in herb-infused garlic butter.",
     ingredients: [
       "250g fresh Lion's Mane mushroom",
@@ -21,7 +23,7 @@ export const RECIPES_DATA = [
     ],
     steps: [
       "Slice the Lion's Mane mushroom into 1-inch thick slabs.",
-      "Heat a dry cast-iron skillet over medium-high heat. Place the mushroom slabs in the pan and sear for 2-3 minutes, using a heavy press or second pan to compress out excess moisture.",
+      "Heat a dry cast-iron skillet over medium-high heat. Place the mushroom slabs in the pan and sear for 2-3 minutes, using a heavy press to compress out excess moisture.",
       "Lower the heat to medium. Add butter, crushed garlic, and rosemary sprigs to the skillet.",
       "Tilt the pan and baste the melted butter over the steaks continuously for 4-5 minutes until golden brown and caramelized.",
       "Season generously with sea salt and black pepper. Serve hot."
@@ -31,10 +33,10 @@ export const RECIPES_DATA = [
     id: "king-oyster-scallops",
     name: "King Oyster Mushroom 'Scallops'",
     mushroom: "King Oyster",
-    category: "main",
+    category: "mains",
     time: "25 mins",
     difficulty: "Medium",
-    icon: "fa-glass",
+    image: "/box_king_oyster.jpg",
     summary: "Thick rounds of King Oyster stems scored, seared, and glazed in white wine and soy sauce.",
     ingredients: [
       "3 large King Oyster mushroom stems",
@@ -59,7 +61,7 @@ export const RECIPES_DATA = [
     category: "quick",
     time: "15 mins",
     difficulty: "Easy",
-    icon: "fa-lemon-o",
+    image: "/box_pink_oyster.jpg",
     summary: "Vibrant shredded Pink Oyster clusters pan-fried till crispy and served in warm tortillas.",
     ingredients: [
       "200g Pink Oyster mushrooms",
@@ -81,10 +83,10 @@ export const RECIPES_DATA = [
     id: "blue-oyster-pasta",
     name: "Creamy Blue Oyster Linguine",
     mushroom: "Blue Oyster",
-    category: "main",
+    category: "pasta",
     time: "30 mins",
     difficulty: "Medium",
-    icon: "fa-cutlery",
+    image: "/box_blue_oyster.jpg",
     summary: "Silky linguine tossed in a rich, garlic-shallot cream sauce with sautéed Blue Oyster mushrooms.",
     ingredients: [
       "200g Blue Oyster mushrooms, sliced",
@@ -109,7 +111,7 @@ export const RECIPES_DATA = [
     category: "wellness",
     time: "10 mins",
     difficulty: "Easy",
-    icon: "fa-coffee",
+    image: "/cultivar_reishi.jpg",
     summary: "A warm, earthy spiced beverage prepared with Reishi powder, turmeric, and ginger.",
     ingredients: [
       "1 tsp organic Reishi powder (extract)",
@@ -131,10 +133,10 @@ export const RECIPES_DATA = [
     id: "shiitake-broth",
     name: "Restorative Umami Shiitake Broth",
     mushroom: "Shiitake",
-    category: "wellness",
+    category: "soups",
     time: "40 mins",
     difficulty: "Easy",
-    icon: "fa-leaf",
+    image: "/cultivar_maitake.jpg",
     summary: "A nourishing, mineral-rich vegetable broth brewed with fresh shiitake, ginger, and kombu.",
     ingredients: [
       "150g Shiitake mushrooms, sliced",
@@ -155,143 +157,123 @@ export const RECIPES_DATA = [
   }
 ];
 
+const CATEGORY_FILTERS = [
+  { id: "all", label: "All Recipes" },
+  { id: "mains", label: "🍛 Mains" },
+  { id: "pasta", label: "🍝 Pasta" },
+  { id: "quick", label: "🥪 Quick Sauté" },
+  { id: "soups", label: "🍜 Soups & Broths" },
+  { id: "wellness", label: "🍵 Wellness Infusions" }
+];
+
 const Recipes = () => {
+  const dispatch = useDispatch();
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedRecipe, setExpandedRecipe] = useState(null);
 
+  const productsData = useSelector((state) => state.products);
+  const { vegetables: products } = productsData || {};
+
   useEffect(() => {
-    document.title = "Gourmet Mushroom Recipes | Cook Oyster & Shiitake – Shroooms";
+    if (!products || products.length === 0) {
+      dispatch(vegetablesList());
+    }
+  }, [dispatch, products]);
+
+  useEffect(() => {
+    document.title = "Gourmet Mushroom Recipes | The Shroooms Kitchen";
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
-      metaDesc.setAttribute("content", "Learn how to cook gourmet mushrooms with chef-curated recipes. Simple, delicious guides for sautéed Pink Oyster, Lion's Mane, and Shiitake broth.");
+      metaDesc.setAttribute(
+        "content",
+        "Master gourmet mushroom cooking with chef-curated recipes. Simple preparation techniques for Lion's Mane steaks, Pink Oyster tacos, and Shiitake broth."
+      );
     }
+    window.scrollTo(0, 0);
   }, []);
 
   const toggleRecipeExpand = (id) => {
-    if (expandedRecipe === id) {
-      setExpandedRecipe(null);
-    } else {
-      setExpandedRecipe(id);
-    }
+    setExpandedRecipe((prev) => (prev === id ? null : id));
   };
 
-  const [recipes, setRecipes] = useState(RECIPES_DATA);
-
-  useEffect(() => {
-    const fetchRecipes = async () => {
-      const { supabase, isSupabaseConfigured } = await import("../../supabase");
-      if (isSupabaseConfigured && supabase) {
-        try {
-          const { data, error } = await supabase.from("recipes").select("*");
-          if (!error && data && data.length > 0) {
-            setRecipes(data);
-            return;
-          }
-        } catch (err) {
-          console.error("Supabase recipes fetch error:", err);
-        }
-      }
-      const saved = localStorage.getItem("mock_recipes");
-      if (saved) {
-        setRecipes(JSON.parse(saved));
-      } else {
-        localStorage.setItem("mock_recipes", JSON.stringify(RECIPES_DATA));
-      }
-    };
-    fetchRecipes();
-  }, []);
-
-  const filteredRecipes = recipes.filter((recipe) => {
-    const matchesCategory = activeCategory === "all" || 
+  const filteredRecipes = RECIPES_DATA.filter((recipe) => {
+    const matchesCategory =
+      activeCategory === "all" ||
       recipe.category === activeCategory ||
-      (activeCategory === "salads" && (recipe.category === "salads" || recipe.category === "sides"));
-    const matchesSearch = 
-      recipe.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      recipe.mushroom.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      recipe.summary.toLowerCase().includes(searchQuery.toLowerCase());
+      (activeCategory === "mains" && recipe.category === "main");
+
+    const query = searchQuery.toLowerCase().trim();
+    const matchesSearch =
+      !query ||
+      recipe.name.toLowerCase().includes(query) ||
+      recipe.mushroom.toLowerCase().includes(query) ||
+      recipe.summary.toLowerCase().includes(query);
+
     return matchesCategory && matchesSearch;
   });
 
+  // Resolve matching catalog product safely
+  const getProductRoute = (mushroomName) => {
+    if (!products || !Array.isArray(products) || products.length === 0) {
+      return "/";
+    }
+    const cleanName = (mushroomName || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+    const match = products.find((p) => {
+      const pName = (p.name || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+      return pName.includes(cleanName) || cleanName.includes(pName);
+    });
+    return match ? `/product/${match._id}` : "/";
+  };
+
   return (
-    <div className="recipes-container">
-      <div className="recipes-inner animate__animated animate__fadeIn">
+    <main className="recipes-container" aria-label="The Shroooms Kitchen Recipes">
+      <div className="recipes-inner">
         <header className="recipes-header-section">
-          <span className="recipes-eyebrow">Culinary Arts</span>
-          <h1 className="recipes-title">The Shroooms Kitchen</h1>
+          <span className="recipes-eyebrow">SHROOOMS KITCHEN</span>
+          <h1 className="recipes-title">Chef-Curated Gourmet Mushroom Recipes</h1>
           <p className="recipes-subtitle">
-            Master the art of cooking gourmet mushrooms. Discover professional culinary techniques and therapeutic wellness infusions.
+            Master simple cooking techniques, savory sautés, and rich broths with fresh, locally cultivated mushrooms.
           </p>
-          <div className="recipes-divider"></div>
+          <div className="recipes-divider" aria-hidden="true" />
         </header>
 
         {/* Search & Filter Toolbar */}
         <div className="recipes-toolbar">
           <div className="recipes-search-wrapper">
-            <i className="fa fa-search search-icon"></i>
+            <i className="fa fa-search search-icon" aria-hidden="true"></i>
             <input
               type="text"
-              placeholder="Search recipes or mushrooms..."
+              placeholder="Search by recipe or mushroom..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="recipes-search-input"
+              aria-label="Search recipes or mushrooms"
             />
             {searchQuery && (
-              <button className="clear-search-btn" onClick={() => setSearchQuery("")}>
-                <i className="fa fa-times"></i>
+              <button
+                type="button"
+                className="clear-search-btn"
+                onClick={() => setSearchQuery("")}
+                aria-label="Clear search input"
+              >
+                <i className="fa fa-times" aria-hidden="true"></i>
               </button>
             )}
           </div>
 
-          <div className="recipes-filter-nav" style={{ display: "flex", flexWrap: "wrap", gap: "0.8rem" }}>
-            <button
-              className={`recipe-filter-btn ${activeCategory === "all" ? "active" : ""}`}
-              onClick={() => setActiveCategory("all")}
-            >
-              All Recipes
-            </button>
-            <button
-              className={`recipe-filter-btn ${activeCategory === "breakfast" ? "active" : ""}`}
-              onClick={() => setActiveCategory("breakfast")}
-            >
-              🥣 Breakfast
-            </button>
-            <button
-              className={`recipe-filter-btn ${activeCategory === "salads" ? "active" : ""}`}
-              onClick={() => setActiveCategory("salads")}
-            >
-              🥗 Salads &amp; Sides
-            </button>
-            <button
-              className={`recipe-filter-btn ${activeCategory === "soups" ? "active" : ""}`}
-              onClick={() => setActiveCategory("soups")}
-            >
-              🍜 Soups
-            </button>
-            <button
-              className={`recipe-filter-btn ${activeCategory === "pasta" ? "active" : ""}`}
-              onClick={() => setActiveCategory("pasta")}
-            >
-              🍝 Pasta
-            </button>
-            <button
-              className={`recipe-filter-btn ${activeCategory === "main" ? "active" : ""}`}
-              onClick={() => setActiveCategory("main")}
-            >
-              🍛 Mains
-            </button>
-            <button
-              className={`recipe-filter-btn ${activeCategory === "quick" ? "active" : ""}`}
-              onClick={() => setActiveCategory("quick")}
-            >
-              🥪 Snacks &amp; Quick
-            </button>
-            <button
-              className={`recipe-filter-btn ${activeCategory === "wellness" ? "active" : ""}`}
-              onClick={() => setActiveCategory("wellness")}
-            >
-              🍵 Wellness
-            </button>
+          <div className="recipes-filter-nav" role="group" aria-label="Filter recipes by category">
+            {CATEGORY_FILTERS.map((cat) => (
+              <button
+                key={cat.id}
+                type="button"
+                className={`recipe-filter-btn ${activeCategory === cat.id ? "active" : ""}`}
+                onClick={() => setActiveCategory(cat.id)}
+                aria-pressed={activeCategory === cat.id}
+              >
+                {cat.label}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -300,28 +282,60 @@ const Recipes = () => {
           {filteredRecipes.length > 0 ? (
             filteredRecipes.map((recipe) => {
               const isExpanded = expandedRecipe === recipe.id;
+              const productRoute = getProductRoute(recipe.mushroom);
+
               return (
-                <div key={recipe.id} className={`recipe-card ${isExpanded ? "expanded" : ""}`}>
-                  <div className="recipe-card-header" onClick={() => toggleRecipeExpand(recipe.id)}>
+                <article key={recipe.id} className={`recipe-card ${isExpanded ? "expanded" : ""}`}>
+                  <button
+                    type="button"
+                    className="recipe-card-header"
+                    onClick={() => toggleRecipeExpand(recipe.id)}
+                    aria-expanded={isExpanded}
+                    aria-controls={`recipe-content-${recipe.id}`}
+                    id={`recipe-header-${recipe.id}`}
+                  >
+                    <div className="recipe-card-header__media">
+                      <img
+                        src={recipe.image}
+                        alt={recipe.name}
+                        className="recipe-card-header__img"
+                        loading="lazy"
+                      />
+                    </div>
+
                     <div className="recipe-main-meta">
-                      <span className="recipe-mushroom-tag">{recipe.mushroom}</span>
-                      <h3>{recipe.name}</h3>
+                      <div className="recipe-card-header__tags">
+                        <span className="recipe-mushroom-tag">{recipe.mushroom}</span>
+                      </div>
+                      <h2 className="recipe-card__title">{recipe.name}</h2>
                       <p className="recipe-summary-text">{recipe.summary}</p>
                     </div>
+
                     <div className="recipe-quick-tags">
-                      <span className="meta-tag"><i className="fa fa-clock-o"></i> {recipe.time}</span>
-                      <span className="meta-tag"><i className="fa fa-tachometer"></i> {recipe.difficulty}</span>
+                      <span className="meta-tag">
+                        <i className="fa fa-clock-o" aria-hidden="true"></i> {recipe.time}
+                      </span>
+                      <span className="meta-tag">
+                        <i className="fa fa-tachometer" aria-hidden="true"></i> {recipe.difficulty}
+                      </span>
+                      <span className="expand-indicator-btn" aria-hidden="true">
+                        <i className={`fa ${isExpanded ? "fa-chevron-up" : "fa-chevron-down"}`}></i>
+                      </span>
                     </div>
-                    <button className="expand-indicator-btn">
-                      <i className={`fa ${isExpanded ? "fa-chevron-up" : "fa-chevron-down"}`}></i>
-                    </button>
-                  </div>
+                  </button>
 
                   {isExpanded && (
-                    <div className="recipe-expanded-content animate__animated animate__fadeIn">
+                    <div
+                      id={`recipe-content-${recipe.id}`}
+                      className="recipe-expanded-content"
+                      role="region"
+                      aria-labelledby={`recipe-header-${recipe.id}`}
+                    >
                       <div className="recipe-content-split">
                         <div className="ingredients-block">
-                          <h4><i className="fa fa-shopping-basket"></i> Ingredients</h4>
+                          <h4>
+                            <i className="fa fa-shopping-basket" aria-hidden="true"></i> Ingredients
+                          </h4>
                           <ul>
                             {recipe.ingredients.map((ing, idx) => (
                               <li key={idx}>{ing}</li>
@@ -329,7 +343,9 @@ const Recipes = () => {
                           </ul>
                         </div>
                         <div className="steps-block">
-                          <h4><i className="fa fa-list-ol"></i> Method</h4>
+                          <h4>
+                            <i className="fa fa-list-ol" aria-hidden="true"></i> Preparation Method
+                          </h4>
                           <ol>
                             {recipe.steps.map((step, idx) => (
                               <li key={idx}>
@@ -342,24 +358,24 @@ const Recipes = () => {
                       </div>
 
                       <div className="recipe-card-actions">
-                        <Link to="/" className="shop-ingredients-btn">
-                          Order Fresh {recipe.mushroom} <i className="fa fa-arrow-right"></i>
+                        <Link to={productRoute} className="shop-ingredients-btn">
+                          Order Fresh {recipe.mushroom} <i className="fa fa-arrow-right" aria-hidden="true"></i>
                         </Link>
                       </div>
                     </div>
                   )}
-                </div>
+                </article>
               );
             })
           ) : (
-            <div className="no-recipes-found">
-              <i className="fa fa-cutlery"></i>
-              <p>No culinary recipes matches your search queries. Try searching for "Lion's Mane" or "Oyster".</p>
+            <div className="no-recipes-found" role="status">
+              <i className="fa fa-cutlery" aria-hidden="true"></i>
+              <p>No gourmet recipes match your current search criteria. Try searching for "Lion's Mane" or "Oyster".</p>
             </div>
           )}
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

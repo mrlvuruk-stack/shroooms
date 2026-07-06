@@ -12,7 +12,7 @@
 
 /* ── STORY HERO ── */
 .ourstory-hero {
-  min-height: 75vh;
+  min-height: 78vh;
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
@@ -39,9 +39,9 @@
 
 .ourstory-hero__title {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(4.8rem, 6.5vw, 9.6rem);
+  font-size: clamp(5.6rem, 7vw, 10rem);
   font-weight: 700;
-  line-height: 1.05;
+  line-height: 1.02;
   color: var(--frugivore-dark, #2c2416);
 }
 
@@ -61,22 +61,27 @@
 
 .ourstory-hero__image {
   width: 100%;
-  max-width: 540px;
+  max-width: 560px;
   aspect-ratio: 4 / 5;
   object-fit: cover;
   border-radius: 24px;
   box-shadow: 0 24px 64px rgba(44, 36, 22, 0.12);
 }
 
-/* ── SECTION LAYOUT UTILITY ── */
+/* ── SECTION LAYOUT ── */
 .ourstory-section {
   max-width: 1280px;
   margin: 0 auto;
   padding: 9.6rem 6.4rem;
 }
 
-.ourstory-section--narrow {
-  max-width: 960px;
+.ourstory-section__heading {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(3.2rem, 4vw, 5.6rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--frugivore-dark, #2c2416);
+  margin-bottom: 4.8rem;
 }
 
 .ourstory-divider {
@@ -101,7 +106,7 @@
 
 .ourstory-idea__marker {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: 8rem;
+  font-size: 6.4rem;
   font-weight: 700;
   line-height: 1;
   color: var(--frugivore-border, #e6e0d4);
@@ -130,6 +135,30 @@
   max-width: 64ch;
 }
 
+/* ── CINEMATIC BRAND MOMENT ── */
+.ourstory-cinematic {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 9.6rem 4rem;
+}
+
+.ourstory-cinematic__container {
+  width: 100%;
+  height: clamp(420px, 55vw, 720px);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--frugivore-dark, #2c2416);
+  position: relative;
+}
+
+.ourstory-cinematic__video,
+.ourstory-cinematic__fallback {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 /* ── WHAT WE ARE BUILDING ── */
 .ourstory-building {
   display: grid;
@@ -149,7 +178,6 @@
 .ourstory-building__pillars {
   display: flex;
   flex-direction: column;
-  gap: 0;
 }
 
 .ourstory-pillar {
@@ -188,7 +216,7 @@
   grid-column: 2;
 }
 
-/* ── DISCOVERY TO EXPERIENCE JOURNEY ── */
+/* ── JOURNEY ── */
 .ourstory-journey {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -235,12 +263,13 @@
   color: var(--frugivore-gray, #7a7062);
 }
 
-/* ── HOW WE APPROACH THE PRODUCT ── */
+/* ── PRODUCT APPROACH ── */
 .ourstory-approach {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 6.4rem;
   align-items: center;
+  margin-bottom: 9.6rem;
 }
 
 .ourstory-approach__image {
@@ -303,8 +332,10 @@
   font-weight: 500;
 }
 
-/* ── PRINCIPLES ── */
+/* ── PRINCIPLES (integrated) ── */
 .ourstory-principles {
+  border-top: 1px solid var(--frugivore-border, #e6e0d4);
+  padding-top: 7.2rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4.8rem;
@@ -313,7 +344,7 @@
 
 .ourstory-principles__heading {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(3.2rem, 4vw, 5.6rem);
+  font-size: clamp(2.8rem, 3.5vw, 4.8rem);
   font-weight: 700;
   line-height: 1.15;
   color: var(--frugivore-dark, #2c2416);
@@ -322,12 +353,15 @@
 .ourstory-principles__list {
   display: flex;
   flex-direction: column;
-  gap: 0;
 }
 
 .ourstory-principle {
-  padding: 2.4rem 0;
+  padding: 2rem 0;
   border-bottom: 1px solid var(--frugivore-border, #e6e0d4);
+  display: grid;
+  grid-template-columns: 3.2rem 1fr;
+  gap: 1.2rem;
+  align-items: baseline;
 }
 
 .ourstory-principle:first-child {
@@ -339,63 +373,28 @@
   font-size: 1.4rem;
   font-weight: 700;
   color: var(--frugivore-green, #5a7247);
-  margin-bottom: 0.8rem;
 }
 
 .ourstory-principle__title {
   font-family: "Outfit", sans-serif;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   font-weight: 600;
   color: var(--frugivore-dark, #2c2416);
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.4rem;
 }
 
 .ourstory-principle__desc {
   font-family: "Outfit", sans-serif;
-  font-size: 1.5rem;
-  line-height: 1.65;
+  font-size: 1.4rem;
+  line-height: 1.6;
   color: var(--frugivore-gray, #7a7062);
-}
-
-/* ── FUTURE DIRECTION ── */
-.ourstory-future {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2.4rem;
-}
-
-.ourstory-future__eyebrow {
-  font-family: "Outfit", sans-serif;
-  font-size: 1.2rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 4px;
-  color: var(--frugivore-green, #5a7247);
-}
-
-.ourstory-future__heading {
-  font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(3.2rem, 4vw, 5.6rem);
-  font-weight: 700;
-  line-height: 1.15;
-  color: var(--frugivore-dark, #2c2416);
-  max-width: 18ch;
-}
-
-.ourstory-future__text {
-  font-family: "Outfit", sans-serif;
-  font-size: 1.7rem;
-  line-height: 1.8;
-  color: var(--frugivore-gray, #7a7062);
-  max-width: 56ch;
+  grid-column: 2;
 }
 
 /* ── FINAL CTA ── */
 .ourstory-cta {
   background: var(--frugivore-forest, #1e352f);
-  padding: 8rem 6.4rem;
+  padding: 9.6rem 6.4rem;
 }
 
 .ourstory-cta__inner {
@@ -405,7 +404,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3.2rem;
+  gap: 2.4rem;
+}
+
+.ourstory-cta__eyebrow {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: rgba(250, 247, 240, 0.5);
 }
 
 .ourstory-cta__heading {
@@ -416,11 +424,20 @@
   color: #faf7f0;
 }
 
+.ourstory-cta__text {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.6rem;
+  line-height: 1.7;
+  color: rgba(250, 247, 240, 0.65);
+  max-width: 52ch;
+}
+
 .ourstory-cta__actions {
   display: flex;
   gap: 1.6rem;
   flex-wrap: wrap;
   justify-content: center;
+  margin-top: 0.8rem;
 }
 
 .ourstory-cta__btn {
@@ -490,12 +507,21 @@
     grid-template-columns: 1fr;
     gap: 4rem;
   }
+  .ourstory-approach {
+    margin-bottom: 7.2rem;
+  }
   .ourstory-journey {
     grid-template-columns: repeat(2, 1fr);
-    gap: 3.2rem;
+  }
+  .ourstory-cinematic {
+    padding: 7.2rem 4rem;
+  }
+  .ourstory-cinematic__container {
+    height: clamp(280px, 50vw, 480px);
+    border-radius: 16px;
   }
   .ourstory-cta {
-    padding: 6.4rem 4rem;
+    padding: 7.2rem 4rem;
   }
 }
 
@@ -518,11 +544,23 @@
     gap: 1.6rem;
   }
   .ourstory-idea__marker {
-    font-size: 5.6rem;
+    font-size: 4.8rem;
   }
   .ourstory-journey {
     grid-template-columns: 1fr;
-    gap: 3.2rem;
+  }
+  .ourstory-cinematic {
+    padding: 5.6rem 2.4rem;
+  }
+  .ourstory-cinematic__container {
+    height: clamp(220px, 56vw, 360px);
+    border-radius: 12px;
+  }
+  .ourstory-approach {
+    margin-bottom: 5.6rem;
+  }
+  .ourstory-principles {
+    padding-top: 5.6rem;
   }
   .ourstory-cta {
     padding: 5.6rem 2.4rem;
@@ -542,6 +580,13 @@
   }
   .ourstory-divider {
     padding: 0 1.6rem;
+  }
+  .ourstory-cinematic {
+    padding: 4.8rem 1.6rem;
+  }
+  .ourstory-cinematic__container {
+    height: clamp(200px, 60vw, 300px);
+    border-radius: 10px;
   }
   .ourstory-cta {
     padding: 4.8rem 1.6rem;

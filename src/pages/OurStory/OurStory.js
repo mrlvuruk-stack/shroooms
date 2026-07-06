@@ -1,8 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "./OurStory.css";
 
+/* ── Video eligibility constants ── */
+const VIDEO_MIN_WIDTH = 1024;
+const VIDEO_SRC = "/videos/our-story/shroooms-cinematic.mp4";
+const VIDEO_POSTER = "/shroooms_product_showcase.png";
+
 const OurStory = () => {
+  const videoRef = useRef(null);
+  const [videoEligible, setVideoEligible] = useState(false);
+  const [videoFailed, setVideoFailed] = useState(false);
+
   useEffect(() => {
     document.title = "Our Story | SHROOOMS";
     const metaDesc = document.querySelector('meta[name="description"]');
@@ -15,6 +24,59 @@ const OurStory = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  /* ── Video eligibility: viewport width + reduced-motion ── */
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    const checkEligibility = () => {
+      setVideoEligible(
+        window.innerWidth >= VIDEO_MIN_WIDTH && !prefersReducedMotion
+      );
+    };
+
+    checkEligibility();
+
+    /* Recheck on resize (debounced via matchMedia for width threshold) */
+    const mql = window.matchMedia(`(min-width: ${VIDEO_MIN_WIDTH}px)`);
+    const handler = (e) => {
+      setVideoEligible(e.matches && !prefersReducedMotion);
+    };
+    if (mql.addEventListener) {
+      mql.addEventListener("change", handler);
+    } else {
+      mql.addListener(handler); // Safari 13 fallback
+    }
+
+    return () => {
+      if (mql.removeEventListener) {
+        mql.removeEventListener("change", handler);
+      } else {
+        mql.removeListener(handler);
+      }
+    };
+  }, []);
+
+  /* ── Page-visibility: pause/resume video ── */
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !videoEligible) return;
+
+    const handleVisibility = () => {
+      if (document.visibilityState === "hidden") {
+        video.pause();
+      } else if (document.visibilityState === "visible") {
+        video.play().catch(() => {});
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, [videoEligible]);
+
   return (
     <main className="ourstory">
 
@@ -23,12 +85,12 @@ const OurStory = () => {
         <div className="ourstory-hero__content">
           <span className="ourstory-hero__eyebrow">The SHROOOMS Story</span>
           <h1 className="ourstory-hero__title">
-            More Than Mushrooms.
+            More Than<br />Mushrooms.
           </h1>
           <p className="ourstory-hero__subtitle">
-            SHROOOMS is building a focused place to discover gourmet mushrooms,
-            explore mushroom products, learn practical ways to use them, and
-            access grow-at-home offerings.
+            SHROOOMS is building a focused place to discover mushroom varieties,
+            explore products, learn practical ways to use them, and access
+            grow-at-home and wholesale experiences.
           </p>
         </div>
         <div className="ourstory-hero__visual">
@@ -46,16 +108,17 @@ const OurStory = () => {
       {/* ═══ 2. THE IDEA BEHIND SHROOOMS ═══ */}
       <section className="ourstory-section">
         <div className="ourstory-idea">
-          <span className="ourstory-idea__marker" aria-hidden="true">I</span>
+          <span className="ourstory-idea__marker" aria-hidden="true">01</span>
           <div className="ourstory-idea__body">
             <h2 className="ourstory-idea__heading">
               The Idea Behind SHROOOMS
             </h2>
             <p className="ourstory-idea__text">
-              Mushrooms are often presented only as generic ingredients or isolated
-              products without context. Finding reliable information about specific
-              varieties, understanding how to use them, or accessing premium
-              cultivars can be surprisingly difficult.
+              Mushrooms are often encountered as isolated products, generic
+              ingredients, or unfamiliar varieties without context. Finding
+              reliable information about specific cultivars, understanding how to
+              use them, or accessing premium offerings can be surprisingly
+              difficult.
             </p>
             <p className="ourstory-idea__text">
               SHROOOMS aims to create a clearer experience — a single place where
@@ -71,44 +134,59 @@ const OurStory = () => {
       {/* ─── divider ─── */}
       <div className="ourstory-divider"><div className="ourstory-divider__line" /></div>
 
-      {/* ═══ 3. WHAT WE ARE BUILDING ═══ */}
+      {/* ═══ 3. CINEMATIC BRAND MOMENT ═══ */}
+      <section className="ourstory-cinematic" aria-label="SHROOOMS brand visual">
+        <div className="ourstory-cinematic__container">
+          {videoEligible && !videoFailed ? (
+            <video
+              ref={videoRef}
+              className="ourstory-cinematic__video"
+              src={VIDEO_SRC}
+              poster={VIDEO_POSTER}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              aria-hidden="true"
+              onError={() => setVideoFailed(true)}
+            />
+          ) : (
+            <img
+              src={VIDEO_POSTER}
+              alt=""
+              className="ourstory-cinematic__fallback"
+              loading="lazy"
+            />
+          )}
+        </div>
+      </section>
+
+      {/* ─── divider ─── */}
+      <div className="ourstory-divider"><div className="ourstory-divider__line" /></div>
+
+      {/* ═══ 4. WHAT WE ARE BUILDING ═══ */}
       <section className="ourstory-section">
         <div className="ourstory-building">
           <h2 className="ourstory-building__statement">
-            What We Are Building
+            A Focused Ecosystem Around Mushroom Discovery
           </h2>
           <div className="ourstory-building__pillars">
             <div className="ourstory-pillar">
               <span className="ourstory-pillar__number">01</span>
               <div>
-                <p className="ourstory-pillar__title">
-                  Gourmet Mushroom Discovery
-                </p>
+                <p className="ourstory-pillar__title">Product Discovery</p>
                 <p className="ourstory-pillar__desc">
-                  A curated catalog of premium gourmet cultivars — from Lion's Mane
-                  and King Oyster to Pink and Blue Oyster — with clear product
-                  information and variety-specific detail.
+                  Explore mushroom varieties and available products — from Lion's
+                  Mane and King Oyster to Pink and Blue Oyster — with clear,
+                  variety-specific detail.
                 </p>
               </div>
             </div>
             <div className="ourstory-pillar">
               <span className="ourstory-pillar__number">02</span>
               <div>
-                <p className="ourstory-pillar__title">
-                  Recipes &amp; Culinary Education
-                </p>
-                <p className="ourstory-pillar__desc">
-                  Practical recipes and preparation guidance that show how each
-                  mushroom variety can be used in everyday cooking.
-                </p>
-              </div>
-            </div>
-            <div className="ourstory-pillar">
-              <span className="ourstory-pillar__number">03</span>
-              <div>
-                <p className="ourstory-pillar__title">
-                  Grow-at-Home Offerings
-                </p>
+                <p className="ourstory-pillar__title">Grow-at-Home Access</p>
                 <p className="ourstory-pillar__desc">
                   Fully colonized substrate fruiting blocks that allow customers
                   to grow fresh mushrooms at home.
@@ -116,11 +194,19 @@ const OurStory = () => {
               </div>
             </div>
             <div className="ourstory-pillar">
+              <span className="ourstory-pillar__number">03</span>
+              <div>
+                <p className="ourstory-pillar__title">Recipes &amp; Learning</p>
+                <p className="ourstory-pillar__desc">
+                  Practical recipes and preparation guidance that show how each
+                  mushroom variety can be used in everyday cooking.
+                </p>
+              </div>
+            </div>
+            <div className="ourstory-pillar">
               <span className="ourstory-pillar__number">04</span>
               <div>
-                <p className="ourstory-pillar__title">
-                  Wholesale Access
-                </p>
+                <p className="ourstory-pillar__title">Wholesale Inquiries</p>
                 <p className="ourstory-pillar__desc">
                   A direct inquiry route for restaurants, chefs, and businesses
                   looking for consistent, quality mushroom supply.
@@ -134,9 +220,9 @@ const OurStory = () => {
       {/* ─── divider ─── */}
       <div className="ourstory-divider"><div className="ourstory-divider__line" /></div>
 
-      {/* ═══ 4. FROM DISCOVERY TO EXPERIENCE ═══ */}
+      {/* ═══ 5. FROM DISCOVERY TO EXPERIENCE ═══ */}
       <section className="ourstory-section">
-        <h2 className="ourstory-idea__heading" style={{ marginBottom: "4.8rem" }}>
+        <h2 className="ourstory-section__heading">
           From Discovery to Experience
         </h2>
         <div className="ourstory-journey">
@@ -179,7 +265,7 @@ const OurStory = () => {
       {/* ─── divider ─── */}
       <div className="ourstory-divider"><div className="ourstory-divider__line" /></div>
 
-      {/* ═══ 5. HOW WE APPROACH THE PRODUCT ═══ */}
+      {/* ═══ 6. OUR PRODUCT APPROACH + PRINCIPLES ═══ */}
       <section className="ourstory-section">
         <div className="ourstory-approach">
           <img
@@ -190,7 +276,7 @@ const OurStory = () => {
           />
           <div className="ourstory-approach__content">
             <h2 className="ourstory-approach__heading">
-              How We Approach the Product
+              Our Product Approach
             </h2>
             <p className="ourstory-approach__text">
               SHROOOMS cultivates gourmet mushrooms in Indore using indoor
@@ -220,88 +306,77 @@ const OurStory = () => {
             </div>
           </div>
         </div>
-      </section>
 
-      {/* ─── divider ─── */}
-      <div className="ourstory-divider"><div className="ourstory-divider__line" /></div>
-
-      {/* ═══ 6. PRINCIPLES THAT GUIDE SHROOOMS ═══ */}
-      <section className="ourstory-section">
+        {/* ── Integrated Principles ── */}
         <div className="ourstory-principles">
-          <h2 className="ourstory-principles__heading">
-            Principles That Guide SHROOOMS
-          </h2>
+          <h3 className="ourstory-principles__heading">
+            Principles That Guide Us
+          </h3>
           <div className="ourstory-principles__list">
             <div className="ourstory-principle">
-              <p className="ourstory-principle__number">01</p>
-              <p className="ourstory-principle__title">
-                Clear Product Information
-              </p>
-              <p className="ourstory-principle__desc">
-                Every mushroom variety is presented with honest, specific detail
-                about its characteristics, culinary use, and available formats.
-              </p>
+              <span className="ourstory-principle__number">01</span>
+              <div>
+                <p className="ourstory-principle__title">
+                  Clear Product Information
+                </p>
+                <p className="ourstory-principle__desc">
+                  Every mushroom variety is presented with honest, specific detail
+                  about its characteristics, culinary use, and available formats.
+                </p>
+              </div>
             </div>
             <div className="ourstory-principle">
-              <p className="ourstory-principle__number">02</p>
-              <p className="ourstory-principle__title">
-                Practical Discovery
-              </p>
-              <p className="ourstory-principle__desc">
-                Products are organized so customers can browse by type, explore
-                related recipes, and understand what they are purchasing.
-              </p>
+              <span className="ourstory-principle__number">02</span>
+              <div>
+                <p className="ourstory-principle__title">
+                  Practical Discovery
+                </p>
+                <p className="ourstory-principle__desc">
+                  Products are organized so customers can browse by type, explore
+                  related recipes, and understand what they are purchasing.
+                </p>
+              </div>
             </div>
             <div className="ourstory-principle">
-              <p className="ourstory-principle__number">03</p>
-              <p className="ourstory-principle__title">
-                Culinary Exploration
-              </p>
-              <p className="ourstory-principle__desc">
-                Recipes and preparation guidance help customers use mushroom
-                products in everyday cooking — not just as specialty ingredients.
-              </p>
+              <span className="ourstory-principle__number">03</span>
+              <div>
+                <p className="ourstory-principle__title">
+                  Culinary Exploration
+                </p>
+                <p className="ourstory-principle__desc">
+                  Recipes and preparation guidance help customers use mushroom
+                  products in everyday cooking — not just as specialty ingredients.
+                </p>
+              </div>
             </div>
             <div className="ourstory-principle">
-              <p className="ourstory-principle__number">04</p>
-              <p className="ourstory-principle__title">
-                Accessible Product Experiences
-              </p>
-              <p className="ourstory-principle__desc">
-                From fresh gourmet mushrooms to grow-at-home blocks, the product
-                range aims to make mushroom experiences approachable for everyone.
-              </p>
+              <span className="ourstory-principle__number">04</span>
+              <div>
+                <p className="ourstory-principle__title">
+                  Accessible Experiences
+                </p>
+                <p className="ourstory-principle__desc">
+                  From fresh gourmet mushrooms to grow-at-home blocks, the product
+                  range aims to make mushroom experiences approachable for everyone.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ─── divider ─── */}
-      <div className="ourstory-divider"><div className="ourstory-divider__line" /></div>
-
-      {/* ═══ 7. FUTURE DIRECTION ═══ */}
-      <section className="ourstory-section ourstory-section--narrow">
-        <div className="ourstory-future">
-          <span className="ourstory-future__eyebrow">Looking Ahead</span>
-          <h2 className="ourstory-future__heading">
-            What SHROOOMS Aims to Explore Next
-          </h2>
-          <p className="ourstory-future__text">
-            SHROOOMS intends to continue improving how people discover mushroom
-            varieties, access product information, explore culinary uses, and
-            connect with mushroom products and grow-at-home experiences. The focus
-            remains on building a clearer, more useful platform for mushroom
-            discovery and commerce.
-          </p>
-        </div>
-      </section>
-
-      {/* ═══ FINAL CTA ═══ */}
+      {/* ═══ 7. FUTURE DIRECTION + FINAL CTA ═══ */}
       <section className="ourstory-cta">
         <div className="ourstory-cta__inner">
+          <span className="ourstory-cta__eyebrow">Looking Ahead</span>
           <h2 className="ourstory-cta__heading">
             Explore What SHROOOMS Is Growing.
           </h2>
+          <p className="ourstory-cta__text">
+            SHROOOMS intends to continue improving how people discover mushroom
+            varieties, access product information, explore culinary uses, and
+            connect with mushroom products and grow-at-home experiences.
+          </p>
           <div className="ourstory-cta__actions">
             <Link
               to="/#produce-list"

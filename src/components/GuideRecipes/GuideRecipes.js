@@ -16,7 +16,7 @@ const GuideRecipes = () => {
     return null;
   }
 
-  // Map species image to recipe for visual consistency & claim safety
+  // Map claim-free species image to recipe
   const getRecipeImage = (mushroomName) => {
     const speciesMatch = MUSHROOM_GUIDE_DATA.find(
       (s) => s.commonName.toLowerCase() === (mushroomName || "").toLowerCase()
@@ -34,7 +34,7 @@ const GuideRecipes = () => {
         </p>
       </div>
 
-      <div className="guide-recipes-grid">
+      <div className="guide-recipes-list">
         {selectedRecipes.map((recipe) => (
           <article key={recipe.id} className="guide-recipe-card">
             <div className="guide-recipe-card__media">
@@ -44,21 +44,24 @@ const GuideRecipes = () => {
                 className="guide-recipe-card__image"
                 loading="lazy"
               />
-              <span className="guide-recipe-card__badge">
-                {recipe.category === "quick" ? "Quick Sauté" : "Main Course"}
-              </span>
             </div>
 
             <div className="guide-recipe-card__content">
-              <span className="guide-recipe-card__meta">
-                {recipe.time} • {recipe.difficulty} • {recipe.mushroom}
-              </span>
+              <div className="guide-recipe-card__meta-bar">
+                <span className="guide-recipe-card__meta">
+                  {recipe.time} • {recipe.difficulty} • {recipe.mushroom}
+                </span>
+                <span className="guide-recipe-card__badge">
+                  {recipe.category === "quick" ? "Quick Sauté" : "Main Course"}
+                </span>
+              </div>
+
               <h3 className="guide-recipe-card__title">{recipe.name}</h3>
               <p className="guide-recipe-card__summary">{recipe.summary}</p>
 
               <div className="guide-recipe-card__action">
                 <Link to="/recipes" className="guide-recipe-card__cta">
-                  View Recipe on Kitchen →
+                  Explore Recipe →
                 </Link>
               </div>
             </div>

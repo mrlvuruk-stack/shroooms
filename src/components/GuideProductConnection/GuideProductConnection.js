@@ -39,41 +39,38 @@ const GuideProductConnection = ({ products }) => {
         </p>
       </div>
 
-      <div className="guide-products-grid">
+      <div className="guide-products-list">
         {items.map(({ product, species }) => {
-          // Use claim-free raw species image if product image matches pouch artwork
+          // Explicitly use claim-free raw species image for product display
           const displayImage = species && species.image ? species.image : (product.image || "/shrooom.jpg");
 
           return (
-            <article key={product._id} className="guide-prod-card">
-              <div className="guide-prod-card__media">
+            <article key={product._id} className="guide-prod-row">
+              <div className="guide-prod-row__media">
                 <img
                   src={displayImage}
                   alt={product.name}
-                  className="guide-prod-card__image"
+                  className="guide-prod-row__image"
                   loading="lazy"
                 />
-                <span className="guide-prod-card__badge">Fresh Harvest</span>
               </div>
 
-              <div className="guide-prod-card__content">
-                <div className="guide-prod-card__header">
-                  <h3 className="guide-prod-card__title">{product.name}</h3>
-                  <span className="guide-prod-card__price">₹{product.price}</span>
-                </div>
+              <div className="guide-prod-row__info">
+                <h3 className="guide-prod-row__title">{product.name}</h3>
+                <span className="guide-prod-row__unit">Fresh Harvest • 200g</span>
+              </div>
 
-                <p className="guide-prod-card__desc">
-                  {species ? species.shortDescription : (product.description || "Fresh gourmet mushrooms grown locally in Indore.")}
-                </p>
+              <div className="guide-prod-row__price-tag">
+                <span className="guide-prod-row__price">₹{product.price}</span>
+              </div>
 
-                <div className="guide-prod-card__action">
-                  <Link
-                    to={`/product/${product._id}`}
-                    className="guide-prod-card__cta"
-                  >
-                    View Product Details →
-                  </Link>
-                </div>
+              <div className="guide-prod-row__action">
+                <Link
+                  to={`/product/${product._id}`}
+                  className="guide-prod-row__cta"
+                >
+                  View Product →
+                </Link>
               </div>
             </article>
           );

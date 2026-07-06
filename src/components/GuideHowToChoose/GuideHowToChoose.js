@@ -18,10 +18,10 @@ const GuideHowToChoose = () => {
 
       <div className="guide-choose-grid">
         {MUSHROOM_GUIDE_CHOICE_GROUPS.map((group) => {
-          // Derive species for this group dynamically from MUSHROOM_GUIDE_DATA
+          // Derive species for this group dynamically from MUSHROOM_GUIDE_DATA (max 3)
           const matchingSpecies = MUSHROOM_GUIDE_DATA.filter(
             (sp) => sp.choiceGroup === group.id
-          );
+          ).slice(0, 3);
 
           if (matchingSpecies.length === 0) {
             return null;
@@ -46,9 +46,9 @@ const GuideHowToChoose = () => {
                           <span className="guide-choose-card__scientific">({sp.scientificName})</span>
                         )}
                       </a>
-                      <p className="guide-choose-card__reason">
-                        <strong style={{ color: "var(--frugivore-dark, #2c2416)" }}>Profile:</strong> {sp.flavor} — {sp.bestFor}
-                      </p>
+                      <span className="guide-choose-card__reason">
+                        {sp.flavor.split(",")[0]} • {sp.bestFor.split(",")[0]}
+                      </span>
                     </li>
                   ))}
                 </ul>

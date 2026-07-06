@@ -8,6 +8,7 @@
   width: 100%;
   overflow-x: hidden;
   color: var(--frugivore-dark, #2c2416);
+  background: var(--frugivore-cream, #faf7f0);
 }
 
 /* ── STORY HERO ── */
@@ -39,15 +40,15 @@
 
 .ourstory-hero__title {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(5.6rem, 7vw, 10rem);
+  font-size: clamp(3.6rem, 7vw, 10rem);
   font-weight: 700;
-  line-height: 1.02;
+  line-height: 1.05;
   color: var(--frugivore-dark, #2c2416);
 }
 
 .ourstory-hero__subtitle {
   font-family: "Outfit", sans-serif;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   line-height: 1.7;
   color: var(--frugivore-gray, #7a7062);
   max-width: 48ch;
@@ -62,6 +63,7 @@
 .ourstory-hero__image {
   width: 100%;
   max-width: 560px;
+  height: auto;
   aspect-ratio: 4 / 5;
   object-fit: cover;
   border-radius: 24px;
@@ -77,7 +79,7 @@
 
 .ourstory-section__heading {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(3.2rem, 4vw, 5.6rem);
+  font-size: clamp(2.8rem, 4vw, 5.6rem);
   font-weight: 700;
   line-height: 1.15;
   color: var(--frugivore-dark, #2c2416);
@@ -121,7 +123,7 @@
 
 .ourstory-idea__heading {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(3.2rem, 4vw, 5.6rem);
+  font-size: clamp(2.8rem, 4vw, 5.6rem);
   font-weight: 700;
   line-height: 1.15;
   color: var(--frugivore-dark, #2c2416);
@@ -129,7 +131,7 @@
 
 .ourstory-idea__text {
   font-family: "Outfit", sans-serif;
-  font-size: 1.7rem;
+  font-size: 1.6rem;
   line-height: 1.8;
   color: var(--frugivore-gray, #7a7062);
   max-width: 64ch;
@@ -169,7 +171,7 @@
 
 .ourstory-building__statement {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(3.2rem, 4vw, 5.6rem);
+  font-size: clamp(2.8rem, 4vw, 5.6rem);
   font-weight: 700;
   line-height: 1.15;
   color: var(--frugivore-dark, #2c2416);
@@ -202,7 +204,7 @@
 
 .ourstory-pillar__title {
   font-family: "Outfit", sans-serif;
-  font-size: 1.8rem;
+  font-size: 1.7rem;
   font-weight: 600;
   color: var(--frugivore-dark, #2c2416);
   margin-bottom: 0.6rem;
@@ -226,9 +228,9 @@
 .ourstory-journey__step {
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
+  gap: 1.2rem;
   position: relative;
-  padding-top: 3.2rem;
+  padding-top: 2.4rem;
 }
 
 .ourstory-journey__step::before {
@@ -243,14 +245,14 @@
 
 .ourstory-journey__num {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: var(--frugivore-green, #5a7247);
 }
 
 .ourstory-journey__title {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: 2.4rem;
+  font-size: 2.2rem;
   font-weight: 700;
   color: var(--frugivore-dark, #2c2416);
   line-height: 1.2;
@@ -258,7 +260,7 @@
 
 .ourstory-journey__desc {
   font-family: "Outfit", sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   line-height: 1.65;
   color: var(--frugivore-gray, #7a7062);
 }
@@ -274,6 +276,7 @@
 
 .ourstory-approach__image {
   width: 100%;
+  height: auto;
   aspect-ratio: 4 / 3;
   object-fit: cover;
   border-radius: 20px;
@@ -288,7 +291,7 @@
 
 .ourstory-approach__heading {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(3.2rem, 4vw, 5.6rem);
+  font-size: clamp(2.8rem, 4vw, 5.6rem);
   font-weight: 700;
   line-height: 1.15;
   color: var(--frugivore-dark, #2c2416);
@@ -296,7 +299,7 @@
 
 .ourstory-approach__text {
   font-family: "Outfit", sans-serif;
-  font-size: 1.7rem;
+  font-size: 1.6rem;
   line-height: 1.8;
   color: var(--frugivore-gray, #7a7062);
   max-width: 52ch;
@@ -305,14 +308,14 @@
 .ourstory-approach__markers {
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
+  gap: 1.4rem;
   margin-top: 0.8rem;
 }
 
 .ourstory-approach__marker {
   display: flex;
   gap: 1.2rem;
-  align-items: baseline;
+  align-items: center;
 }
 
 .ourstory-approach__marker-dot {
@@ -321,12 +324,11 @@
   min-width: 8px;
   border-radius: 50%;
   background: var(--frugivore-green, #5a7247);
-  margin-top: 0.6rem;
 }
 
 .ourstory-approach__marker-text {
   font-family: "Outfit", sans-serif;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   line-height: 1.5;
   color: var(--frugivore-dark, #2c2416);
   font-weight: 500;
@@ -344,7 +346,7 @@
 
 .ourstory-principles__heading {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(2.8rem, 3.5vw, 4.8rem);
+  font-size: clamp(2.4rem, 3.5vw, 4.8rem);
   font-weight: 700;
   line-height: 1.15;
   color: var(--frugivore-dark, #2c2416);
@@ -370,7 +372,7 @@
 
 .ourstory-principle__number {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: var(--frugivore-green, #5a7247);
 }
@@ -404,7 +406,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2.4rem;
+  gap: 2rem;
 }
 
 .ourstory-cta__eyebrow {
@@ -418,7 +420,7 @@
 
 .ourstory-cta__heading {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(3.2rem, 4.5vw, 6rem);
+  font-size: clamp(2.8rem, 4.5vw, 6rem);
   font-weight: 700;
   line-height: 1.15;
   color: #faf7f0;
@@ -426,7 +428,7 @@
 
 .ourstory-cta__text {
   font-family: "Outfit", sans-serif;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   line-height: 1.7;
   color: rgba(250, 247, 240, 0.65);
   max-width: 52ch;
@@ -444,9 +446,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 1.6rem 3.6rem;
+  padding: 1.4rem 3.2rem;
   font-family: "Outfit", sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 600;
   border-radius: 60px;
   text-decoration: none;
@@ -478,25 +480,25 @@
 }
 
 /* ═══════════════════════════════════════════════
-   RESPONSIVE
+   RESPONSIVE — TABLET
    ═══════════════════════════════════════════════ */
 
 @media (max-width: 1024px) {
   .ourstory-hero {
     grid-template-columns: 1fr;
-    padding: 12rem 4rem 7.2rem;
+    padding: 12rem 4rem 6.4rem;
     min-height: auto;
-    gap: 4rem;
+    gap: 3.2rem;
   }
   .ourstory-hero__visual {
     order: -1;
   }
   .ourstory-hero__image {
-    max-width: 400px;
+    max-width: 360px;
     aspect-ratio: 1 / 1;
   }
   .ourstory-section {
-    padding: 7.2rem 4rem;
+    padding: 6.4rem 4rem;
   }
   .ourstory-divider {
     padding: 0 4rem;
@@ -505,91 +507,196 @@
   .ourstory-approach,
   .ourstory-principles {
     grid-template-columns: 1fr;
-    gap: 4rem;
+    gap: 3.2rem;
   }
   .ourstory-approach {
-    margin-bottom: 7.2rem;
+    margin-bottom: 6.4rem;
   }
   .ourstory-journey {
     grid-template-columns: repeat(2, 1fr);
   }
   .ourstory-cinematic {
-    padding: 7.2rem 4rem;
+    padding: 6.4rem 4rem;
   }
   .ourstory-cinematic__container {
-    height: clamp(280px, 50vw, 480px);
+    height: clamp(260px, 45vw, 420px);
     border-radius: 16px;
   }
   .ourstory-cta {
-    padding: 7.2rem 4rem;
+    padding: 6.4rem 4rem;
   }
 }
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE — MOBILE LARGE
+   ═══════════════════════════════════════════════ */
 
 @media (max-width: 768px) {
   .ourstory-hero {
-    padding: 10rem 2.4rem 5.6rem;
-    gap: 3.2rem;
+    padding: 9.6rem 2rem 4.8rem;
+    gap: 2.4rem;
+  }
+  .ourstory-hero__title {
+    font-size: clamp(3.2rem, 9vw, 4.8rem);
+  }
+  .ourstory-hero__subtitle {
+    font-size: 1.5rem;
   }
   .ourstory-hero__image {
-    max-width: 320px;
-  }
-  .ourstory-section {
-    padding: 5.6rem 2.4rem;
-  }
-  .ourstory-divider {
-    padding: 0 2.4rem;
-  }
-  .ourstory-idea {
-    grid-template-columns: 1fr;
-    gap: 1.6rem;
-  }
-  .ourstory-idea__marker {
-    font-size: 4.8rem;
-  }
-  .ourstory-journey {
-    grid-template-columns: 1fr;
-  }
-  .ourstory-cinematic {
-    padding: 5.6rem 2.4rem;
-  }
-  .ourstory-cinematic__container {
-    height: clamp(220px, 56vw, 360px);
-    border-radius: 12px;
-  }
-  .ourstory-approach {
-    margin-bottom: 5.6rem;
-  }
-  .ourstory-principles {
-    padding-top: 5.6rem;
-  }
-  .ourstory-cta {
-    padding: 5.6rem 2.4rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .ourstory-hero {
-    padding: 9.6rem 1.6rem 4.8rem;
-  }
-  .ourstory-hero__image {
-    max-width: 280px;
+    max-width: 260px;
     border-radius: 16px;
   }
   .ourstory-section {
-    padding: 4.8rem 1.6rem;
+    padding: 4.8rem 2rem;
+  }
+  .ourstory-section__heading {
+    font-size: 2.4rem;
+    margin-bottom: 3.2rem;
+  }
+  .ourstory-divider {
+    padding: 0 2rem;
+  }
+  .ourstory-idea {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+  .ourstory-idea__marker {
+    font-size: 4rem;
+  }
+  .ourstory-idea__heading {
+    font-size: 2.4rem;
+  }
+  .ourstory-idea__text {
+    font-size: 1.5rem;
+    line-height: 1.7;
+  }
+  .ourstory-building__statement {
+    font-size: 2.4rem;
+  }
+  .ourstory-journey {
+    grid-template-columns: 1fr;
+    gap: 2.4rem;
+  }
+  .ourstory-cinematic {
+    padding: 4.8rem 2rem;
+  }
+  .ourstory-cinematic__container {
+    height: clamp(200px, 56vw, 320px);
+    border-radius: 12px;
+  }
+  .ourstory-approach {
+    margin-bottom: 4.8rem;
+  }
+  .ourstory-approach__heading {
+    font-size: 2.4rem;
+  }
+  .ourstory-approach__text {
+    font-size: 1.5rem;
+  }
+  .ourstory-principles {
+    padding-top: 4.8rem;
+  }
+  .ourstory-principles__heading {
+    font-size: 2.2rem;
+  }
+  .ourstory-cta {
+    padding: 4.8rem 2rem;
+  }
+  .ourstory-cta__heading {
+    font-size: 2.4rem;
+  }
+  .ourstory-cta__text {
+    font-size: 1.4rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE — MOBILE SMALL
+   ═══════════════════════════════════════════════ */
+
+@media (max-width: 480px) {
+  .ourstory-hero {
+    padding: 8.8rem 1.6rem 3.6rem;
+    gap: 2rem;
+  }
+  .ourstory-hero__eyebrow {
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+  }
+  .ourstory-hero__title {
+    font-size: 3.2rem;
+    line-height: 1.1;
+  }
+  .ourstory-hero__subtitle {
+    font-size: 1.4rem;
+    line-height: 1.65;
+  }
+  .ourstory-hero__image {
+    max-width: 220px;
+    border-radius: 14px;
+    box-shadow: 0 12px 32px rgba(44, 36, 22, 0.1);
+  }
+  .ourstory-section {
+    padding: 3.6rem 1.6rem;
+  }
+  .ourstory-section__heading {
+    font-size: 2.2rem;
+    margin-bottom: 2.4rem;
   }
   .ourstory-divider {
     padding: 0 1.6rem;
   }
+  .ourstory-idea__marker {
+    font-size: 3.2rem;
+  }
+  .ourstory-idea__heading {
+    font-size: 2.2rem;
+  }
+  .ourstory-idea__text {
+    font-size: 1.4rem;
+  }
+  .ourstory-building__statement {
+    font-size: 2.2rem;
+  }
+  .ourstory-pillar__title {
+    font-size: 1.6rem;
+  }
+  .ourstory-pillar__desc {
+    font-size: 1.4rem;
+  }
+  .ourstory-journey__title {
+    font-size: 2rem;
+  }
   .ourstory-cinematic {
-    padding: 4.8rem 1.6rem;
+    padding: 3.6rem 1.6rem;
   }
   .ourstory-cinematic__container {
-    height: clamp(200px, 60vw, 300px);
+    height: clamp(180px, 56vw, 260px);
     border-radius: 10px;
   }
+  .ourstory-approach {
+    margin-bottom: 3.6rem;
+  }
+  .ourstory-approach__heading {
+    font-size: 2.2rem;
+  }
+  .ourstory-approach__text {
+    font-size: 1.4rem;
+  }
+  .ourstory-approach__marker-text {
+    font-size: 1.4rem;
+  }
+  .ourstory-principles {
+    padding-top: 3.6rem;
+  }
+  .ourstory-principles__heading {
+    font-size: 2rem;
+  }
   .ourstory-cta {
-    padding: 4.8rem 1.6rem;
+    padding: 4rem 1.6rem;
+  }
+  .ourstory-cta__heading {
+    font-size: 2.2rem;
   }
   .ourstory-cta__btn {
     width: 100%;

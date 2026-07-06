@@ -25,6 +25,7 @@ import SignInPage from "./pages/SignInPage/SignInPage";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import Profile from "./pages/Profile/Profile";
 import Policies from "./pages/Policies/Policies";
+import MushroomGuide from "./pages/MushroomGuide/MushroomGuide";
 
 const App = () => {
   const location = useLocation();
@@ -92,6 +93,7 @@ const App = () => {
           <Route path="/checkout" component={Checkout} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/our-story" component={OurStory} />
+          <Route path="/mushroom-guide" component={MushroomGuide} />
           <Route path="/health-benefits" component={HealthBenefits} />
           <Route path="/recipes" component={Recipes} />
           <Route path="/wholesale" component={Wholesale} />

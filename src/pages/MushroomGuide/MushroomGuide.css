@@ -1,0 +1,429 @@
+/* ═══════════════════════════════════════════════
+   MUSHROOM GUIDE PAGE — SHROOOMS
+   Phase A: Educational Discovery Hub & Species Grid
+   ═══════════════════════════════════════════════ */
+
+/* ── PAGE CONTAINER ── */
+.mushroom-guide {
+  width: 100%;
+  overflow-x: hidden;
+  color: var(--frugivore-dark, #2c2416);
+  background: var(--frugivore-cream, #faf7f0);
+  box-sizing: border-box;
+}
+
+/* ── GUIDE HERO ── */
+.guide-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+  padding: 3.2rem 2rem 4rem;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  height: auto;
+  min-height: auto;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.guide-hero__content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  width: 100%;
+}
+
+.guide-hero__eyebrow {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--frugivore-green, #5a7247);
+}
+
+.guide-hero__title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(3.2rem, 7.5vw, 4.8rem);
+  font-weight: 700;
+  line-height: 1.08;
+  color: var(--frugivore-dark, #2c2416);
+  word-break: break-word;
+}
+
+.guide-hero__subtitle {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.5rem;
+  line-height: 1.65;
+  color: var(--frugivore-gray, #7a7062);
+  max-width: 100%;
+}
+
+.guide-hero__visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 0.8rem;
+}
+
+.guide-hero__image {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(44, 36, 22, 0.08);
+  display: block;
+}
+
+/* Hero Tablet (768px+) */
+@media (min-width: 768px) {
+  .guide-hero {
+    gap: 3.2rem;
+    padding: 4.8rem 4rem 5.6rem;
+  }
+
+  .guide-hero__content {
+    gap: 2rem;
+  }
+
+  .guide-hero__title {
+    font-size: clamp(4.4rem, 6vw, 5.8rem);
+  }
+
+  .guide-hero__subtitle {
+    font-size: 1.6rem;
+    max-width: 54ch;
+  }
+
+  .guide-hero__image {
+    max-width: 480px;
+    aspect-ratio: 16 / 10;
+    border-radius: 20px;
+  }
+}
+
+/* Hero Desktop (1024px+) */
+@media (min-width: 1024px) {
+  .guide-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 5.6rem;
+    padding: 6.4rem 6.4rem 8rem;
+    min-height: 60vh;
+  }
+
+  .guide-hero__content {
+    gap: 2.4rem;
+  }
+
+  .guide-hero__title {
+    font-size: clamp(4.8rem, 5vw, 7.6rem);
+    line-height: 1.04;
+  }
+
+  .guide-hero__subtitle {
+    font-size: 1.8rem;
+    line-height: 1.7;
+    max-width: 48ch;
+  }
+
+  .guide-hero__visual {
+    margin-top: 0;
+  }
+
+  .guide-hero__image {
+    max-width: 520px;
+    aspect-ratio: 4 / 3;
+    border-radius: 24px;
+    box-shadow: 0 24px 64px rgba(44, 36, 22, 0.12);
+  }
+}
+
+/* ── SECTION LAYOUT & DIVIDER ── */
+.guide-section {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 4.8rem 2rem;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .guide-section {
+    padding: 6.4rem 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .guide-section {
+    padding: 8rem 6.4rem;
+  }
+}
+
+.guide-divider {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .guide-divider {
+    padding: 0 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .guide-divider {
+    padding: 0 6.4rem;
+  }
+}
+
+.guide-divider__line {
+  height: 1px;
+  width: 100%;
+  background: var(--frugivore-border, #e6e0d4);
+}
+
+/* ── CATEGORY FILTERS BAR ── */
+.guide-filter-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  margin-bottom: 4rem;
+  align-items: flex-start;
+}
+
+@media (min-width: 768px) {
+  .guide-filter-bar {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4.8rem;
+  }
+}
+
+.guide-filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.guide-chip {
+  padding: 1rem 2.2rem;
+  font-family: "Outfit", sans-serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--frugivore-dark, #2c2416);
+  background: #ffffff;
+  border: 1px solid var(--frugivore-border, #e6e0d4);
+  border-radius: 40px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  line-height: 1;
+}
+
+.guide-chip:hover {
+  border-color: var(--frugivore-green, #5a7247);
+  color: var(--frugivore-green, #5a7247);
+}
+
+.guide-chip--active {
+  background: var(--frugivore-forest, #1e352f);
+  color: #faf7f0 !important;
+  border-color: var(--frugivore-forest, #1e352f);
+  box-shadow: 0 4px 12px rgba(30, 53, 47, 0.15);
+}
+
+.guide-filter-count {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--frugivore-gray, #7a7062);
+}
+
+/* ── SPECIES DISCOVERY GRID ── */
+.guide-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3.2rem;
+}
+
+@media (min-width: 768px) {
+  .guide-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3.2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .guide-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4rem;
+  }
+}
+
+/* ── SPECIES CARD ── */
+.guide-card {
+  background: #ffffff;
+  border: 1px solid var(--frugivore-border, #e6e0d4);
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 16px rgba(44, 36, 22, 0.04);
+}
+
+.guide-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(44, 36, 22, 0.1);
+}
+
+.guide-card__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #f4efe6;
+}
+
+.guide-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.guide-card:hover .guide-card__image {
+  transform: scale(1.04);
+}
+
+.guide-card__category-badge {
+  position: absolute;
+  top: 1.6rem;
+  left: 1.6rem;
+  background: rgba(250, 247, 240, 0.92);
+  backdrop-filter: blur(8px);
+  color: var(--frugivore-forest, #1e352f);
+  font-family: "Outfit", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 0.6rem 1.4rem;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.guide-card__content {
+  padding: 2.4rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 1.6rem;
+}
+
+.guide-card__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.guide-card__title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--frugivore-dark, #2c2416);
+  line-height: 1.2;
+}
+
+.guide-card__scientific {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.3rem;
+  font-style: italic;
+  color: var(--frugivore-green, #5a7247);
+}
+
+.guide-card__desc {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.45rem;
+  line-height: 1.65;
+  color: var(--frugivore-gray, #7a7062);
+}
+
+.guide-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin: 0.4rem 0 0.8rem;
+  padding: 1.4rem 0;
+  border-top: 1px dashed var(--frugivore-border, #e6e0d4);
+  border-bottom: 1px dashed var(--frugivore-border, #e6e0d4);
+}
+
+.guide-card__meta-row {
+  display: grid;
+  grid-template-columns: 7.2rem 1fr;
+  gap: 0.8rem;
+  font-size: 1.35rem;
+  line-height: 1.5;
+}
+
+.guide-card__meta-label {
+  font-family: "Outfit", sans-serif;
+  font-weight: 700;
+  color: var(--frugivore-dark, #2c2416);
+}
+
+.guide-card__meta-value {
+  font-family: "Outfit", sans-serif;
+  font-weight: 400;
+  color: var(--frugivore-gray, #7a7062);
+  margin: 0;
+}
+
+.guide-card__action {
+  margin-top: auto;
+  padding-top: 0.8rem;
+}
+
+.guide-card__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 1.2rem 2rem;
+  font-family: "Outfit", sans-serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--frugivore-forest, #1e352f);
+  background: var(--frugivore-cream, #faf7f0);
+  border: 1px solid var(--frugivore-border, #e6e0d4);
+  border-radius: 30px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.guide-card__cta:hover {
+  background: var(--frugivore-forest, #1e352f);
+  color: #faf7f0;
+  border-color: var(--frugivore-forest, #1e352f);
+}
+
+/* ── REDUCED MOTION ── */
+@media (prefers-reduced-motion: reduce) {
+  .guide-card,
+  .guide-card__image,
+  .guide-chip,
+  .guide-card__cta {
+    transition: none;
+  }
+}

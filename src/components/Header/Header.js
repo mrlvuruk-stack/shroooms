@@ -91,7 +91,7 @@ const Header = (props) => {
               <Link to="/our-story" className="menu-link">OUR STORY</Link>
             </li>
             <li className="menu-item">
-              <Link to="/health-benefits" className="menu-link">MUSHROOM GUIDE</Link>
+              <Link to="/mushroom-guide" className="menu-link">MUSHROOM GUIDE</Link>
             </li>
             <li className="menu-item">
               <Link to="/recipes" className="menu-link">RECIPES</Link>
@@ -181,7 +181,7 @@ const Header = (props) => {
               <Link to="/our-story" onClick={() => setMenuOpen(false)} className="mobile-menu-link">OUR STORY</Link>
             </li>
             <li className="mobile-menu-item">
-              <Link to="/health-benefits" onClick={() => setMenuOpen(false)} className="mobile-menu-link">MUSHROOM GUIDE</Link>
+              <Link to="/mushroom-guide" onClick={() => setMenuOpen(false)} className="mobile-menu-link">MUSHROOM GUIDE</Link>
             </li>
             <li className="mobile-menu-item">
               <Link to="/recipes" onClick={() => setMenuOpen(false)} className="mobile-menu-link">RECIPES</Link>

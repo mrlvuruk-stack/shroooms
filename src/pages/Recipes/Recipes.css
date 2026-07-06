@@ -567,6 +567,33 @@
   padding-top: 2.4rem;
   display: flex;
   justify-content: flex-end;
+  gap: 1.2rem;
+}
+
+.view-full-recipe-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  background-color: transparent;
+  color: var(--frugivore-forest, #1e352f);
+  border: 1.5px solid var(--frugivore-forest, #1e352f);
+  padding: 1rem 2.4rem;
+  border-radius: 30px;
+  font-family: "Outfit", sans-serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+
+.view-full-recipe-btn:hover {
+  background-color: var(--frugivore-forest, #1e352f);
+  color: #faf7f0;
+}
+
+.view-full-recipe-btn:focus-visible {
+  outline: 2.5px solid var(--frugivore-green, #5a7247);
+  outline-offset: 2px;
 }
 
 .shop-ingredients-btn {

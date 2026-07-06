@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import vegetablesList from "../../store/actions/actionCreators/productsListAction";
+import { resolveProductForMushroom } from "./recipesUtils";
 import "./Recipes.css";
 
 export const RECIPES_DATA = [
@@ -11,6 +12,9 @@ export const RECIPES_DATA = [
     mushroom: "Lion's Mane",
     category: "mains",
     time: "20 mins",
+    prepTime: "10 mins",
+    cookTime: "10 mins",
+    servings: "2 servings",
     difficulty: "Easy",
     image: "/cultivar_lions_mane.jpg",
     summary: "Thick-cut Lion's Mane steaks seared to golden perfection in herb-infused garlic butter.",
@@ -35,6 +39,9 @@ export const RECIPES_DATA = [
     mushroom: "King Oyster",
     category: "mains",
     time: "25 mins",
+    prepTime: "10 mins",
+    cookTime: "15 mins",
+    servings: "2 servings",
     difficulty: "Medium",
     image: "/box_king_oyster.jpg",
     summary: "Thick rounds of King Oyster stems scored, seared, and glazed in white wine and soy sauce.",
@@ -60,6 +67,9 @@ export const RECIPES_DATA = [
     mushroom: "Pink Oyster",
     category: "quick",
     time: "15 mins",
+    prepTime: "5 mins",
+    cookTime: "10 mins",
+    servings: "2-3 servings",
     difficulty: "Easy",
     image: "/box_pink_oyster.jpg",
     summary: "Vibrant shredded Pink Oyster clusters pan-fried till crispy and served in warm tortillas.",
@@ -85,6 +95,9 @@ export const RECIPES_DATA = [
     mushroom: "Blue Oyster",
     category: "pasta",
     time: "30 mins",
+    prepTime: "10 mins",
+    cookTime: "20 mins",
+    servings: "2 servings",
     difficulty: "Medium",
     image: "/box_blue_oyster.jpg",
     summary: "Silky linguine tossed in a rich, garlic-shallot cream sauce with sautéed Blue Oyster mushrooms.",
@@ -110,6 +123,9 @@ export const RECIPES_DATA = [
     mushroom: "Reishi",
     category: "wellness",
     time: "10 mins",
+    prepTime: "5 mins",
+    cookTime: "5 mins",
+    servings: "1 serving",
     difficulty: "Easy",
     image: "/cultivar_reishi.jpg",
     summary: "A warm, earthy spiced beverage prepared with Reishi powder, turmeric, and ginger.",
@@ -131,13 +147,16 @@ export const RECIPES_DATA = [
   },
   {
     id: "shiitake-broth",
-    name: "Restorative Umami Shiitake Broth",
+    name: "Classic Umami Shiitake Broth",
     mushroom: "Shiitake",
     category: "soups",
     time: "40 mins",
+    prepTime: "10 mins",
+    cookTime: "30 mins",
+    servings: "3 servings",
     difficulty: "Easy",
     image: "/cultivar_maitake.jpg",
-    summary: "A nourishing, mineral-rich vegetable broth brewed with fresh shiitake, ginger, and kombu.",
+    summary: "A nourishing, umami-rich vegetable broth brewed with fresh shiitake, ginger, and kombu.",
     ingredients: [
       "150g Shiitake mushrooms, sliced",
       "1 piece dried Kombu seaweed",
@@ -163,8 +182,9 @@ const CATEGORY_FILTERS = [
   { id: "pasta", label: "🍝 Pasta" },
   { id: "quick", label: "🥪 Quick Sauté" },
   { id: "soups", label: "🍜 Soups & Broths" },
-  { id: "wellness", label: "🍵 Wellness Infusions" }
+  { id: "wellness", label: "🍵 Traditional Decoctions" }
 ];
+
 
 const Recipes = () => {
   const dispatch = useDispatch();
@@ -213,17 +233,10 @@ const Recipes = () => {
     return matchesCategory && matchesSearch;
   });
 
-  // Resolve matching catalog product safely
+  // Resolve matching catalog product safely using the strict normalization resolver
   const getProductRoute = (mushroomName) => {
-    if (!products || !Array.isArray(products) || products.length === 0) {
-      return "/";
-    }
-    const cleanName = (mushroomName || "").toLowerCase().replace(/[^a-z0-9]/g, "");
-    const match = products.find((p) => {
-      const pName = (p.name || "").toLowerCase().replace(/[^a-z0-9]/g, "");
-      return pName.includes(cleanName) || cleanName.includes(pName);
-    });
-    return match ? `/product/${match._id}` : "/";
+    const matchedProduct = resolveProductForMushroom(mushroomName, products);
+    return matchedProduct ? `/product/${matchedProduct._id}` : "/";
   };
 
   return (
@@ -358,6 +371,9 @@ const Recipes = () => {
                       </div>
 
                       <div className="recipe-card-actions">
+                        <Link to={`/recipes/${recipe.id}`} className="view-full-recipe-btn">
+                          View Full Recipe <i className="fa fa-book" aria-hidden="true"></i>
+                        </Link>
                         <Link to={productRoute} className="shop-ingredients-btn">
                           Order Fresh {recipe.mushroom} <i className="fa fa-arrow-right" aria-hidden="true"></i>
                         </Link>

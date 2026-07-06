@@ -17,6 +17,7 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import OurStory from "./pages/OurStory/OurStory";
 import HealthBenefits from "./pages/HealthBenefits/HealthBenefits";
 import Recipes from "./pages/Recipes/Recipes";
+import RecipeDetail from "./pages/RecipeDetail/RecipeDetail";
 import Wholesale from "./pages/Wholesale/Wholesale";
 import Blog from "./pages/Blog/Blog";
 import Contact from "./pages/Contact/Contact";
@@ -95,6 +96,7 @@ const App = () => {
           <Route path="/our-story" component={OurStory} />
           <Route path="/mushroom-guide" component={MushroomGuide} />
           <Route path="/health-benefits" component={HealthBenefits} />
+          <Route path="/recipes/:id" component={RecipeDetail} />
           <Route path="/recipes" component={Recipes} />
           <Route path="/wholesale" component={Wholesale} />
           <Route path="/blog" component={Blog} />

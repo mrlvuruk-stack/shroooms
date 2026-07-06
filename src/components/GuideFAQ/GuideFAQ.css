@@ -1,0 +1,133 @@
+/* ═══════════════════════════════════════════════
+   GUIDE FAQ — SHROOOMS
+   Accessible FAQ accordion layout
+   ═══════════════════════════════════════════════ */
+
+.guide-faq-section {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: clamp(3.2rem, 6vw, 6.4rem) 1.6rem;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .guide-faq-section {
+    padding: 6.4rem 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .guide-faq-section {
+    padding: 8rem 6.4rem;
+  }
+}
+
+/* Header */
+.guide-faq-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  max-width: 64ch;
+  margin-bottom: 3.6rem;
+}
+
+@media (min-width: 768px) {
+  .guide-faq-header {
+    margin-bottom: 4.8rem;
+  }
+}
+
+.guide-faq-eyebrow {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--frugivore-green, #5a7247);
+}
+
+.guide-faq-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(3rem, 4vw, 4.4rem);
+  font-weight: 700;
+  color: var(--frugivore-dark, #2c2416);
+  line-height: 1.1;
+  margin: 0;
+}
+
+.guide-faq-subtitle {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.55rem;
+  line-height: 1.65;
+  color: var(--frugivore-gray, #7a7062);
+  margin: 0;
+}
+
+/* Accordion list */
+.guide-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  max-width: 900px;
+}
+
+.guide-faq-item {
+  background: #ffffff;
+  border: 1px solid var(--frugivore-border, #e6e0d4);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color 0.25s ease;
+}
+
+.guide-faq-item--open {
+  border-color: var(--frugivore-green, #5a7247);
+}
+
+.guide-faq-button {
+  width: 100%;
+  padding: 2rem 2.4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.6rem;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.guide-faq-button:focus-visible {
+  outline: 2.5px solid var(--frugivore-green, #5a7247);
+  outline-offset: -2px;
+}
+
+.guide-faq-question {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: var(--frugivore-dark, #2c2416);
+  line-height: 1.35;
+}
+
+.guide-faq-icon {
+  font-family: "Outfit", sans-serif;
+  font-size: 2.4rem;
+  font-weight: 400;
+  color: var(--frugivore-green, #5a7247);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.guide-faq-answer-wrapper {
+  padding: 0 2.4rem 2rem;
+}
+
+.guide-faq-answer {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.5rem;
+  line-height: 1.65;
+  color: var(--frugivore-gray, #7a7062);
+  margin: 0;
+}

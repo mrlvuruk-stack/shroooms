@@ -10,6 +10,10 @@ import { resolveProductForGuideItem } from "./mushroomGuideUtils";
 import GuideFeaturedSpecies from "../../components/GuideFeaturedSpecies/GuideFeaturedSpecies";
 import GuideHowToChoose from "../../components/GuideHowToChoose/GuideHowToChoose";
 import GuideHandlingStorage from "../../components/GuideHandlingStorage/GuideHandlingStorage";
+import GuideRecipes from "../../components/GuideRecipes/GuideRecipes";
+import GuideProductConnection from "../../components/GuideProductConnection/GuideProductConnection";
+import GuideFAQ from "../../components/GuideFAQ/GuideFAQ";
+import GuideFinalCTA from "../../components/GuideFinalCTA/GuideFinalCTA";
 import "./MushroomGuide.css";
 
 const MushroomGuide = () => {
@@ -26,12 +30,12 @@ const MushroomGuide = () => {
   }, [dispatch, products]);
 
   useEffect(() => {
-    document.title = "Mushroom Guide — Varieties & Culinary Uses | SHROOOMS";
+    document.title = "Mushroom Guide — Varieties, Recipes & Care | SHROOOMS";
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
       metaDesc.setAttribute(
         "content",
-        "Explore gourmet mushroom varieties, culinary flavor profiles, textures, best cooking methods, decision guides, and handling advice."
+        "Explore gourmet mushroom varieties, flavor profiles, cooking techniques, culinary recipes, storage guidance, and available SHROOOMS products."
       );
     }
     window.scrollTo(0, 0);
@@ -171,6 +175,30 @@ const MushroomGuide = () => {
 
       {/* ═══ 6. HANDLING & STORAGE ═══ */}
       <GuideHandlingStorage />
+
+      {/* ─── divider ─── */}
+      <div className="guide-divider"><div className="guide-divider__line" /></div>
+
+      {/* ═══ 7. RECIPES CONNECTION ═══ */}
+      <GuideRecipes />
+
+      {/* ─── divider ─── */}
+      <div className="guide-divider"><div className="guide-divider__line" /></div>
+
+      {/* ═══ 8. PRODUCT CONNECTION ═══ */}
+      <GuideProductConnection products={products} />
+
+      {/* ─── divider ─── */}
+      <div className="guide-divider"><div className="guide-divider__line" /></div>
+
+      {/* ═══ 9. GUIDE FAQ ═══ */}
+      <GuideFAQ />
+
+      {/* ─── divider ─── */}
+      <div className="guide-divider"><div className="guide-divider__line" /></div>
+
+      {/* ═══ 10. FINAL CTA ═══ */}
+      <GuideFinalCTA />
 
     </main>
   );

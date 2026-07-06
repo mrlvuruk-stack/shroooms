@@ -151,3 +151,27 @@ export const MUSHROOM_GUIDE_CHOICE_GROUPS = [
     description: "Woody, structured species historically sliced, dried, and simmered into warm infused teas and herbal broths."
   }
 ];
+
+export const MUSHROOM_GUIDE_FAQS = [
+  {
+    id: "faq-choose",
+    question: "How do I choose between different gourmet mushroom varieties?",
+    answer: "Consider your cooking method and desired texture. Dense species like King Oyster and Lion's Mane sear into thick steak-like rounds, while Blue and Pink Oyster clusters cook quickly in stir-fries, pastas, and sautés."
+  },
+  {
+    id: "faq-cleaning",
+    question: "How should fresh gourmet mushrooms be cleaned before cooking?",
+    answer: "Avoid soaking fresh mushrooms in water, as they absorb moisture easily. Instead, trim the base of the stems and gently wipe away substrate with a damp cloth or soft brush shortly before cooking."
+  },
+  {
+    id: "faq-storage",
+    question: "What is the best way to store fresh mushrooms after purchase?",
+    answer: "Store fresh mushrooms refrigerated in a cool environment inside breathable paper bags or ventilated containers. Keeping them dry and allowing airflow helps preserve natural texture and aroma."
+  },
+  {
+    id: "faq-products",
+    question: "Where can I find SHROOOMS products and detailed cooking recipes?",
+    answer: "Each species card in this guide links directly to available SHROOOMS products. You can also explore our dedicated Kitchen Recipes page for chef-curated cooking techniques and serving suggestions."
+  }
+];
+

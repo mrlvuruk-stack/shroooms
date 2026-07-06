@@ -6,7 +6,7 @@ const HANDLING_STEPS = [
     number: "01",
     title: "Keep Cool",
     summary: "Refrigerate promptly upon arrival",
-    detail: "Store fresh mushrooms in a cool refrigerator environment (3°C–5°C) and avoid unnecessary exposure to direct heat or sunlight."
+    detail: "Store fresh mushrooms refrigerated in a cool environment and avoid unnecessary exposure to heat."
   },
   {
     number: "02",

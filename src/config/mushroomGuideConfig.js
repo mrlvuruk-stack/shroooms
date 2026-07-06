@@ -99,7 +99,7 @@ export const MUSHROOM_GUIDE_DATA = [
     shortDescription: "Traditional species with a firm, lacquered cap, historically prepared as an infused warm brew.",
     flavor: "Deeply earthy, pleasantly bitter",
     texture: "Hard, corky, woody",
-    bestFor: "Simmering into health teas, decoctions, warm herbal broths",
+    bestFor: "Simmering into warm bitter infusions, traditional decoctions, and herbal broths",
     image: "/cultivar_reishi.jpg",
     imageAlt: "Red Reishi mushroom cap",
     productMatchNames: ["Reishi Mushroom", "Reishi"]

@@ -88,8 +88,8 @@ const MushroomGuide = () => {
         </div>
         <div className="guide-hero__visual">
           <img
-            src="/shroooms_product_showcase.png"
-            alt="SHROOOMS gourmet mushroom collection showcase"
+            src="/shroooms_farm_story.png"
+            alt="SHROOOMS indoor controlled-environment vertical mushroom cultivation facility"
             className="guide-hero__image"
             fetchPriority="high"
           />

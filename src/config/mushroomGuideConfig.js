@@ -15,7 +15,7 @@ export const MUSHROOM_GUIDE_DATA = [
     flavor: "Sweet, subtle, seafood-like notes",
     texture: "Meaty, fibrous, tender",
     bestFor: "Pan-searing in garlic butter, roasting, dry-searing steaks",
-    image: "/box_lions_mane.jpg",
+    image: "/cultivar_lions_mane.jpg",
     imageAlt: "Fresh Lion's Mane mushroom cluster",
     productMatchNames: ["Lion's Mane Mushroom", "Lion's Mane"]
   },

@@ -235,13 +235,17 @@ const Admin = () => {
   // ── Active tab ──
   const [tab, setTab] = useState("overview");
 
-  // ── Admin Security Passkey ──
-  const ADMIN_PASSKEY = "729481635"; // Default 9-digit passkey
-  const [passkeyAuthorized, setPasskeyAuthorized] = useState(() => {
-    return sessionStorage.getItem("admin_authorized") === "true";
-  });
-  const [passkeyInput, setPasskeyInput] = useState("");
-  const [passkeyError, setPasskeyError] = useState("");
+  // ── Admin Security (Supabase Auth & admin_users RLS) ──
+  const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(null); // null = checking/unauth, true = verified admin, false = unauth/denied
+  const [authLoading, setAuthLoading] = useState(true);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [loginSubmitting, setLoginSubmitting] = useState(false);
+
+  const isMountedRef = useRef(true);
 
   // ── Blogs ──
   const [blogs, setBlogs] = useState(() => {
@@ -332,7 +336,161 @@ const Admin = () => {
   // ── Customer Accounts State ──
   const [usersListState, setUsersListState] = useState([]);
 
-  // ── Sync with Supabase on mount ──
+  // ── Track component mount state ──
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
+
+  // ── Admin Security & Session restoration ──
+  useEffect(() => {
+    if (!isSupabaseConfigured || !supabase) {
+      setAuthLoading(false);
+      setIsAdmin(false);
+      return;
+    }
+
+    const checkInitialSession = async () => {
+      try {
+        const session = supabase.auth.session();
+        if (session && session.user) {
+          if (isMountedRef.current) {
+            setUser(session.user);
+          }
+          await verifyAdminMembership(session.user.id);
+        } else {
+          if (isMountedRef.current) {
+            setAuthLoading(false);
+            setIsAdmin(null);
+          }
+        }
+      } catch (err) {
+        console.error("Initial session check error:", err);
+        if (isMountedRef.current) {
+          setAuthLoading(false);
+          setIsAdmin(false);
+        }
+      }
+    };
+
+    checkInitialSession();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === "SIGNED_IN" && session && session.user) {
+        if (isMountedRef.current) {
+          setUser(session.user);
+        }
+        await verifyAdminMembership(session.user.id);
+      } else if (event === "SIGNED_OUT") {
+        if (isMountedRef.current) {
+          setUser(null);
+          setIsAdmin(null);
+          setAuthLoading(false);
+        }
+      }
+    });
+
+    return () => {
+      if (authListener) {
+        authListener.unsubscribe();
+      }
+    };
+  }, []);
+
+  const verifyAdminMembership = async (userId) => {
+    if (!supabase) {
+      if (isMountedRef.current) {
+        setIsAdmin(false);
+        setAuthLoading(false);
+      }
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from("admin_users")
+        .select("user_id")
+        .eq("user_id", userId);
+
+      if (isMountedRef.current) {
+        if (!error && data && data.length > 0) {
+          setIsAdmin(true);
+        } else {
+          setIsAdmin(false); // Auth user exists, but is not in admin_users list
+        }
+      }
+    } catch (err) {
+      console.error("Admin verification error:", err);
+      if (isMountedRef.current) {
+        setIsAdmin(false); // Fail closed on DB exception
+      }
+    } finally {
+      if (isMountedRef.current) {
+        setAuthLoading(false);
+      }
+    }
+  };
+
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    if (!email || !password) {
+      setLoginError("Please enter both email and password.");
+      return;
+    }
+    if (!isSupabaseConfigured || !supabase) {
+      setLoginError("Supabase connection is not configured.");
+      return;
+    }
+
+    setLoginSubmitting(true);
+    setLoginError("");
+
+    try {
+      const { user: authUser, error } = await supabase.auth.signIn({
+        email,
+        password,
+      });
+
+      if (error) {
+        if (isMountedRef.current) {
+          setLoginError("Invalid credentials. Access Denied.");
+        }
+      } else if (authUser) {
+        if (isMountedRef.current) {
+          setUser(authUser);
+        }
+        await verifyAdminMembership(authUser.id);
+      }
+    } catch (err) {
+      console.error("Login submission error:", err);
+      if (isMountedRef.current) {
+        setLoginError("An unexpected error occurred during authorization.");
+      }
+    } finally {
+      if (isMountedRef.current) {
+        setLoginSubmitting(false);
+      }
+    }
+  };
+
+  const handleLogout = async () => {
+    if (supabase) {
+      try {
+        await supabase.auth.signOut();
+      } catch (err) {
+        console.error("Logout error:", err);
+      }
+    }
+    if (isMountedRef.current) {
+      setUser(null);
+      setIsAdmin(null);
+      setAuthLoading(false);
+    }
+  };
+
+  // ── Sync with Supabase on mount (Admin-only gated) ──
   useEffect(() => {
     const fetchAllSupabaseData = async () => {
       // LocalStorage fallback loads first
@@ -426,8 +584,11 @@ const Admin = () => {
         }
       }
     };
-    fetchAllSupabaseData();
-  }, []);
+
+    if (isAdmin === true) {
+      fetchAllSupabaseData();
+    }
+  }, [isAdmin]);
 
   // ── Inquiries Helpers ──
   const handleInquiryStatusChange = async (id, newStatus) => {
@@ -731,9 +892,6 @@ const Admin = () => {
       updatedBlogs = [...blogs, blogData];
     }
 
-    localStorage.setItem("mock_blogs", JSON.stringify(updatedBlogs));
-    setBlogs(updatedBlogs);
-
     if (isSupabaseConfigured && supabase) {
       try {
         const dbFormat = {
@@ -747,33 +905,50 @@ const Admin = () => {
           paragraphs: blogData.paragraphs,
           date: blogData.date
         };
-        await supabase.from("blogs").upsert(dbFormat);
+        const { error } = await supabase.from("blogs").upsert(dbFormat);
+        if (error) {
+          console.error("Supabase blog save error:", error);
+          alert(`Database save failed: ${error.message}`);
+          return;
+        }
       } catch (err) {
         console.error("Supabase blog save error:", err);
+        alert("Unexpected database error saving blog.");
+        return;
       }
     }
 
+    localStorage.setItem("mock_blogs", JSON.stringify(updatedBlogs));
+    setBlogs(updatedBlogs);
     setBlogModal(false);
   };
 
   const handleBlogDelete = async (id) => {
     if (!window.confirm("Delete this blog post?")) return;
+
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const { error } = await supabase.from("blogs").delete().eq("id", id);
+        if (error) {
+          console.error("Supabase blog delete error:", error);
+          alert(`Database delete failed: ${error.message}`);
+          return;
+        }
+      } catch (err) {
+        console.error("Supabase blog delete error:", err);
+        alert("Unexpected database error deleting blog.");
+        return;
+      }
+    }
+
     const updatedBlogs = blogs.filter(b => b.id !== id);
     localStorage.setItem("mock_blogs", JSON.stringify(updatedBlogs));
     setBlogs(updatedBlogs);
-    if (isSupabaseConfigured && supabase) {
-      try {
-        await supabase.from("blogs").delete().eq("id", id);
-      } catch (err) {
-        console.error("Supabase blog delete error:", err);
-      }
-    }
   };
 
   const handleResetBlogs = async () => {
     if (!window.confirm("Reset blog posts to defaults? This will erase custom posts.")) return;
-    localStorage.setItem("mock_blogs", JSON.stringify(DEFAULT_BLOG_POSTS));
-    setBlogs(DEFAULT_BLOG_POSTS);
+
     if (isSupabaseConfigured && supabase) {
       try {
         for (const post of DEFAULT_BLOG_POSTS) {
@@ -788,12 +963,22 @@ const Admin = () => {
             paragraphs: post.paragraphs,
             date: post.date
           };
-          await supabase.from("blogs").upsert(dbFormat);
+          const { error } = await supabase.from("blogs").upsert(dbFormat);
+          if (error) {
+            console.error("Supabase reset blogs error:", error);
+            alert(`Database reset failed at article "${post.title}": ${error.message}`);
+            return;
+          }
         }
       } catch (err) {
         console.error("Supabase reset blogs error:", err);
+        alert("Unexpected database error resetting blogs.");
+        return;
       }
     }
+
+    localStorage.setItem("mock_blogs", JSON.stringify(DEFAULT_BLOG_POSTS));
+    setBlogs(DEFAULT_BLOG_POSTS);
   };
 
   const openAddBlog = () => {
@@ -1050,23 +1235,7 @@ const Admin = () => {
   // ─────────────────────────────────────────────────
   // RETURN
   // ─────────────────────────────────────────────────
-  if (!passkeyAuthorized) {
-    const handlePasskeySubmit = (e) => {
-      e.preventDefault();
-      if (passkeyInput === ADMIN_PASSKEY) {
-        sessionStorage.setItem("admin_authorized", "true");
-        setPasskeyAuthorized(true);
-      } else {
-        setPasskeyError("Ghalat Passkey! Access Denied.");
-        setPasskeyInput("");
-        const card = document.querySelector(".passkey-card");
-        if (card) {
-          card.classList.add("shake-animation");
-          setTimeout(() => card.classList.remove("shake-animation"), 500);
-        }
-      }
-    };
-
+  if (isAdmin !== true) {
     return (
       <div className="passkey-overlay">
         <style>{`
@@ -1110,26 +1279,34 @@ const Admin = () => {
             margin-bottom: 2rem;
             line-height: 1.5;
           }
-          .passkey-input-wrapper {
-            position: relative;
+          .login-input-group {
+            text-align: left;
             margin-bottom: 1.5rem;
           }
-          .passkey-input {
+          .login-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #e0c98a;
+            margin-bottom: 0.5rem;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+          }
+          .login-input {
             width: 100%;
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(224, 201, 138, 0.3);
             border-radius: 1rem;
             padding: 1.2rem;
-            font-size: 2rem;
-            letter-spacing: 0.5rem;
-            text-align: center;
+            font-size: 1.4rem;
             color: #fff;
             outline: none;
             transition: all 0.3s ease;
+            box-sizing: border-box;
           }
-          .passkey-input:focus {
+          .login-input:focus {
             border-color: #e0c98a;
-            box-shadow: 0 0 15px rgba(224, 201, 138, 0.2);
+            box-shadow: 0 0 10px rgba(224, 201, 138, 0.2);
           }
           .passkey-btn {
             width: 100%;
@@ -1144,10 +1321,15 @@ const Admin = () => {
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
+            box-sizing: border-box;
           }
-          .passkey-btn:hover {
+          .passkey-btn:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(224, 201, 138, 0.3);
+          }
+          .passkey-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
           }
           .passkey-error {
             color: #ff6b6b;
@@ -1164,33 +1346,70 @@ const Admin = () => {
             40%, 80% { transform: translateX(10px); }
           }
         `}</style>
-        <div className="passkey-card animate__animated animate__zoomIn">
-          <img src="/shroooms_logo_full.png" alt="Shroooms" className="passkey-logo" />
-          <h2 className="passkey-title font-serif">Security Portal</h2>
-          <p className="passkey-desc">Enter the 9-digit security passkey to access administrative controls.</p>
-          <form onSubmit={handlePasskeySubmit}>
-            <div className="passkey-input-wrapper">
-              <input
-                type="password"
-                maxLength={9}
-                pattern="[0-9]*"
-                inputMode="numeric"
-                className="passkey-input"
-                placeholder="•••••••••"
-                value={passkeyInput}
-                onChange={(e) => {
-                  const val = e.target.value.replace(/[^0-9]/g, "");
-                  setPasskeyInput(val);
-                  setPasskeyError("");
-                }}
-                autoFocus
-                required
-              />
+
+        {authLoading ? (
+          <div className="passkey-card">
+            <img src="/shroooms_logo_full.png" alt="Shroooms" className="passkey-logo" />
+            <h2 className="passkey-title font-serif">Verifying Session...</h2>
+            <div style={{ padding: "2rem 0" }}>
+              <i className="fa fa-spinner fa-spin" style={{ fontSize: "3rem", color: "#e0c98a" }}></i>
             </div>
-            <button type="submit" className="passkey-btn">Authorize Access</button>
-          </form>
-          {passkeyError && <div className="passkey-error animate__animated animate__headShake"><i className="fa fa-exclamation-circle"></i> {passkeyError}</div>}
-        </div>
+          </div>
+        ) : isAdmin === false ? (
+          <div className="passkey-card animate__animated animate__zoomIn">
+            <img src="/shroooms_logo_full.png" alt="Shroooms" className="passkey-logo" />
+            <h2 className="passkey-title font-serif" style={{ color: "#ff6b6b" }}>Access Denied</h2>
+            <p className="passkey-desc">Your account is successfully authenticated but does not possess administrative privileges.</p>
+            <div style={{ margin: "2rem 0" }}>
+              <i className="fa fa-ban" style={{ fontSize: "4rem", color: "#ff6b6b" }}></i>
+            </div>
+            <button className="passkey-btn" onClick={handleLogout}>Back to Login</button>
+          </div>
+        ) : (
+          <div className="passkey-card animate__animated animate__zoomIn">
+            <img src="/shroooms_logo_full.png" alt="Shroooms" className="passkey-logo" />
+            <h2 className="passkey-title font-serif">Security Portal</h2>
+            <p className="passkey-desc">Sign in with registered administrative credentials to access the console.</p>
+            <form onSubmit={handleLoginSubmit}>
+              <div className="login-input-group">
+                <label className="login-label">Email Address</label>
+                <input
+                  type="email"
+                  className="login-input"
+                  placeholder="admin@shrooom.in"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setLoginError("");
+                  }}
+                  required
+                />
+              </div>
+              <div className="login-input-group" style={{ marginBottom: "2.5rem" }}>
+                <label className="login-label">Security Password</label>
+                <input
+                  type="password"
+                  className="login-input"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setLoginError("");
+                  }}
+                  required
+                />
+              </div>
+              <button type="submit" className="passkey-btn" disabled={loginSubmitting}>
+                {loginSubmitting ? "Authorizing..." : "Authorize Access"}
+              </button>
+            </form>
+            {loginError && (
+              <div className="passkey-error animate__animated animate__headShake">
+                <i className="fa fa-exclamation-circle"></i> {loginError}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     );
   }
@@ -1257,8 +1476,10 @@ const Admin = () => {
           </div>
           <div className="adm-topbar-actions">
             <span className="adm-topbar-chip online">● Live</span>
+            {user && <span className="adm-topbar-chip" style={{ textTransform: "none" }}>{user.email}</span>}
             <span className="adm-topbar-chip">{clock}</span>
             <button className="adm-btn adm-btn-ghost adm-btn-sm" onClick={() => window.location.href = "/"}>← Store</button>
+            <button className="adm-btn adm-btn-ghost adm-btn-sm" onClick={handleLogout} style={{ marginLeft: "1rem", borderColor: "rgba(239, 68, 68, 0.4)", color: "#ef4444" }}>Logout</button>
           </div>
         </div>
 

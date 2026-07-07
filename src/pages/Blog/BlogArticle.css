@@ -1,0 +1,208 @@
+/* Breadcrumbs styling */
+.blog-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1.3rem;
+  color: var(--frugivore-gray);
+  margin-bottom: 3.5rem;
+  flex-wrap: wrap;
+}
+
+.blog-breadcrumb a {
+  color: var(--frugivore-green);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.blog-breadcrumb a:hover {
+  color: var(--frugivore-forest);
+}
+
+.blog-breadcrumb .bc-sep {
+  color: var(--frugivore-border);
+}
+
+.blog-breadcrumb .bc-current {
+  color: var(--frugivore-dark);
+  font-weight: 600;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Article title elements */
+.article-main-title {
+  font-size: 3.6rem;
+  font-weight: 700;
+  color: var(--frugivore-dark);
+  line-height: 1.3;
+  margin-bottom: 2rem;
+  padding: 0;
+}
+
+/* Neutral placeholder image styling */
+.article-media-placeholder {
+  width: 100%;
+  height: 350px;
+  background: linear-gradient(135deg, rgba(250, 247, 240, 0.9) 0%, rgba(224, 201, 138, 0.15) 100%);
+  border: 1px solid var(--frugivore-border);
+  border-radius: 16px;
+  margin-bottom: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  color: var(--frugivore-gray);
+}
+
+.placeholder-icon {
+  font-size: 5rem !important;
+  color: var(--frugivore-green);
+}
+
+.placeholder-label {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--frugivore-forest);
+}
+
+/* Article measure limit (max-width of body content for optimal reading) */
+.article-body {
+  max-width: 70ch;
+  margin: 0 auto 5rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2.2rem;
+}
+
+.article-body p {
+  font-size: 1.6rem;
+  line-height: 1.85;
+  color: var(--frugivore-gray);
+  margin: 0;
+  text-align: justify;
+}
+
+.article-intro-para {
+  font-size: 1.8rem !important;
+  line-height: 1.8 !important;
+  color: var(--frugivore-dark) !important;
+  font-weight: 500;
+}
+
+/* Conversion bridge box */
+.article-conversion-bridge {
+  background-color: var(--frugivore-white);
+  border: 1px solid var(--frugivore-border);
+  border-radius: 16px;
+  padding: 3rem 4rem;
+  margin: 5rem 0;
+  box-shadow: 0 4px 20px rgba(89, 78, 59, 0.02);
+}
+
+.article-conversion-bridge h4 {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--frugivore-dark);
+  margin: 0 0 1rem 0;
+}
+
+.article-conversion-bridge p {
+  font-size: 1.45rem;
+  line-height: 1.6;
+  color: var(--frugivore-gray);
+  margin: 0 0 2rem 0;
+}
+
+.bridge-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+/* Related section */
+.related-articles-section {
+  border-top: 1px solid var(--frugivore-border);
+  padding-top: 5rem;
+  margin-top: 5rem;
+}
+
+.related-title {
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: var(--frugivore-dark);
+  margin-bottom: 3rem;
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3rem;
+}
+
+.related-card {
+  background-color: var(--frugivore-white);
+  border: 1px solid var(--frugivore-border);
+  border-radius: 16px;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 15px rgba(89, 78, 59, 0.02);
+}
+
+.related-cat {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--frugivore-green);
+  letter-spacing: 1px;
+}
+
+.related-card-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--frugivore-dark);
+  line-height: 1.4;
+  margin: 1rem 0 2rem 0;
+  flex-grow: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .article-main-title {
+    font-size: 2.8rem;
+  }
+  .article-media-placeholder {
+    height: 250px;
+  }
+  .related-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .article-conversion-bridge {
+    padding: 2.5rem 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .article-main-title {
+    font-size: 2.4rem;
+  }
+  .blog-breadcrumb .bc-current {
+    max-width: 150px;
+  }
+  .article-media-placeholder {
+    height: 180px;
+  }
+}

@@ -20,6 +20,7 @@ import Recipes from "./pages/Recipes/Recipes";
 import RecipeDetail from "./pages/RecipeDetail/RecipeDetail";
 import Wholesale from "./pages/Wholesale/Wholesale";
 import Blog from "./pages/Blog/Blog";
+import BlogArticle from "./pages/Blog/BlogArticle";
 import Contact from "./pages/Contact/Contact";
 import Admin from "./pages/Admin/Admin";
 import SignInPage from "./pages/SignInPage/SignInPage";
@@ -99,6 +100,7 @@ const App = () => {
           <Route path="/recipes/:id" component={RecipeDetail} />
           <Route path="/recipes" component={Recipes} />
           <Route path="/wholesale" component={Wholesale} />
+          <Route path="/blog/:slug" component={BlogArticle} />
           <Route path="/blog" component={Blog} />
           <Route path="/contact" component={Contact} />
           <Route path="/signin" component={SignInPage} />

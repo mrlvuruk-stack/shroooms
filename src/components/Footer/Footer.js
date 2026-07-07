@@ -253,6 +253,8 @@ export const Footer = () => {
 
         {/* E-E-A-T POLICY LINKS */}
         <div className="footer-policy-row">
+          <Link to="/blog" className="footer-policy-link" style={{ fontWeight: 600, color: "var(--frugivore-green)" }}>Chronicles (Blog)</Link>
+          <span className="footer-policy-dot">•</span>
           <Link to="/privacy-policy" className="footer-policy-link">Privacy Policy</Link>
           <span className="footer-policy-dot">•</span>
           <Link to="/refund-policy" className="footer-policy-link">Refund & Cancellation</Link>

@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { supabase, isSupabaseConfigured } from "../../supabase";
 import { normalizeBlogPost } from "./blogNormalizer";
 import { updateBlogMetadata, clearBlogMetadata } from "./blogMetadata";
-import { injectBlogCollectionSchema, removeBlogSchema } from "./blogStructuredData";
-import "./Blog.css";
+import { injectBlogPostingSchema, removeBlogSchema } from "./blogStructuredData";
+import "./BlogArticle.css";
 
 const DEFAULT_BLOG_POSTS = [
   {
@@ -72,12 +73,11 @@ const DEFAULT_BLOG_POSTS = [
   }
 ];
 
-const Blog = () => {
-  const [activeCategory, setActiveCategory] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [posts, setPosts] = useState([]);
-  const [status, setStatus] = useState("LOADING"); // LOADING | SUCCESS_WITH_ARTICLES | SUCCESS_EMPTY | FETCH_ERROR
-
+const BlogArticle = () => {
+  const { slug } = useParams();
+  const [post, setPost] = useState(null);
+  const [related, setRelated] = useState([]);
+  const [status, setStatus] = useState("LOADING"); // LOADING | SUCCESS | ERROR | NOT_FOUND
   const isMountedRef = useRef(true);
 
   useEffect(() => {
@@ -89,216 +89,224 @@ const Blog = () => {
     };
   }, []);
 
-  const fetchBlogs = async () => {
-    if (!isMountedRef.current) return;
-    setStatus("LOADING");
+  useEffect(() => {
+    const fetchArticleData = async () => {
+      setStatus("LOADING");
+      let allPosts = [];
 
-    const { supabase, isSupabaseConfigured } = await import("../../supabase");
-    
-    if (isSupabaseConfigured && supabase) {
-      try {
-        const { data, error } = await supabase.from("blogs").select("*");
-        if (error) {
-          console.error("Supabase blogs fetch error:", error);
+      if (isSupabaseConfigured && supabase) {
+        try {
+          const { data, error } = await supabase.from("blogs").select("*");
+          if (!error && data && data.length > 0) {
+            allPosts = data.map(normalizeBlogPost).filter(Boolean);
+          } else {
+            console.warn("Supabase fetch returned empty, attempting local recovery");
+          }
+        } catch (err) {
+          console.error("Supabase fetch error inside BlogArticle:", err);
           if (isMountedRef.current) {
-            setStatus("FETCH_ERROR");
+            setStatus("ERROR");
           }
           return;
         }
-
-        if (isMountedRef.current) {
-          if (data && data.length > 0) {
-            const formatted = data.map(normalizeBlogPost).filter(Boolean);
-            setPosts(formatted);
-            setStatus(formatted.length > 0 ? "SUCCESS_WITH_ARTICLES" : "SUCCESS_EMPTY");
-          } else {
-            setPosts([]);
-            setStatus("SUCCESS_EMPTY");
-          }
-        }
-      } catch (err) {
-        console.error("Supabase blogs fetch exception:", err);
-        if (isMountedRef.current) {
-          setStatus("FETCH_ERROR");
-        }
       }
-    } else {
-      // Local development mock mode fallback
-      const saved = localStorage.getItem("mock_blogs");
-      if (isMountedRef.current) {
+
+      // If Supabase fetch was unsuccessful or empty, try localStorage fallback
+      if (allPosts.length === 0) {
+        const saved = localStorage.getItem("mock_blogs");
         if (saved) {
           try {
-            const parsed = JSON.parse(saved).map(normalizeBlogPost).filter(Boolean);
-            setPosts(parsed);
-            setStatus(parsed.length > 0 ? "SUCCESS_WITH_ARTICLES" : "SUCCESS_EMPTY");
+            allPosts = JSON.parse(saved).map(normalizeBlogPost).filter(Boolean);
           } catch (e) {
-            const parsed = DEFAULT_BLOG_POSTS.map(normalizeBlogPost).filter(Boolean);
-            setPosts(parsed);
-            setStatus("SUCCESS_WITH_ARTICLES");
+            allPosts = DEFAULT_BLOG_POSTS.map(normalizeBlogPost).filter(Boolean);
           }
         } else {
-          localStorage.setItem("mock_blogs", JSON.stringify(DEFAULT_BLOG_POSTS));
-          const parsed = DEFAULT_BLOG_POSTS.map(normalizeBlogPost).filter(Boolean);
-          setPosts(parsed);
-          setStatus("SUCCESS_WITH_ARTICLES");
+          allPosts = DEFAULT_BLOG_POSTS.map(normalizeBlogPost).filter(Boolean);
         }
       }
-    }
-  };
 
-  useEffect(() => {
-    fetchBlogs();
-    
-    // Inject Listing SEO Head tags & JSON-LD schema
-    updateBlogMetadata({
-      title: "Shrooom Chronicles | Mycology, Science & Culinary Arts",
-      description: "Read the latest articles on mushroom superfoods, indoor vertical cultivation, recipes, and medicinal wellness guides from Shroooms experts."
-    });
-    injectBlogCollectionSchema();
-  }, []);
+      const currentPost = allPosts.find((p) => p.slug === slug);
+      if (!currentPost) {
+        if (isMountedRef.current) {
+          setStatus("NOT_FOUND");
+          updateBlogMetadata({
+            title: "Article Not Found | Shrooom Chronicles",
+            description: "The requested blog article could not be found.",
+            noindex: true
+          });
+        }
+        return;
+      }
 
-  const trimmedQuery = searchQuery.trim().toLowerCase();
+      // Deterministic category-based related article resolution
+      const categoryRelated = allPosts
+        .filter((p) => p.slug !== currentPost.slug && p.category === currentPost.category)
+        .sort((a, b) => a.slug.localeCompare(b.slug)) // Deterministic alphabetical sort fallback
+        .slice(0, 2);
 
-  const filteredPosts = posts.filter((post) => {
-    const matchesCategory = activeCategory === "all" || post.category === activeCategory;
-    const matchesSearch = 
-      post.title.toLowerCase().includes(trimmedQuery) ||
-      post.author.toLowerCase().includes(trimmedQuery) ||
-      post.excerpt.toLowerCase().includes(trimmedQuery);
-    return matchesCategory && matchesSearch;
-  });
+      if (isMountedRef.current) {
+        setPost(currentPost);
+        setRelated(categoryRelated);
+        setStatus("SUCCESS");
+
+        // Inject SEO and Structured Data
+        updateBlogMetadata({
+          title: `${currentPost.title} | Shrooom Chronicles`,
+          description: currentPost.excerpt || "Read this article from the SHROOOMS Editorial Team.",
+          slug: currentPost.slug
+        });
+        injectBlogPostingSchema(currentPost);
+      }
+    };
+
+    fetchArticleData();
+  }, [slug]);
+
+  if (status === "LOADING") {
+    return (
+      <div className="blog-container">
+        <div className="blog-inner" style={{ textAlign: "center", padding: "6rem 2rem" }}>
+          <i className="fa fa-spinner fa-spin" style={{ fontSize: "4rem", color: "var(--frugivore-green)" }}></i>
+          <p style={{ marginTop: "2rem", fontSize: "1.6rem", color: "var(--frugivore-gray)" }}>Loading article details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (status === "ERROR") {
+    return (
+      <div className="blog-container">
+        <div className="blog-inner" style={{ textAlign: "center", padding: "6rem 2rem" }}>
+          <i className="fa fa-exclamation-triangle" style={{ fontSize: "4rem", color: "#d96f7c", marginBottom: "2rem" }}></i>
+          <h2 style={{ fontSize: "2.4rem", marginBottom: "1rem" }}>Failed to Load Article</h2>
+          <p style={{ fontSize: "1.5rem", color: "var(--frugivore-gray)", marginBottom: "3rem" }}>
+            An error occurred while connecting to the database. Please check your connection.
+          </p>
+          <Link to="/blog" className="close-reader-footer-btn" style={{ textDecoration: "none" }}>
+            Back to Chronicles
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (status === "NOT_FOUND") {
+    return (
+      <div className="blog-container">
+        <div className="blog-inner" style={{ textAlign: "center", padding: "6rem 2rem" }}>
+          <i className="fa fa-chain-broken" style={{ fontSize: "4rem", color: "#d96f7c", marginBottom: "2rem" }}></i>
+          <h2 style={{ fontSize: "2.4rem", marginBottom: "1rem" }}>Article Not Found</h2>
+          <p style={{ fontSize: "1.5rem", color: "var(--frugivore-gray)", marginBottom: "3rem" }}>
+            The article you are looking for does not exist or has been moved.
+          </p>
+          <Link to="/blog" className="close-reader-footer-btn" style={{ textDecoration: "none" }}>
+            Back to Chronicles
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="blog-container">
       <div className="blog-inner animate__animated animate__fadeIn">
-        <header className="blog-header-section">
-          <span className="blog-eyebrow">Shroooms Chronicles</span>
-          <h1 className="blog-title font-serif">Mycology, Science & Culinary Arts</h1>
-          <p className="blog-subtitle">
-            Delve into the fascinating biology of Kingdom Fungi. Read expert growing logs, scientific wellness reports, and kitchen masterclasses.
-          </p>
-          <div className="blog-divider"></div>
-        </header>
+        
+        {/* Breadcrumbs */}
+        <nav className="blog-breadcrumb">
+          <Link to="/">Home</Link>
+          <span className="bc-sep">/</span>
+          <Link to="/blog">Chronicles</Link>
+          <span className="bc-sep">/</span>
+          <span className="bc-current">{post.title}</span>
+        </nav>
 
-        {/* Search & Filter Toolbar */}
-        <div className="blog-toolbar">
-          <div className="blog-search-wrapper">
-            <i className="fa fa-search search-icon"></i>
-            <input
-              type="text"
-              placeholder="Search articles by title or keyword..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="blog-search-input"
-              aria-label="Search articles by title or keyword"
-            />
-            {searchQuery && (
-              <button className="clear-search-btn" onClick={() => setSearchQuery("")} aria-label="Clear search input">
-                <i className="fa fa-times"></i>
-              </button>
-            )}
+        <article className="article-content">
+          <header className="article-header">
+            <span className="article-category-label">{post.category.toUpperCase()}</span>
+            <h1 className="article-main-title font-serif">{post.title}</h1>
+            
+            <div className="article-meta-strip">
+              <span className="author">By {post.author}</span>
+              {post.datePublished && (
+                <>
+                  <span className="dot">•</span>
+                  <span className="date">{post.datePublished}</span>
+                </>
+              )}
+            </div>
+            
+            <div className="article-divider-ws"></div>
+          </header>
+
+          {/* Fallback visual placeholder instead of category-based fake image */}
+          <div className="article-media-placeholder">
+            <div className="placeholder-content">
+              <i className={`fa ${post.icon || "fa-book"} placeholder-icon`}></i>
+              <span className="placeholder-label">{post.category.toUpperCase()} EDITORIAL</span>
+            </div>
           </div>
 
-          <div className="blog-filter-nav" role="tablist">
-            {["all", "science", "cultivation", "culinary"].map((cat) => {
-              const labels = {
-                all: "All Articles",
-                science: "Science & Wellness",
-                cultivation: "Cultivation",
-                culinary: "Culinary"
-              };
-              return (
-                <button
-                  key={cat}
-                  role="tab"
-                  aria-selected={activeCategory === cat}
-                  className={`blog-filter-btn ${activeCategory === cat ? "active" : ""}`}
-                  onClick={() => setActiveCategory(cat)}
-                >
-                  {labels[cat]}
-                </button>
-              );
-            })}
+          <div className="article-body">
+            {post.body.map((para, idx) => (
+              <p key={idx} className={idx === 0 ? "article-intro-para" : ""}>
+                {para}
+              </p>
+            ))}
           </div>
-        </div>
 
-        {/* Content Render States */}
-        {status === "LOADING" && (
-          <div style={{ textAlign: "center", padding: "6rem 2rem" }}>
-            <i className="fa fa-spinner fa-spin" style={{ fontSize: "4rem", color: "var(--frugivore-green)" }}></i>
-            <p style={{ marginTop: "2rem", fontSize: "1.5rem", color: "var(--frugivore-gray)" }}>Announcing articles list...</p>
-          </div>
-        )}
+          {/* Contextual Conversion bridges */}
+          <section className="article-conversion-bridge">
+            <h4>Explore Fungi Products</h4>
+            <p>Ready to try organic cultivars? Buy premium fruiting substrates and kits from our store.</p>
+            <div className="bridge-ctas">
+              <Link to="/#products" className="adm-btn adm-btn-primary" style={{ padding: "1.2rem 2.5rem", borderRadius: "10px", textDecoration: "none", fontSize: "1.3rem", fontWeight: 700 }}>
+                Shop Fresh Cultivars
+              </Link>
+              <Link to="/wholesale" className="adm-btn adm-btn-ghost" style={{ padding: "1.2rem 2.5rem", borderRadius: "10px", textDecoration: "none", fontSize: "1.3rem", fontWeight: 700, marginLeft: "1.5rem" }}>
+                B2B Wholesale Inquiry
+              </Link>
+            </div>
+          </section>
 
-        {status === "FETCH_ERROR" && (
-          <div style={{ textAlign: "center", padding: "6rem 2rem" }} role="alert">
-            <i className="fa fa-exclamation-triangle" style={{ fontSize: "4rem", color: "#d96f7c", marginBottom: "2rem" }}></i>
-            <h3 style={{ fontSize: "2.2rem", marginBottom: "1rem" }}>Failed to Connect</h3>
-            <p style={{ fontSize: "1.5rem", color: "var(--frugivore-gray)", marginBottom: "2.5rem" }}>
-              We could not fetch the Chronicles data from the production database.
-            </p>
-            <button className="close-reader-footer-btn" onClick={fetchBlogs}>
-              Retry Connection
-            </button>
-          </div>
-        )}
-
-        {status === "SUCCESS_EMPTY" && (
-          <div className="no-blogs-found">
-            <i className="fa fa-book"></i>
-            <p>No articles exist in the database yet. Check back soon!</p>
-          </div>
-        )}
-
-        {status === "SUCCESS_WITH_ARTICLES" && (
-          <>
-            {filteredPosts.length > 0 ? (
-              <div className="blog-grid">
-                {filteredPosts.map((post) => (
-                  <div key={post.id} className="blog-card">
-                    <div className="blog-card-header">
-                      <div className="blog-icon-box">
-                        <i className={`fa ${post.icon || "fa-book"}`}></i>
-                      </div>
-                      <span className="blog-category-tag">{post.category.toUpperCase()}</span>
-                    </div>
-                    
-                    {/* Wrap title in Link */}
-                    <Link to={`/blog/${post.slug}`} style={{ textDecoration: "none" }}>
-                      <h3 className="blog-card-title">{post.title}</h3>
-                    </Link>
-                    
-                    <p className="blog-card-summary">{post.excerpt}</p>
-                    
-                    <div className="blog-card-meta">
-                      <div className="blog-author-info">
-                        <span>By {post.author}</span>
-                        {post.datePublished && (
-                          <>
-                            <span className="meta-dot">•</span>
-                            <span>{post.datePublished}</span>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                    
-                    <Link to={`/blog/${post.slug}`} className="read-full-btn">
-                      Read Full Article <i className="fa fa-long-arrow-right"></i>
-                    </Link>
-                  </div>
-                ))}
+          <footer className="article-footer">
+            <div className="author-bio-card">
+              <i className="fa fa-user-circle-o bio-icon"></i>
+              <div>
+                <h5>{post.author}</h5>
+                <p>Official contributor to Shroooms Chronicles, documenting indoor vertical cultivation logs, mycological ecosystems, and kitchen masterclasses.</p>
               </div>
-            ) : (
-              <div className="no-blogs-found">
-                <i className="fa fa-search"></i>
-                <p>No articles match your query. Try searching for other terms or reset filters.</p>
+            </div>
+
+            {/* Related Articles Section */}
+            {related.length > 0 && (
+              <div className="related-articles-section">
+                <h3 className="related-title font-serif">Related Chronicles</h3>
+                <div className="related-grid">
+                  {related.map((item) => (
+                    <div key={item.slug} className="related-card">
+                      <div className="related-card-header">
+                        <span className="related-cat">{item.category.toUpperCase()}</span>
+                      </div>
+                      <h4 className="related-card-title">{item.title}</h4>
+                      <Link to={`/blog/${item.slug}`} className="read-full-btn" style={{ fontSize: "1.25rem" }}>
+                        Read Article <i className="fa fa-long-arrow-right"></i>
+                      </Link>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
-          </>
-        )}
+
+            <div style={{ textAlign: "center", marginTop: "4rem" }}>
+              <Link to="/blog" className="close-reader-footer-btn" style={{ textDecoration: "none" }}>
+                Back to Chronicles
+              </Link>
+            </div>
+          </footer>
+        </article>
       </div>
     </div>
   );
 };
 
-export default Blog;
+export default BlogArticle;

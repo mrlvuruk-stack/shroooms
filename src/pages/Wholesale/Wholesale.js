@@ -209,7 +209,7 @@ const Wholesale = () => {
 
     try {
       if (isSupabaseConfigured && supabase) {
-        const { error: insertErr } = await supabase.from("inquiries").insert([payload]);
+        const { error: insertErr } = await supabase.from("inquiries").insert([payload], { returning: "minimal" });
         if (insertErr) throw insertErr;
         
         if (isMountedRef.current) {

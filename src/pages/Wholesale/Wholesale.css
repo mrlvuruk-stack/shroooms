@@ -271,6 +271,13 @@
   box-shadow: 0 4px 15px rgba(89, 78, 59, 0.05);
 }
 
+.form-group input:focus-visible, 
+.form-group select:focus-visible, 
+.form-group textarea:focus-visible {
+  outline: 2.5px solid var(--frugivore-green);
+  outline-offset: 1px;
+}
+
 .form-row-ws {
   display: flex;
   gap: 2rem;
@@ -299,9 +306,17 @@
   gap: 1rem;
 }
 
-.ws-submit-btn:hover {
+.ws-submit-btn:hover:not(:disabled) {
   background-color: var(--frugivore-green);
   transform: translateY(-1px);
+}
+
+.ws-submit-btn:disabled {
+  background-color: var(--frugivore-border);
+  color: var(--frugivore-gray);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .ws-submit-btn .fa {
@@ -327,6 +342,56 @@
   font-size: 1.6rem !important;
   color: #c81e1e;
 }
+
+/* Field level error validation styles */
+.field-error-text {
+  color: #c81e1e;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 0.4rem;
+  display: block;
+}
+
+/* Privacy disclaimer note */
+.form-privacy-note {
+  font-size: 1.2rem;
+  color: var(--frugivore-gray);
+  line-height: 1.5;
+  margin: 0;
+  text-align: center;
+}
+
+.privacy-link {
+  color: var(--frugivore-forest);
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.privacy-link:hover {
+  color: var(--frugivore-green);
+}
+
+/* Dev mode mock submission badge */
+.dev-mock-badge {
+  background-color: #feebc8;
+  border: 1px solid #fbd38d;
+  color: #c05621;
+  font-size: 1.25rem;
+  font-weight: 650;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  text-align: left;
+}
+
+.dev-mock-badge .fa {
+  font-size: 1.6rem !important;
+  color: #c05621;
+}
+
 
 /* Success Card styling */
 .form-success-card {

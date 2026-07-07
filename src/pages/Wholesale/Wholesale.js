@@ -35,7 +35,8 @@ const BULK_PRODUCTS = [
 ];
 
 const Wholesale = () => {
-  const isMounted = useRef(true);
+  const isMountedRef = useRef(true);
+  const submissionLockRef = useRef(false);
   
   const [formData, setFormData] = useState({
     name: "",
@@ -54,14 +55,14 @@ const Wholesale = () => {
   const [bulkProducts, setBulkProducts] = useState(BULK_PRODUCTS);
 
   useEffect(() => {
-    isMounted.current = true;
+    isMountedRef.current = true;
     document.title = "Wholesale Gourmet Mushrooms | Bulk Supply for Restaurants – Shroooms";
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
       metaDesc.setAttribute("content", "Order premium gourmet mushrooms in bulk. Reliable farm-to-table supply chain for restaurants, hotels, and cafes in Indore and across India.");
     }
     return () => {
-      isMounted.current = false;
+      isMountedRef.current = false;
     };
   }, []);
 
@@ -71,7 +72,7 @@ const Wholesale = () => {
       if (isSupabaseConfigured && supabase) {
         try {
           const { data, error } = await supabase.from("wholesale").select("*");
-          if (isMounted.current && !error && data && data.length > 0) {
+          if (isMountedRef.current && !error && data && data.length > 0) {
             setBulkProducts(data);
             return;
           }
@@ -81,7 +82,7 @@ const Wholesale = () => {
       }
       const saved = localStorage.getItem("mock_wholesale");
       if (saved) {
-        if (isMounted.current) {
+        if (isMountedRef.current) {
           setBulkProducts(JSON.parse(saved));
         }
       } else {
@@ -177,7 +178,9 @@ const Wholesale = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (submitStatus === "submitting") return;
+    if (submissionLockRef.current) {
+      return;
+    }
 
     setGlobalError("");
     setFieldErrors({});
@@ -189,6 +192,8 @@ const Wholesale = () => {
       return;
     }
 
+    // Acquire lock immediately before starting async requests
+    submissionLockRef.current = true;
     setSubmitStatus("submitting");
 
     const payload = {
@@ -202,28 +207,20 @@ const Wholesale = () => {
       message: formData.message.trim() || null
     };
 
-    if (isSupabaseConfigured && supabase) {
-      try {
+    try {
+      if (isSupabaseConfigured && supabase) {
         const { error: insertErr } = await supabase.from("inquiries").insert([payload]);
         if (insertErr) throw insertErr;
         
-        if (isMounted.current) {
+        if (isMountedRef.current) {
           setSubmitStatus("success");
           setIsMockSuccess(false);
         }
-      } catch (err) {
-        console.error("Error submitting wholesale inquiry to Supabase:", err);
-        if (isMounted.current) {
-          setGlobalError("Unable to submit inquiry. Please check your connection and try again.");
-          setSubmitStatus("error");
-        }
-      }
-    } else {
-      // Supabase is unavailable
-      const isDev = process.env.NODE_ENV === "development";
-      if (isDev) {
-        // Gated development mock persistence
-        try {
+      } else {
+        // Supabase is unavailable
+        const isDev = process.env.NODE_ENV === "development";
+        if (isDev) {
+          // Gated development mock persistence
           const mockInqs = JSON.parse(localStorage.getItem("mock_inquiries") || "[]");
           mockInqs.push({
             id: `mock-inq-${Date.now()}`,
@@ -233,29 +230,32 @@ const Wholesale = () => {
           });
           localStorage.setItem("mock_inquiries", JSON.stringify(mockInqs));
           
-          if (isMounted.current) {
+          if (isMountedRef.current) {
             setSubmitStatus("success");
             setIsMockSuccess(true);
           }
-        } catch (err) {
-          console.error("Failed to write to LocalStorage:", err);
-          if (isMounted.current) {
-            setGlobalError("Submission failed. Browser local storage is disabled or full.");
+        } else {
+          // In production, block localStorage fallback and show real error/unavailable state
+          if (isMountedRef.current) {
+            setGlobalError("Wholesale inquiry service is currently offline. Please contact us directly at customar@shrooom.in.");
             setSubmitStatus("error");
           }
         }
-      } else {
-        // In production, block localStorage fallback and show real error/unavailable state
-        if (isMounted.current) {
-          setGlobalError("Wholesale inquiry service is currently offline. Please contact us directly at customar@shrooom.in.");
-          setSubmitStatus("error");
-        }
       }
+    } catch (err) {
+      console.error("Error submitting wholesale inquiry to Supabase:", err);
+      if (isMountedRef.current) {
+        setGlobalError("Unable to submit inquiry. Please check your connection and try again.");
+        setSubmitStatus("error");
+      }
+    } finally {
+      // Release lock unconditionally in finally block
+      submissionLockRef.current = false;
     }
   };
 
   const handleReset = () => {
-    if (isMounted.current) {
+    if (isMountedRef.current) {
       setFormData({
         name: "",
         email: "",
@@ -340,7 +340,7 @@ const Wholesale = () => {
                 <div className="success-icon-wrapper">
                   <i className="fa fa-check" aria-hidden="true"></i>
                 </div>
-                <h3>Inquiry Submitted Successfully!</h3>
+                <h3>{isMockSuccess ? "Development Mock Inquiry Saved!" : "Inquiry Submitted Successfully!"}</h3>
                 
                 {isMockSuccess ? (
                   <div className="dev-mock-badge" role="alert">

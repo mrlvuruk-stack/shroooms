@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation, Link } from "react-router-dom";
@@ -219,13 +220,22 @@ const SignUpPage = () => {
             {step === 1 && (
               <>
                 <h2 className="signup-form-title">Begin Your Wellness Journey</h2>
-                <p className="signup-form-desc">
-                  Join the Shroooms community and discover nature's most powerful nutrients.
-                </p>
+                
+                <div className="signup-maintenance-banner" style={{
+                  padding: "1.2rem",
+                  background: "rgba(220, 95, 0, 0.1)",
+                  border: "1px solid rgba(220, 95, 0, 0.3)",
+                  borderRadius: "8px",
+                  color: "#c05600",
+                  fontSize: "1.3rem",
+                  textAlign: "center",
+                  margin: "1.5rem 0",
+                  fontWeight: "500"
+                }}>
+                  Authentication features are temporarily offline for security upgrades. Please browse the store as a guest.
+                </div>
 
-                {error && <div className="signup-err-msg">{error}</div>}
-
-                <form onSubmit={handleSignUp} className="signup-form">
+                <form onSubmit={(e) => e.preventDefault()} className="signup-form">
                   
                   {/* Full Name Input */}
                   <div className="signup-form-group">
@@ -233,15 +243,12 @@ const SignUpPage = () => {
                     <div className="signup-input-wrapper">
                       <i className="fa fa-user signup-input-icon"></i>
                       <input
+                        disabled
                         type="text"
                         placeholder="Sage Everly"
                         value={fullName}
-                        onChange={(e) => {
-                          setFullName(e.target.value);
-                          setError("");
-                        }}
                         className="signup-line-input"
-                        required
+                        style={{ backgroundColor: "#fafafa", cursor: "not-allowed" }}
                       />
                     </div>
                   </div>
@@ -252,15 +259,12 @@ const SignUpPage = () => {
                     <div className="signup-input-wrapper">
                       <i className="fa fa-envelope signup-input-icon"></i>
                       <input
+                        disabled
                         type="email"
                         placeholder="wellness@shroooms.com"
                         value={email}
-                        onChange={(e) => {
-                          setEmail(e.target.value);
-                          setError("");
-                        }}
                         className="signup-line-input"
-                        required
+                        style={{ backgroundColor: "#fafafa", cursor: "not-allowed" }}
                       />
                     </div>
                   </div>
@@ -271,25 +275,18 @@ const SignUpPage = () => {
                     <div className="signup-input-wrapper">
                       <i className="fa fa-lock signup-input-icon"></i>
                       <input
-                        type={showPassword ? "text" : "password"}
+                        disabled
+                        type="password"
                         placeholder="••••••••"
                         value={password}
-                        onChange={(e) => {
-                          setPassword(e.target.value);
-                          setError("");
-                        }}
                         className="signup-line-input"
-                        required
+                        style={{ backgroundColor: "#fafafa", cursor: "not-allowed" }}
                       />
-                      <i 
-                        className={`fa fa-eye${showPassword ? "-slash" : ""} signup-eye-toggle`}
-                        onClick={() => setShowPassword(!showPassword)}
-                      ></i>
                     </div>
                   </div>
 
-                  <button type="submit" className="signup-primary-btn" disabled={loading}>
-                    {loading ? "Sending Verification OTP..." : "Create Account"}
+                  <button type="button" className="signup-primary-btn" disabled style={{ backgroundColor: "#ccc", color: "#666", cursor: "not-allowed" }}>
+                    Create Account (Disabled)
                   </button>
 
                 </form>

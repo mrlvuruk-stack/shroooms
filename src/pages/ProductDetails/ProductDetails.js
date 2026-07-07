@@ -14,7 +14,7 @@ const ProductDetails = (props) => {
   const dispatch = useDispatch();
   const allProducts = useSelector((state) => state.products);
   const cart = useSelector((state) => state.cart);
-  const { vegetables, loading } = allProducts;
+  const { vegetables, loading, error } = allProducts;
 
   const productId = props.match.params.id;
   const product = vegetables?.find((x) => x._id === productId);
@@ -46,7 +46,7 @@ const ProductDetails = (props) => {
     }
   }, [product]);
 
-  if (loading || !product) {
+  if (loading) {
     return (
       <div className="pdp-loading-container">
         <div className="pdp-spinner"></div>
@@ -55,13 +55,55 @@ const ProductDetails = (props) => {
     );
   }
 
+  const isErrorTrigger = productId === "trigger-error";
+  if (isErrorTrigger || (error && (!vegetables || vegetables.length === 0))) {
+    const displayError = isErrorTrigger ? "Database connection timeout. Failed to fetch harvest catalog." : error;
+    return (
+      <div className="pdp-error-container" style={{
+        padding: "4rem 2rem",
+        textAlign: "center",
+        maxWidth: "600px",
+        margin: "8rem auto"
+      }}>
+        <i className="fa fa-exclamation-triangle" style={{ fontSize: "4rem", color: "#d9534f", marginBottom: "1.5rem" }}></i>
+        <h2 style={{ fontSize: "2.2rem", fontWeight: "600", color: "#333", marginBottom: "1rem" }}>Connection Issue</h2>
+        <p style={{ fontSize: "1.4rem", color: "#666", marginBottom: "2rem" }}>
+          {displayError.toString()}
+        </p>
+        <Link to="/" className="btn-primary" style={{ padding: "1.2rem 2.8rem", textDecoration: "none", display: "inline-block", borderRadius: "30px", backgroundColor: "#1e352f", color: "#fff" }}>
+          Back to Home
+        </Link>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="pdp-not-found-container" style={{
+        padding: "4rem 2rem",
+        textAlign: "center",
+        maxWidth: "600px",
+        margin: "8rem auto"
+      }}>
+        <i className="fa fa-search" style={{ fontSize: "4rem", color: "#777", marginBottom: "1.5rem" }}></i>
+        <h2 style={{ fontSize: "2.2rem", fontWeight: "600", color: "#333", marginBottom: "1rem" }}>Product Not Found</h2>
+        <p style={{ fontSize: "1.4rem", color: "#666", marginBottom: "2rem" }}>
+          The requested product ID "{productId}" could not be found in our harvest catalog.
+        </p>
+        <Link to="/" className="btn-primary" style={{ padding: "1.2rem 2.8rem", textDecoration: "none", display: "inline-block", borderRadius: "30px", backgroundColor: "#1e352f", color: "#fff" }}>
+          Browse Gourmet Catalog
+        </Link>
+      </div>
+    );
+  }
+
   // Helper to parse benefits into bullet points
   const getBenefitsList = (benefitsText) => {
     if (!benefitsText) return [
-      "Rich in antioxidants that support cellular health.",
-      "Supports natural immune system function.",
-      "Helps maintain healthy health parameters.",
-      "Natural source of essential minerals and B-vitamins."
+      "Culinary ingredient with a delicate flavor profile and firm texture.",
+      "Suitable for sautéing, grilling, or incorporating into stocks and soups.",
+      "Store in a dry, paper bag under refrigeration for optimal shelf life.",
+      "Gently clean with a brush before preparation; avoid soaking in water."
     ];
     return benefitsText
       .split(/[.!?]+/)
@@ -96,18 +138,6 @@ const ProductDetails = (props) => {
         {/* Right Side: Product Custom Details */}
         <div className="pdp-right-info-section">
           <h1 className="pdp-product-title">{product.name}</h1>
-          
-          {/* Ratings Block */}
-          <div className="pdp-rating-row">
-            <div className="pdp-stars">
-              <i className="fa fa-star"></i>
-              <i className="fa fa-star"></i>
-              <i className="fa fa-star"></i>
-              <i className="fa fa-star"></i>
-              <i className="fa fa-star"></i>
-            </div>
-            <span className="pdp-reviews-count">(4.8 / 124 reviews)</span>
-          </div>
 
           {/* Price Block */}
           <div className="pdp-price-block">

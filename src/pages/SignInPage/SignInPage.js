@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation, Link } from "react-router-dom";
@@ -322,40 +323,47 @@ const SignInPage = () => {
             {step === 1 && (
               <>
                 <h2 className="signin-form-title font-serif">Welcome Back</h2>
-                <p className="signin-form-desc">
-                  Please enter your details to access your account.
-                </p>
+                
+                <div className="signin-maintenance-banner" style={{
+                  padding: "1.2rem",
+                  background: "rgba(220, 95, 0, 0.1)",
+                  border: "1px solid rgba(220, 95, 0, 0.3)",
+                  borderRadius: "8px",
+                  color: "#c05600",
+                  fontSize: "1.3rem",
+                  textAlign: "center",
+                  margin: "1.5rem 0",
+                  fontWeight: "500"
+                }}>
+                  Authentication features are temporarily offline for security upgrades. Please browse the store as a guest.
+                </div>
 
-                {error && <div className="signin-err-msg">{error}</div>}
-
-                <form onSubmit={handleIdentifierSubmit} className="signin-form">
+                <form onSubmit={(e) => e.preventDefault()} className="signin-form">
                   <div className="signin-form-group">
                     <label className="signin-label">PHONE OR EMAIL ADDRESS</label>
                     <input
+                      disabled
                       type="text"
                       placeholder="e.g. 9826012345 or user@shrooom.in"
                       value={identifier}
-                      onChange={(e) => {
-                        setIdentifier(e.target.value);
-                        setError("");
-                      }}
                       className="signin-line-input"
-                      required
+                      style={{ backgroundColor: "#fafafa", cursor: "not-allowed" }}
                     />
                   </div>
 
-                  <button type="submit" className="signin-primary-btn" disabled={loading || truecallerLoading}>
-                    {loading ? "Sending OTP..." : "Get OTP Code"}
+                  <button type="button" className="signin-primary-btn" disabled style={{ backgroundColor: "#ccc", color: "#666", cursor: "not-allowed" }}>
+                    Get OTP Code (Disabled)
                   </button>
 
                   {/* Truecaller verification option */}
                   <button 
-                    onClick={handleTruecallerLogin} 
+                    type="button"
                     className="signin-truecaller-btn" 
-                    disabled={loading || truecallerLoading}
+                    disabled
+                    style={{ backgroundColor: "#eee", color: "#999", cursor: "not-allowed" }}
                   >
-                    <i className="fa fa-phone-square truecaller-icon"></i>
-                    <span>{truecallerLoading ? "Verifying via Truecaller..." : "Verify with Truecaller"}</span>
+                    <i className="fa fa-phone-square truecaller-icon" style={{ color: "#999" }}></i>
+                    <span>Verify with Truecaller (Disabled)</span>
                   </button>
                 </form>
 

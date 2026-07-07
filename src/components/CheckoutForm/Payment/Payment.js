@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -62,35 +63,40 @@ const Payment = (props) => {
           <p>Total Pay: </p>
           <p>{totalPay}&#8377;</p>
         </div>
-        <div>
-          <h3>Test Credientials</h3>
-          <p>Email Id: sb-8hgkh7198474@personal.example.com</p>
-          <p style={{ fontWeight: "normal" }}>Password: rMAm)C1o</p>
+        <div className="checkout-payment-disabled-notice" style={{
+          padding: "1.5rem",
+          background: "rgba(220, 95, 0, 0.1)",
+          border: "1px solid rgba(220, 95, 0, 0.3)",
+          borderRadius: "8px",
+          color: "#c05600",
+          fontSize: "1.4rem",
+          textAlign: "center",
+          margin: "1.5rem 0",
+          fontWeight: "500",
+          lineHeight: "1.5"
+        }}>
+          Online ordering is being finalized. Please <a href="/contact" style={{ textDecoration: "underline", color: "inherit", fontWeight: "bold" }}>contact us</a> for order assistance.
         </div>
-        <br />
         <button
-          onClick={successPaymentHandler}
-          className="btn-pay-demo"
+          disabled
+          type="button"
+          className="btn-pay-demo btn-pay-disabled"
           style={{
             width: "100%",
             padding: "1.4rem 2.8rem",
-            backgroundColor: "#1e352f",
-            color: "#fff",
+            backgroundColor: "#ccc",
+            color: "#666",
             fontSize: "1.5rem",
             fontWeight: "600",
             border: "none",
             borderRadius: "30px",
-            cursor: "pointer",
-            transition: "all 0.2s ease",
+            cursor: "not-allowed",
             display: "flex",
             justifyContent: "center",
-            alignItems: "center",
-            boxShadow: "0 4px 15px rgba(30, 53, 47, 0.25)"
+            alignItems: "center"
           }}
-          onMouseOver={(e) => e.target.style.backgroundColor = "#12211d"}
-          onMouseOut={(e) => e.target.style.backgroundColor = "#1e352f"}
         >
-          Pay &#8377;{totalPay} & Place Order (Demo Mode)
+          Pay &#8377;{totalPay} & Place Order (Disabled)
         </button>
         {loading && <LoadingBox></LoadingBox>}
         {error && <ErrorBox varient="error">{error}</ErrorBox>}

@@ -25,3 +25,4 @@ backend/.env
 .env
 /verification/
 /design_specs/
+.vercel

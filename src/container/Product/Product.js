@@ -1,16 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { AddItemPrimary } from "../../components/Buttons/AddItem";
 import { RemoveItemPrimary } from "../../components/Buttons/RemoveItem";
 import { purchasingState } from "../../store/actions/actionCreators/addToCartAction";
-import { signInOpen } from "../../store/actions/actionCreators/signInAction";
-import {
-  addToWishlist,
-  getWishlist,
-  removeFromWishlist,
-} from "../../store/actions/actionCreators/wishlistAction";
 
 import "./Product.css";
 
@@ -18,65 +12,25 @@ const Product = ({ product }, props) => {
   const dispatch = useDispatch();
 
   const cart = useSelector((state) => state.cart);
-  const fullWishlist = useSelector((state) => state.fullWishlist);
-  const userSignIn = useSelector((state) => state.userSignIn);
-
-  const { wishlist } = fullWishlist;
-  const { userInfo } = userSignIn;
-
-  const [inWishlist, setInWishlist] = useState(false);
 
   // Dynamic cart item state from Redux store to avoid mutating product props
   const cartItem = cart?.cartData?.vegetablesCart?.find((x) => x._id === product._id);
   const isPurchasing = cartItem ? cartItem.purchasing : false;
   const quantity = cartItem ? cartItem.quantity : 0;
 
-  useEffect(() => {
-    dispatch(getWishlist());
-  }, [dispatch]);
-
-  useEffect(() => {
-    wishlist &&
-      wishlist.map((x) => {
-        if (x.product === product._id) {
-          setInWishlist(true);
-        }
-        return true;
-      });
-  }, [product, wishlist]);
-
-  useEffect(() => {
-    !wishlist && setInWishlist(false);
-  }, [product, wishlist]);
-
-  useEffect(() => {
-    if (userInfo) {
-      dispatch(getWishlist());
-    }
-  }, [userInfo, dispatch]);
-
   const wishlistIcon = () => {
-    if (!userInfo) {
-      return (
-        <i className="fa fa-heart-o" onClick={() => dispatch(signInOpen())}></i>
-      );
-    } else {
-      if (inWishlist) {
-        return (
-          <i
-            className="fa fa-heart"
-            onClick={() => dispatch(removeFromWishlist(product._id))}
-          ></i>
-        );
-      } else {
-        return (
-          <i
-            className="fa fa-heart-o"
-            onClick={() => dispatch(addToWishlist(product._id))}
-          ></i>
-        );
-      }
-    }
+    return (
+      <i
+        className="fa fa-heart-o"
+        style={{ color: "#bbb", cursor: "not-allowed" }}
+        title="Wishlist is temporarily offline"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          alert("Wishlist is temporarily offline for maintenance.");
+        }}
+      ></i>
+    );
   };
 
   const getBadgeClass = (badge) => {
@@ -132,7 +86,6 @@ const Product = ({ product }, props) => {
         <div className="priceCart pc-action-row">
           <div className="pc-price-block">
             <span className="price pc-price-now">&#8377;{product.price}</span>
-            <span className="pc-price-mrp">&#8377;{Math.round(product.price * 1.25)}</span>
           </div>
 
           <div className="pc-cta-wrapper">

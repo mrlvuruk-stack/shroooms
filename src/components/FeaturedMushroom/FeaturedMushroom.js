@@ -83,7 +83,6 @@ const FeaturedMushroom = () => {
           <div className="spotlight-action-row">
             <div className="spotlight-price-block">
               <span className="spotlight-price">&#8377;{product.price}</span>
-              <span className="spotlight-mrp">&#8377;{Math.round(product.price * 1.25)}</span>
             </div>
 
             <div className="spotlight-cta-wrapper">

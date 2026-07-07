@@ -8,15 +8,15 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const mockProducts = [
   {
     _id: "p1",
-    name: "Lion's Mane Mushroom (Organic)",
+    name: "Lion's Mane Mushroom (Premium)",
     image: "/box_lions_mane.jpg",
     price: 499,
     unit: "150 Gm",
-    description: "Premium organic Lion's Mane. Highly prized for cognitive enhancement, memory support, and neural health. Features a beautiful white, shaggy fluff texture with a mild seafood-like sweet flavor when cooked.",
+    description: "Premium gourmet Lion's Mane. Features a beautiful white, shaggy fluff texture with a mild seafood-like sweet flavor when cooked. Excellent for pan-searing or roasting.",
     purchasing: false,
     quantity: 0,
-    benefits: "Focus · Memory · Wellness",
-    badge: "100% Organic"
+    benefits: "Premium Harvest · Culinary Grade",
+    badge: "New Arrival"
   },
   {
     _id: "p2",
@@ -36,7 +36,7 @@ const mockProducts = [
     image: "/box_pink_oyster.jpg",
     price: 399,
     unit: "150 Gm",
-    description: "Vibrant and exotic Pink Oyster Mushrooms. Highly decorative with a rich woodsy flavor and a chewy bacon-like texture when sautéed crisp. Sourced fresh at dawn from our temperature-controlled grow chambers.",
+    description: "Vibrant and exotic Pink Oyster Mushrooms. Highly decorative with a rich woodsy flavor and a chewy bacon-like texture when sautéed crisp.",
     purchasing: false,
     quantity: 0,
     benefits: "Rich Flavor · Premium Harvest",
@@ -60,35 +60,35 @@ const mockProducts = [
     image: "/shrooom.jpg",
     price: 429,
     unit: "150 Gm",
-    description: "Stunning yellow Golden Oyster Mushrooms. Offers a delicate aroma with nutty notes and a slightly sweet finish. Packed with antioxidants and immune-supportive compounds. Grown sustainably.",
+    description: "Stunning yellow Golden Oyster Mushrooms. Offers a delicate aroma with nutty notes and a slightly sweet finish. Grown sustainably on premium hardwood sawdust.",
     purchasing: false,
     quantity: 0,
-    benefits: "Antioxidant Rich · Vibrant Color",
-    badge: "Superfood"
+    benefits: "Nutty Notes · Vibrant Color",
+    badge: "Exotic Bloom"
   },
   {
     _id: "p6",
-    name: "Reishi Mushroom (Medicinal)",
+    name: "Reishi Mushroom (Traditional)",
     image: "/cultivar_reishi.jpg",
     price: 599,
     unit: "100 Gm",
-    description: "Red Reishi Mushroom, the legendary 'Mushroom of Immortality'. Bitter, woody texture suitable for grinding into wellness powders or steeping in health teas. Outstanding adaptogenic support for stress and sleep.",
+    description: "Red Reishi Mushroom. Bitter, woody texture suitable for grinding into culinary tea preparations or stocks.",
     purchasing: false,
     quantity: 0,
-    benefits: "Immune Support · Stress Relief",
-    badge: "Adaptogen"
+    benefits: "Traditional Brew · Hand Picked",
+    badge: "Woody Cultivar"
   },
   {
     _id: "p7",
-    name: "Shiitake Mushroom (Organic)",
+    name: "Shiitake Mushroom (Premium)",
     image: "/cultivar_chaga.jpg",
     price: 299,
     unit: "150 Gm",
-    description: "USDA Certified Organic Shiitake Mushrooms. Rich in B vitamins, minerals, and dietary fibers. These dark brown mushrooms carry deep, smoky-umami profiles and are perfect for pan-frying or in rich broths.",
+    description: "Premium Cultivated Shiitake Mushrooms. Rich in culinary value, carrying deep, smoky-umami profiles that are perfect for pan-frying, soups, or rich broths.",
     purchasing: false,
     quantity: 0,
-    benefits: "Traditional Umami · Heart Health",
-    badge: "100% Organic"
+    benefits: "Traditional Umami · Rich Broths",
+    badge: "Chef's Choice"
   },
   {
     _id: "p8",
@@ -96,10 +96,10 @@ const mockProducts = [
     image: "/cultivar_maitake.jpg",
     price: 479,
     unit: "150 Gm",
-    description: "Maitake, meaning 'Dancing Mushroom' in Japanese, is prized for its cluster formations resembling feathers. Rich earthy flavor, excellent for roasting or grilling. Powerful support for metabolic wellness.",
+    description: "Maitake, meaning 'Dancing Mushroom' in Japanese, is prized for its cluster formations resembling feathers. Rich earthy flavor, excellent for roasting, sautéing, or grilling.",
     purchasing: false,
     quantity: 0,
-    benefits: "Deep Flavor · Energy Support",
+    benefits: "Deep Flavor · Crisp Edges",
     badge: "Premium Cultivated"
   }
 ];
@@ -135,28 +135,9 @@ axios.interceptors.request.use(async (config) => {
   if (url.includes("/api/products") && method === "get") {
     await delay(300);
     config.adapter = async () => {
-      const hasSeeded = localStorage.getItem("mock_products_seeded");
       let productsData = [];
 
-      if (!hasSeeded) {
-        localStorage.setItem("mock_products_seeded", "true");
-        if (isSupabaseConfigured && supabase) {
-          try {
-            console.log("Resetting Supabase products catalog...");
-            await supabase.from("products").delete().neq("_id", "dummy_clear_all");
-            const { error: seedError } = await supabase
-              .from("products")
-              .insert(mockProducts);
-            if (seedError) throw seedError;
-            productsData = mockProducts;
-          } catch (seedErr) {
-            console.error("Failed to reset Supabase products table:", seedErr);
-            productsData = mockProducts;
-          }
-        } else {
-          productsData = mockProducts;
-        }
-      } else if (isSupabaseConfigured && supabase) {
+      if (isSupabaseConfigured && supabase) {
         try {
           const { data: dbProducts, error } = await supabase
             .from("products")
@@ -164,11 +145,10 @@ axios.interceptors.request.use(async (config) => {
           if (error) throw error;
 
           if (!dbProducts || dbProducts.length === 0) {
-            console.log("Supabase products table is empty. Seeding catalog...");
-            const { error: seedError } = await supabase
-              .from("products")
-              .insert(mockProducts);
-            if (seedError) throw seedError;
+            console.warn("Supabase products table is empty. Production catalog requires manual DB seeding.");
+            if (process.env.NODE_ENV === "production") {
+              return Promise.reject(new Error("Catalog temporarily empty. Please contact support."));
+            }
             productsData = mockProducts;
           } else {
             productsData = dbProducts;
@@ -200,92 +180,24 @@ axios.interceptors.request.use(async (config) => {
   // 1b. POST /api/products
   else if (url.endsWith("/api/products") && method === "post") {
     await delay(300);
-    const parsedData = getParsedData(data);
     config.adapter = async () => {
-      const newProduct = {
-        ...parsedData,
-        _id: parsedData._id || "p_" + Date.now(),
-        purchasing: false,
-        quantity: 0
-      };
-      
-      if (isSupabaseConfigured && supabase) {
-        try {
-          const { error } = await supabase.from("products").insert([newProduct]);
-          if (error) throw error;
-        } catch (err) {
-          console.error("Failed to insert product into Supabase:", err);
-          return Promise.reject({
-            status: 500,
-            statusText: "Database Error",
-            config
-          });
-        }
-      }
-      return Promise.resolve({
-        data: newProduct,
-        status: 201,
-        statusText: "Created",
-        headers: {},
-        config
-      });
+      return Promise.reject(new Error("Catalog modification is disabled."));
     };
   }
 
   // 1c. PUT /api/products/:id
   else if (url.includes("/api/products/") && method === "put") {
     await delay(300);
-    const parsedData = getParsedData(data);
-    const prodId = url.split("/").pop();
     config.adapter = async () => {
-      if (isSupabaseConfigured && supabase) {
-        try {
-          const { error } = await supabase.from("products").update(parsedData).eq("_id", prodId);
-          if (error) throw error;
-        } catch (err) {
-          console.error("Failed to update product in Supabase:", err);
-          return Promise.reject({
-            status: 500,
-            statusText: "Database Error",
-            config
-          });
-        }
-      }
-      return Promise.resolve({
-        data: { _id: prodId, ...parsedData },
-        status: 200,
-        statusText: "OK",
-        headers: {},
-        config
-      });
+      return Promise.reject(new Error("Catalog modification is disabled."));
     };
   }
 
   // 1d. DELETE /api/products/:id
   else if (url.includes("/api/products/") && method === "delete") {
     await delay(300);
-    const prodId = url.split("/").pop();
     config.adapter = async () => {
-      if (isSupabaseConfigured && supabase) {
-        try {
-          const { error } = await supabase.from("products").delete().eq("_id", prodId);
-          if (error) throw error;
-        } catch (err) {
-          console.error("Failed to delete product from Supabase:", err);
-          return Promise.reject({
-            status: 500,
-            statusText: "Database Error",
-            config
-          });
-        }
-      }
-      return Promise.resolve({
-        data: { success: true },
-        status: 200,
-        statusText: "OK",
-        headers: {},
-        config
-      });
+      return Promise.reject(new Error("Catalog modification is disabled."));
     };
   }
 

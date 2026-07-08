@@ -1,4 +1,4 @@
-# Client Handover Document — SHROOOMS Secure Commerce Sprint
+# Client Handover Document — SHROOOMS Secure Commerce Sprint (Day 4)
 
 Welcome to the Day 4 closeout handover for the SHROOOMS secure commerce sprint. This document summarizes all changes, limitations, and future steps for your checkout integration.
 
@@ -27,16 +27,20 @@ We successfully integrated your Cart and Checkout frontend with the secure datab
 ## 3. Scope Mappings & Limitations
 
 Please note the following items are deferred:
-- **Payment Collection**: Not processed online.
+- **Payment Collection**: Not processed online (no completed payment processing).
 - **Shipping & Taxes**: Calculated manually post-order.
 - **Admin Dashboard**: Deployed orders must be reviewed directly on the database level during this phase.
 - **Customer Tracking**: Establishes Request ID tracking. No online status updates for guests.
+- **Deployment Status**: Production deployment has not occurred.
 
 ---
 
-## 4. What Was Tested
-- **27 Scoped Unit Tests**: Validating UUID fallback creation, cart fingerprinting, address normalization, payload mappings, and SQLSTATE error translations.
+## 4. What Was Tested & Audited
+- **27 Scoped Unit Tests**: Validating UUID fallback creation, cart fingerprinting, address normalization, payload mappings, and SQLSTATE error translations (Passed).
+- **14 Checkout State machine orchestration tests**: Verifying client-side lock state safety, retryable failures, and Start New Order behavior (Passed).
+- **Database Security Audit**: Reviewed and verified (Passed).
 - **Production Build compilation**: Compiles clean with zero warnings.
+- **Not Executed**: Browser-level automation (Puppeteer/Cypress) and remote RPC E2E writes were not executed.
 
 ---
 

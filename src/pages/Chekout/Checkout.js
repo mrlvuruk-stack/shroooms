@@ -7,22 +7,15 @@ import CheckOutOrder from "../../components/CheckoutForm/CheckoutOrder/CheckoutO
 import { sendOrderDetails } from "../../store/actions/actionCreators/orderAction";
 import "./Checkout.css";
 
-const uuidv4Fallback = () => {
-  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-    (
-      c ^
-      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-    ).toString(16)
-  );
-};
-
-const getCartFingerprint = (vegetablesCart) => {
-  if (!vegetablesCart || vegetablesCart.length === 0) return "";
-  return vegetablesCart
-    .map((item) => `${item._id}:${item.quantity}`)
-    .sort()
-    .join("|");
-};
+import {
+  getCartFingerprint,
+  readSubmissionRecord,
+  initializeSubmission,
+  lockSubmission,
+  classifySubmissionFailure,
+  validateSuccessfulOrderResponse,
+  completeSuccessfulSubmission
+} from "./checkoutSubmissionLifecycle";
 
 const Checkout = (props) => {
   const dispatch = useDispatch();
@@ -55,47 +48,31 @@ const Checkout = (props) => {
 
   // Recover or generate idempotency key on mount
   useEffect(() => {
-    const stored = sessionStorage.getItem("shroooms_checkout_submission");
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        if (parsed && parsed.idempotencyKey) {
-          // If locked is true, reuse key regardless of cart fingerprint mismatch
-          if (
-            parsed.locked &&
-            (parsed.lifecycleStatus === "PENDING" ||
-              parsed.lifecycleStatus === "RETRYABLE_FAILURE")
-          ) {
-            setIdempotencyKey(parsed.idempotencyKey);
-            setSubmissionStatus(parsed.lifecycleStatus);
-            setShowConfirmAlert(true);
-            return;
-          }
-          // If not locked, check fingerprint
-          if (parsed.cartFingerprint === currentFingerprint) {
-            setIdempotencyKey(parsed.idempotencyKey);
-            setSubmissionStatus(parsed.lifecycleStatus || "IDLE");
-            return;
-          }
-        }
-      } catch (e) {
-        // Ignore JSON errors
+    const parsed = readSubmissionRecord(sessionStorage);
+    if (parsed && parsed.idempotencyKey) {
+      // If locked is true, reuse key regardless of cart fingerprint mismatch
+      if (
+        parsed.locked &&
+        (parsed.lifecycleStatus === "PENDING" ||
+          parsed.lifecycleStatus === "RETRYABLE_FAILURE")
+      ) {
+        setIdempotencyKey(parsed.idempotencyKey);
+        setSubmissionStatus(parsed.lifecycleStatus);
+        setShowConfirmAlert(true);
+        return;
+      }
+      // If not locked, check fingerprint
+      if (parsed.cartFingerprint === currentFingerprint) {
+        setIdempotencyKey(parsed.idempotencyKey);
+        setSubmissionStatus(parsed.lifecycleStatus || "IDLE");
+        return;
       }
     }
 
     // Generate new UUID
-    const newUUID = crypto.randomUUID ? crypto.randomUUID() : uuidv4Fallback();
+    const cryptoInstance = typeof crypto !== "undefined" ? crypto : null;
+    const newUUID = initializeSubmission(sessionStorage, cryptoInstance, currentFingerprint);
     setIdempotencyKey(newUUID);
-    const initialRecord = {
-      idempotencyKey: newUUID,
-      cartFingerprint: currentFingerprint,
-      lifecycleStatus: "IDLE",
-      locked: false,
-    };
-    sessionStorage.setItem(
-      "shroooms_checkout_submission",
-      JSON.stringify(initialRecord)
-    );
   }, [currentFingerprint]);
 
   const handleStep1Complete = () => {
@@ -122,22 +99,12 @@ const Checkout = (props) => {
 
   const handleStartNewOrder = () => {
     if (window.confirm("Warning: Your previous order request may have already been received. Do you want to discard it and start a new order request?")) {
-      const newUUID = crypto.randomUUID ? crypto.randomUUID() : uuidv4Fallback();
+      const cryptoInstance = typeof crypto !== "undefined" ? crypto : null;
+      const newUUID = initializeSubmission(sessionStorage, cryptoInstance, currentFingerprint);
       setIdempotencyKey(newUUID);
       setSubmissionStatus("IDLE");
       setShowConfirmAlert(false);
       setErrorMsg("");
-
-      const newRecord = {
-        idempotencyKey: newUUID,
-        cartFingerprint: currentFingerprint,
-        lifecycleStatus: "IDLE",
-        locked: false,
-      };
-      sessionStorage.setItem(
-        "shroooms_checkout_submission",
-        JSON.stringify(newRecord)
-      );
 
       setStep1Status("active");
       setStep2Status("");
@@ -152,16 +119,7 @@ const Checkout = (props) => {
     setSubmissionStatus("PENDING");
     setErrorMsg("");
 
-    const activeRecord = {
-      idempotencyKey: idempotencyKey,
-      cartFingerprint: currentFingerprint,
-      lifecycleStatus: "PENDING",
-      locked: true,
-    };
-    sessionStorage.setItem(
-      "shroooms_checkout_submission",
-      JSON.stringify(activeRecord)
-    );
+    lockSubmission(sessionStorage, idempotencyKey, currentFingerprint);
 
     // Concatenate address
     const addressParts = [
@@ -196,40 +154,19 @@ const Checkout = (props) => {
       })
     );
 
-    if (result.ok) {
+    const validation = validateSuccessfulOrderResponse(result);
+    if (validation.ok) {
       setSubmissionStatus("SUCCESS");
       setOrderRequestId(result.orderRequestId);
       setResultCode(result.resultCode);
-      sessionStorage.removeItem("shroooms_checkout_submission");
+      completeSuccessfulSubmission(sessionStorage);
     } else {
+      classifySubmissionFailure(sessionStorage, idempotencyKey, currentFingerprint, result);
+      setErrorMsg(result.safeMessage || "An error occurred while submitting your order request.");
       if (result.category === "EXPECTED_VALIDATION") {
         setSubmissionStatus("IDLE");
-        setErrorMsg(result.safeMessage);
-
-        const updatedRecord = {
-          idempotencyKey: idempotencyKey,
-          cartFingerprint: currentFingerprint,
-          lifecycleStatus: "IDLE",
-          locked: false,
-        };
-        sessionStorage.setItem(
-          "shroooms_checkout_submission",
-          JSON.stringify(updatedRecord)
-        );
       } else {
         setSubmissionStatus("RETRYABLE_FAILURE");
-        setErrorMsg(result.safeMessage);
-
-        const updatedRecord = {
-          idempotencyKey: idempotencyKey,
-          cartFingerprint: currentFingerprint,
-          lifecycleStatus: "RETRYABLE_FAILURE",
-          locked: true,
-        };
-        sessionStorage.setItem(
-          "shroooms_checkout_submission",
-          JSON.stringify(updatedRecord)
-        );
       }
     }
   };

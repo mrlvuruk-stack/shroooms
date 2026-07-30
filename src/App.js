@@ -28,6 +28,7 @@ import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import Profile from "./pages/Profile/Profile";
 import Policies from "./pages/Policies/Policies";
 import MushroomGuide from "./pages/MushroomGuide/MushroomGuide";
+import ProductsPage from "./pages/Shop/ProductsPage";
 
 const App = () => {
   const location = useLocation();
@@ -151,6 +152,7 @@ const App = () => {
       <main>
         <Switch>
           <Route path="/" exact component={Home} />
+          <Route path="/shop" component={ProductsPage} />
           <Route path="/product/:id" component={ProductDetails} />
           <Route path="/checkout" component={Checkout} />
           <Route path="/dashboard" component={Dashboard} />

@@ -80,11 +80,12 @@ const Header = (props) => {
         <div className="header-nav-center">
           <ul className="header-menu-list">
             <li className="menu-item dropdown-shop">
-              <a href="/#produce-list" className="menu-link">SHOP <i className="fa fa-angle-down"></i></a>
+              <Link to="/shop" className="menu-link">SHOP <i className="fa fa-angle-down"></i></Link>
               <div className="shop-dropdown-menu">
-                <Link to="/" onClick={() => dispatch(filteredProducts(""))}>All Mushrooms</Link>
-                <Link to="/" onClick={() => dispatch(filteredProducts("oyster"))}>Oyster Mushrooms</Link>
-                <Link to="/" onClick={() => dispatch(filteredProducts("lion"))}>Lion's Mane</Link>
+                <Link to="/shop">All Premium Catalog</Link>
+                <Link to="/shop" onClick={() => dispatch(filteredProducts(""))}>Mushroom Spawn</Link>
+                <Link to="/shop" onClick={() => dispatch(filteredProducts("oyster"))}>Liquid Culture</Link>
+                <Link to="/shop" onClick={() => dispatch(filteredProducts("lion"))}>Grow Kits</Link>
               </div>
             </li>
             <li className="menu-item">

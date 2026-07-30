@@ -182,17 +182,19 @@
   color: var(--frugivore-green, #5a7247);
 }
 
-/* Filters Navigation */
-.recipes-filter-nav {
+/* Scoped Filter Toolbar */
+.recipe-filter-bar {
   display: flex;
   gap: 0.8rem;
-  flex-wrap: wrap;
+  overflow-x: auto;
+  padding: 0.4rem 0.2rem 0.8rem 0.2rem;
+  scrollbar-width: thin;
 }
 
 .recipe-filter-btn {
   background-color: #ffffff;
-  border: 1px solid var(--frugivore-border, #e6e0d4);
-  color: var(--frugivore-dark, #2c2416);
+  border: 1px solid rgba(197, 160, 89, 0.3);
+  color: var(--color-text-primary, #1b2d1f);
   padding: 0.8rem 1.8rem;
   font-family: "Outfit", sans-serif;
   font-size: 1.3rem;
@@ -200,24 +202,24 @@
   border-radius: 30px;
   cursor: pointer;
   transition: all 0.25s ease;
-  box-shadow: 0 2px 6px rgba(44, 36, 22, 0.02);
+  box-shadow: 0 2px 6px rgba(27, 46, 35, 0.03);
   white-space: nowrap;
 }
 
 .recipe-filter-btn:hover {
-  border-color: var(--frugivore-green, #5a7247);
-  color: var(--frugivore-forest, #1e352f);
+  border-color: var(--color-green-vibrant, #267a3f);
+  color: var(--color-accent, #1b2e23);
 }
 
 .recipe-filter-btn.active {
-  background-color: var(--frugivore-forest, #1e352f);
-  border-color: var(--frugivore-forest, #1e352f);
-  color: #faf7f0;
-  box-shadow: 0 4px 14px rgba(30, 53, 47, 0.18);
+  background: linear-gradient(135deg, #1b2e23, #284c36);
+  border-color: rgba(212, 175, 55, 0.35);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(27, 46, 35, 0.2);
 }
 
 .recipe-filter-btn:focus-visible {
-  outline: 2.5px solid var(--frugivore-green, #5a7247);
+  outline: 2.5px solid var(--color-gold, #c5a059);
   outline-offset: 2px;
 }
 
@@ -228,23 +230,26 @@
   gap: 2rem;
 }
 
-/* Recipe Card styling */
+/* Recipe Card styling - Luxury Floating Glass Panels */
 .recipe-card {
-  background-color: #ffffff;
-  border: 1px solid var(--frugivore-border, #e6e0d4);
-  border-radius: 20px;
-  box-shadow: 0 4px 16px rgba(44, 36, 22, 0.03);
-  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(197, 160, 89, 0.25);
+  border-radius: 22px;
+  box-shadow: 0 8px 24px rgba(27, 46, 35, 0.04);
+  transition: all 0.35 cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
 }
 
 .recipe-card:hover {
-  box-shadow: 0 10px 30px rgba(44, 36, 22, 0.07);
+  box-shadow: 0 16px 36px rgba(27, 46, 35, 0.09);
+  border-color: rgba(197, 160, 89, 0.5);
+  transform: translateY(-2px);
 }
 
 .recipe-card.expanded {
-  border-color: var(--frugivore-green, #5a7247);
-  box-shadow: 0 12px 36px rgba(44, 36, 22, 0.09);
+  border-color: rgba(197, 160, 89, 0.55);
+  box-shadow: 0 18px 40px rgba(27, 46, 35, 0.1);
 }
 
 /* Native Button Card Header */
@@ -283,7 +288,7 @@
 }
 
 .recipe-card-header:focus-visible {
-  outline: 2.5px solid var(--frugivore-green, #5a7247);
+  outline: 2.5px solid var(--color-gold, #c5a059);
   outline-offset: -2px;
 }
 
@@ -292,13 +297,6 @@
   width: 96px;
   height: 96px;
   aspect-ratio: 1 / 1;
-  border-radius: 14px;
-  overflow: hidden;
-  background: #f4efe6;
-  border: 1px solid var(--frugivore-border, #e6e0d4);
-  padding: 0.4rem;
-  box-sizing: border-box;
-  display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;

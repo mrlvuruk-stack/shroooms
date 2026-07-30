@@ -1,28 +1,33 @@
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,700;1,700&family=Outfit:wght@400;500;600;700&display=swap');
 
 :root {
-  /* COLORS (Derived directly from existing SHROOOMS assets/site identity) */
-  --color-bg-primary:     #faf8f5;   /* Warm Cream Background (frugivore-bg) */
-  --color-bg-secondary:   #e6dfd1;   /* Soft Gold/Beige (frugivore-border) */
-  --color-surface:        #ffffff;   /* frugivore-white */
-  --color-text-primary:   #23221e;   /* frugivore-dark */
-  --color-text-secondary: #7d776f;   /* frugivore-gray */
-  --color-accent:         #5a4b31;   /* frugivore-forest */
-  --color-border:         #e6dfd1;   /* frugivore-border */
-  --color-focus:          #a28a5c;   /* frugivore-green (Soft Gold) */
+  /* LUXURY GOURMET ORGANIC PALETTE */
+  --color-bg-primary:     #f8f6f0;   /* Gourmet Organic Pearl Cream */
+  --color-bg-secondary:   #f0ebe1;   /* Soft Gold Warm Sand */
+  --color-surface:        #ffffff;   /* Pure White */
+  --color-surface-glass:  rgba(255, 255, 255, 0.88);
+  --color-text-primary:   #1b2d1f;   /* Deep Gourmet Forest Dark */
+  --color-text-secondary: #5c665e;   /* Rich Muted Forest Slate */
+  --color-accent:         #1b2e23;   /* Gourmet Forest Emerald */
+  --color-gold:           #c5a059;   /* Royal Warm Gold */
+  --color-gold-bright:    #d4af37;   /* Bright Metallic Gold */
+  --color-gold-light:     #f5eaae;   /* Soft Champagne Gold */
+  --color-green-vibrant:  #267a3f;   /* Organic Fresh Emerald Green */
+  --color-border:         rgba(197, 160, 89, 0.22); /* Glass Gold Border */
+  --color-focus:          #c5a059;   /* Royal Gold Focus */
 
-  /* Legacy aliases (to keep existing components working without modification) */
-  --frugivore-green: #a28a5c;
-  --frugivore-forest: #5a4b31;
-  --frugivore-pink: #d96f7c;
-  --frugivore-yellow: #dcae1d;
-  --frugivore-dark: #23221e;
-  --frugivore-bg: #faf8f5;
+  /* Harmonized Palette Aliases */
+  --frugivore-green: #267a3f;
+  --frugivore-forest: #1b2e23;
+  --frugivore-pink: #267a3f; /* Replaced harsh pink with vibrant organic emerald */
+  --frugivore-yellow: #d4af37;
+  --frugivore-dark: #1b2d1f;
+  --frugivore-bg: #f8f6f0;
   --frugivore-white: #ffffff;
-  --frugivore-gray: #7d776f;
-  --frugivore-border: #e6dfd1;
+  --frugivore-gray: #5c665e;
+  --frugivore-border: rgba(197, 160, 89, 0.22);
 
-  /* TYPOGRAPHY Scale (Preserves html 62.5% -> 1rem = 10px) */
+  /* TYPOGRAPHY Scale */
   --font-display: 'Playfair Display', Georgia, serif;
   --font-body:    'Outfit', 'Inter', sans-serif;
 
@@ -57,16 +62,16 @@
   --container-reading: 800px;
   --page-gutter: clamp(1.6rem, 5vw, 6.4rem);
 
-  /* RADII */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 18px;
+  /* RADII - Smooth Organic Corners */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
   --radius-pill: 9999px;
 
-  /* SHADOWS */
-  --shadow-sm: 0 2px 8px rgba(89, 78, 59, 0.03);
-  --shadow-md: 0 8px 24px rgba(89, 78, 59, 0.05);
-  --shadow-lg: 0 16px 40px rgba(89, 78, 59, 0.08);
+  /* SHADOWS - Multi-layered Soft Glows */
+  --shadow-sm: 0 4px 14px rgba(27, 46, 35, 0.04);
+  --shadow-md: 0 10px 30px rgba(27, 46, 35, 0.07), 0 2px 8px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 20px 48px rgba(27, 46, 35, 0.1), 0 4px 14px rgba(197, 160, 89, 0.08);
 
   /* MOTION TOKENS */
   --duration-fast: 150ms;
@@ -97,8 +102,14 @@ body {
   box-sizing: border-box;
   font-size: 1.6rem;
   font-family: "Outfit", "Inter", "Poppins", Helvetica, Arial, sans-serif;
-  height: 100vh;
-  background-color: var(--color-bg-primary);
+  min-height: 100vh;
+  background-color: #f7f5ef;
+  background-image: 
+    radial-gradient(ellipse 90% 50% at 50% -20%, rgba(212, 175, 55, 0.15) 0%, transparent 60%),
+    radial-gradient(circle at 10% 25%, rgba(27, 46, 35, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 90% 65%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 25% 85%, rgba(38, 122, 63, 0.06) 0%, transparent 45%);
+  background-attachment: fixed;
   color: var(--color-text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -262,50 +273,135 @@ img.medium {
   }
 }
 
-/* Nature Background Side Decorations */
+/* Nature Background Side & Ambient Spore Decorations */
 .global-decor-container {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   overflow: hidden;
   pointer-events: none;
-  z-index: 99;
+  z-index: 0;
 }
 
+/* Background Ambient Glowing Orbs */
+.bg-glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  pointer-events: none;
+  animation: floatGlow 12s ease-in-out infinite alternate;
+}
+
+.orb-left-top {
+  top: 15%;
+  left: -5%;
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.22) 0%, rgba(38, 122, 63, 0.1) 60%, transparent 80%);
+}
+
+.orb-right-mid {
+  top: 45%;
+  right: -5%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(38, 122, 63, 0.18) 0%, rgba(212, 175, 55, 0.12) 60%, transparent 80%);
+  animation-delay: -4s;
+}
+
+.orb-left-bottom {
+  bottom: 10%;
+  left: 5%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.18) 0%, transparent 70%);
+  animation-delay: -8s;
+}
+
+@keyframes floatGlow {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(30px, -40px) scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-20px, 30px) scale(0.95);
+    opacity: 0.8;
+  }
+}
+
+/* Glowing Spore Dots Pulse */
+.spore-dot {
+  animation: pulseSpore 3s ease-in-out infinite alternate;
+}
+
+.spore-dot:nth-child(2n) {
+  animation-delay: 1s;
+}
+
+.spore-dot:nth-child(3n) {
+  animation-delay: 2s;
+}
+
+@keyframes pulseSpore {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0.9;
+  }
+}
+
+/* Global Side Nature Decor Artwork */
 .global-nature-decor {
   position: absolute;
-  top: 18rem;
-  width: 260px;
-  height: 600px;
+  top: 14rem;
+  width: 280px;
+  height: 750px;
   pointer-events: none;
-  z-index: 99;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  z-index: 1;
+  transition: all 0.4s ease;
+  filter: drop-shadow(0 4px 15px rgba(212, 175, 55, 0.15));
 }
 
 .global-nature-decor.left-decor {
-  left: 0;
-  transform: translateX(-40px);
+  left: calc(50% - 780px);
 }
 
 .global-nature-decor.right-decor {
-  right: 0;
-  transform: translateX(40px);
+  right: calc(50% - 780px);
 }
 
-@media (max-width: 1450px) {
+@media (max-width: 1560px) {
   .global-nature-decor.left-decor {
-    transform: translateX(-120px) scale(0.9);
+    left: 0;
+    transform: scale(0.85) translateX(-20px);
+    transform-origin: top left;
   }
   .global-nature-decor.right-decor {
-    transform: translateX(120px) scale(0.9);
+    right: 0;
+    transform: scale(0.85) translateX(20px);
+    transform-origin: top right;
   }
 }
 
-@media (max-width: 1220px) {
+@media (max-width: 1200px) {
   .global-nature-decor {
-    display: none; /* Hide on smaller screens to prevent overlapping content */
+    opacity: 0.35;
+    transform: scale(0.65);
+  }
+}
+
+@media (max-width: 900px) {
+  .global-nature-decor {
+    display: none; /* Hide side art on mobile to prevent overlapping content */
   }
 }
 

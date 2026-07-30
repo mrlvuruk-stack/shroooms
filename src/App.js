@@ -48,44 +48,102 @@ const App = () => {
   return (
     <div className="grid-container">
       {getHeader()}
-
-      {/* Nature/Botanical Side Decorations */}
+      {/* Nature/Botanical & Spore Side Background Decorations */}
       <div className="global-decor-container">
+        {/* Background Ambient Glowing Orbs */}
+        <div className="bg-glow-orb orb-left-top"></div>
+        <div className="bg-glow-orb orb-right-mid"></div>
+        <div className="bg-glow-orb orb-left-bottom"></div>
+
+        {/* Left Side Organic Botanical & Mushroom Cap Art */}
         <div className="global-nature-decor left-decor">
-          <svg width="100%" height="100%" viewBox="0 0 300 600" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10,580 C50,450 110,350 90,50" stroke="#5a4b31" strokeWidth="1.5" strokeLinecap="round" opacity="0.25"/>
-            <path d="M90,50 C80,20 60,-5 35,5 C40,35 65,45 90,50 Z" fill="#a28a5c" opacity="0.15" stroke="#5a4b31" strokeWidth="0.8"/>
-            <path d="M89,85 C68,62 45,52 22,68 C28,95 55,100 89,85 Z" fill="#a28a5c" opacity="0.12" stroke="#5a4b31" strokeWidth="0.8"/>
-            <path d="M88,130 C62,108 34,108 17,130 C28,158 55,158 88,130 Z" fill="#a28a5c" opacity="0.12" stroke="#5a4b31" strokeWidth="0.8"/>
-            <path d="M85,185 C56,162 28,173 11,200 C28,222 56,217 85,185 Z" fill="#a28a5c" opacity="0.12" stroke="#5a4b31" strokeWidth="0.8"/>
-            <path d="M81,240 C50,222 22,238 5,266 C27,288 53,277 81,240 Z" fill="#a28a5c" opacity="0.12" stroke="#5a4b31" strokeWidth="0.8"/>
-            <path d="M76,305 C44,288 16,310 0,343 C22,360 50,343 76,305 Z" fill="#a28a5c" opacity="0.12" stroke="#5a4b31" strokeWidth="0.8"/>
+          <svg width="100%" height="100%" viewBox="0 0 320 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="goldGradientLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#d4af37" stopOpacity="0.45" />
+                <stop offset="100%" stopColor="#c5a059" stopOpacity="0.2" />
+              </linearGradient>
+              <linearGradient id="emeraldGradientLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#267a3f" stopOpacity="0.35" />
+                <stop offset="100%" stopColor="#1b2e23" stopOpacity="0.15" />
+              </linearGradient>
+            </defs>
             
-            <path d="M90,65 C112,42 128,31 150,48 C139,75 117,80 90,65 Z" fill="#a28a5c" opacity="0.15" stroke="#5a4b31" strokeWidth="0.8"/>
-            <path d="M89,105 C118,88 140,82 162,105 C145,133 118,133 89,105 Z" fill="#a28a5c" opacity="0.12" stroke="#5a4b31" strokeWidth="0.8"/>
-            <path d="M87,155 C121,144 145,144 167,172 C145,194 118,188 87,155 Z" fill="#a28a5c" opacity="0.12" stroke="#5a4b31" strokeWidth="0.8"/>
-            <path d="M84,210 C120,199 150,205 172,236 C147,255 117,244 84,210 Z" fill="#a28a5c" opacity="0.12" stroke="#5a4b31" strokeWidth="0.8"/>
-            <path d="M80,270 C119,264 152,270 174,303 C145,320 115,309 80,270 Z" fill="#a28a5c" opacity="0.12" stroke="#5a4b31" strokeWidth="0.8"/>
-            <path d="M73,336 C112,330 145,341 167,377 C137,390 109,377 73,336 Z" fill="#a28a5c" opacity="0.12" stroke="#5a4b31" strokeWidth="0.8"/>
+            {/* Vine stem */}
+            <path d="M-20,780 C60,600 140,450 110,100 M110,100 C100,50 60,10 10,-20" stroke="url(#goldGradientLeft)" strokeWidth="2.5" strokeLinecap="round" />
+            
+            {/* Mushroom Caps */}
+            <g transform="translate(100, 140) rotate(-15) scale(0.9)">
+              <path d="M0,40 Q30,-20 60,40 Z" fill="url(#goldGradientLeft)" stroke="#c5a059" strokeWidth="1" />
+              <path d="M25,40 L25,70 M35,40 L35,70" stroke="#c5a059" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+            </g>
+            <g transform="translate(60, 320) rotate(10) scale(0.75)">
+              <path d="M0,40 Q30,-20 60,40 Z" fill="url(#emeraldGradientLeft)" stroke="#267a3f" strokeWidth="1" />
+              <path d="M25,40 L25,65 M35,40 L35,65" stroke="#267a3f" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+            </g>
+            <g transform="translate(85, 520) rotate(-5) scale(0.85)">
+              <path d="M0,40 Q35,-25 70,40 Z" fill="url(#goldGradientLeft)" stroke="#c5a059" strokeWidth="1" />
+              <path d="M30,40 L30,75 M40,40 L40,75" stroke="#c5a059" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+            </g>
+
+            {/* Glowing Spore Dots */}
+            <circle cx="140" cy="120" r="4" fill="#d4af37" opacity="0.6" className="spore-dot" />
+            <circle cx="165" cy="180" r="3" fill="#267a3f" opacity="0.5" className="spore-dot" />
+            <circle cx="115" cy="270" r="5" fill="#d4af37" opacity="0.5" className="spore-dot" />
+            <circle cx="130" cy="380" r="3.5" fill="#267a3f" opacity="0.6" className="spore-dot" />
+            <circle cx="150" cy="490" r="4" fill="#d4af37" opacity="0.55" className="spore-dot" />
+            <circle cx="110" cy="610" r="3" fill="#267a3f" opacity="0.45" className="spore-dot" />
+
+            {/* Leaves */}
+            <path d="M110,100 C135,70 160,60 185,80 C170,115 135,120 110,100 Z" fill="url(#emeraldGradientLeft)" stroke="#1b2e23" strokeWidth="0.8" />
+            <path d="M100,230 C125,200 155,195 175,215 C160,245 125,250 100,230 Z" fill="url(#goldGradientLeft)" stroke="#c5a059" strokeWidth="0.8" />
+            <path d="M95,430 C120,400 150,395 170,415 C155,445 120,450 95,430 Z" fill="url(#emeraldGradientLeft)" stroke="#267a3f" strokeWidth="0.8" />
           </svg>
         </div>
-  
+
+        {/* Right Side Organic Botanical & Mushroom Cap Art */}
         <div className="global-nature-decor right-decor">
-          <svg width="100%" height="100%" viewBox="0 0 300 600" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M290,580 C250,450 190,350 210,50" stroke="#5a4b31" strokeWidth="1.5" strokeLinecap="round" opacity="0.25"/>
-            <path d="M210,50 C220,20 240,-5 265,5 C260,35 235,45 210,50 Z" fill="#a28a5c" opacity="0.15" stroke="#5a4b31" strokeWidth="0.8"/>
-            <path d="M211,85 C232,62 255,52 278,68 C272,95 245,100 211,85 Z" fill="#a28a5c" opacity="0.12" stroke="#5a4b31" strokeWidth="0.8"/>
-            <path d="M212,130 C238,108 266,108 283,130 C272,158 245,158 212,130 Z" fill="#a28a5c" opacity="0.12" stroke="#5a4b31" strokeWidth="0.8"/>
-            <path d="M215,185 C244,162 272,173 289,200 C272,222 244,217 215,185 Z" fill="#a28a5c" opacity="0.12" stroke="#5a4b31" strokeWidth="0.8"/>
-            <path d="M219,240 C250,222 278,238 295,266 C273,288 247,277 219,240 Z" fill="#a28a5c" opacity="0.12" stroke="#5a4b31" strokeWidth="0.8"/>
-            <path d="M224,305 C256,288 284,310 300,343 C278,360 250,343 224,305 Z" fill="#a28a5c" opacity="0.12" stroke="#5a4b31" strokeWidth="0.8"/>
-            
-            <path d="M210,65 C188,42 172,31 150,48 C161,75 183,80 210,65 Z" fill="#a28a5c" opacity="0.15" stroke="#5a4b31" strokeWidth="0.8"/>
-            <path d="M211,105 C182,88 160,82 138,105 C155,133 182,133 211,105 Z" fill="#a28a5c" opacity="0.12" stroke="#5a4b31" strokeWidth="0.8"/>
-            <path d="M213,155 C179,144 155,144 133,172 C155,194 182,188 213,155 Z" fill="#a28a5c" opacity="0.12" stroke="#5a4b31" strokeWidth="0.8"/>
-            <path d="M216,210 C180,199 150,205 128,236 C153,255 183,244 216,210 Z" fill="#a28a5c" opacity="0.12" stroke="#5a4b31" strokeWidth="0.8"/>
-            <path d="M220,270 C181,264 148,270 126,303 C155,320 185,309 220,270 Z" fill="#a28a5c" opacity="0.12" stroke="#5a4b31" strokeWidth="0.8"/>
-            <path d="M227,336 C188,330 155,341 133,377 C163,390 191,377 227,336 Z" fill="#a28a5c" opacity="0.12" stroke="#5a4b31" strokeWidth="0.8"/>
+          <svg width="100%" height="100%" viewBox="0 0 320 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="goldGradientRight" x1="100%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#d4af37" stopOpacity="0.45" />
+                <stop offset="100%" stopColor="#c5a059" stopOpacity="0.2" />
+              </linearGradient>
+              <linearGradient id="emeraldGradientRight" x1="100%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#267a3f" stopOpacity="0.35" />
+                <stop offset="100%" stopColor="#1b2e23" stopOpacity="0.15" />
+              </linearGradient>
+            </defs>
+
+            {/* Vine stem */}
+            <path d="M340,780 C260,600 180,450 210,100 M210,100 C220,50 260,10 310,-20" stroke="url(#goldGradientRight)" strokeWidth="2.5" strokeLinecap="round" />
+
+            {/* Mushroom Caps */}
+            <g transform="translate(160, 160) rotate(15) scale(0.9)">
+              <path d="M0,40 Q30,-20 60,40 Z" fill="url(#goldGradientRight)" stroke="#c5a059" strokeWidth="1" />
+              <path d="M25,40 L25,70 M35,40 L35,70" stroke="#c5a059" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+            </g>
+            <g transform="translate(200, 360) rotate(-10) scale(0.75)">
+              <path d="M0,40 Q30,-20 60,40 Z" fill="url(#emeraldGradientRight)" stroke="#267a3f" strokeWidth="1" />
+              <path d="M25,40 L25,65 M35,40 L35,65" stroke="#267a3f" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+            </g>
+            <g transform="translate(170, 560) rotate(8) scale(0.85)">
+              <path d="M0,40 Q35,-25 70,40 Z" fill="url(#goldGradientRight)" stroke="#c5a059" strokeWidth="1" />
+              <path d="M30,40 L30,75 M40,40 L40,75" stroke="#c5a059" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+            </g>
+
+            {/* Glowing Spore Dots */}
+            <circle cx="170" cy="130" r="4" fill="#d4af37" opacity="0.6" className="spore-dot" />
+            <circle cx="145" cy="200" r="3" fill="#267a3f" opacity="0.5" className="spore-dot" />
+            <circle cx="190" cy="290" r="5" fill="#d4af37" opacity="0.5" className="spore-dot" />
+            <circle cx="165" cy="410" r="3.5" fill="#267a3f" opacity="0.6" className="spore-dot" />
+            <circle cx="140" cy="510" r="4" fill="#d4af37" opacity="0.55" className="spore-dot" />
+            <circle cx="180" cy="630" r="3" fill="#267a3f" opacity="0.45" className="spore-dot" />
+
+            {/* Leaves */}
+            <path d="M210,100 C185,70 160,60 135,80 C150,115 185,120 210,100 Z" fill="url(#emeraldGradientRight)" stroke="#1b2e23" strokeWidth="0.8" />
+            <path d="M220,240 C195,210 165,205 145,225 C160,255 195,260 220,240 Z" fill="url(#goldGradientRight)" stroke="#c5a059" strokeWidth="0.8" />
+            <path d="M225,450 C200,420 170,415 150,435 C165,465 200,470 225,450 Z" fill="url(#emeraldGradientRight)" stroke="#267a3f" strokeWidth="0.8" />
           </svg>
         </div>
       </div>

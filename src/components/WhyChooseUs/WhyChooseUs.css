@@ -52,23 +52,26 @@
 .why-right-list {
   display: flex;
   flex-direction: column;
+  gap: var(--space-4);
 }
 
 .why-item {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  border-bottom: 1px solid var(--color-border);
-  padding: var(--space-6) 0;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(197, 160, 89, 0.25);
+  border-radius: 20px;
+  padding: var(--space-6);
+  box-shadow: 0 8px 24px rgba(27, 46, 35, 0.04);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.why-item:first-child {
-  padding-top: 0;
-}
-
-.why-item:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
+.why-item:hover {
+  transform: translateX(6px);
+  border-color: rgba(197, 160, 89, 0.5);
+  box-shadow: 0 12px 30px rgba(27, 46, 35, 0.08);
 }
 
 .why-item-header {

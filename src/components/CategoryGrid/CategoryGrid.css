@@ -37,27 +37,28 @@
   width: 100%;
 }
 
-/* Category Card Button styling */
+/* Category Card Button styling - Organic Floating Glass Cards */
 .category-card {
   display: flex;
   flex-direction: column;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(197, 160, 89, 0.25);
+  border-radius: 24px;
   padding: 0;
   overflow: hidden;
   cursor: pointer;
-  box-shadow: var(--shadow-sm);
-  transition: all var(--duration-normal) var(--ease-emphasized);
+  box-shadow: 0 10px 30px rgba(27, 46, 35, 0.05), 0 2px 6px rgba(0, 0, 0, 0.02);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   text-align: left;
   width: 100%;
   box-sizing: border-box;
 }
 
 .category-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--color-focus);
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 20px 45px rgba(27, 46, 35, 0.1), 0 4px 14px rgba(197, 160, 89, 0.18);
+  border-color: rgba(197, 160, 89, 0.55);
 }
 
 .category-card:focus-visible {
@@ -67,9 +68,12 @@
 
 .category-image-wrapper {
   position: relative;
-  width: 100%;
+  width: calc(100% - 1.6rem);
+  margin: 0.8rem 0.8rem 0 0.8rem;
+  border-radius: 18px;
   overflow: hidden;
-  background-color: var(--color-bg-secondary);
+  background: linear-gradient(135deg, #f7f5ee 0%, #ece5d6 100%);
+  border: 1px solid rgba(197, 160, 89, 0.18);
 }
 
 .category-image {
@@ -77,11 +81,12 @@
   height: auto;
   display: block;
   object-fit: cover;
-  transition: transform var(--duration-slow) var(--ease-emphasized);
+  border-radius: 16px;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .category-card:hover .category-image {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
 .category-overlay {
@@ -90,12 +95,12 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, transparent 60%, rgba(35, 34, 30, 0.4) 100%);
+  background: linear-gradient(to bottom, transparent 50%, rgba(27, 46, 35, 0.45) 100%);
   z-index: 1;
 }
 
 .category-info {
-  padding: var(--space-5);
+  padding: var(--space-6);
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -104,7 +109,7 @@
 
 .category-card-name {
   font-family: var(--font-display);
-  font-size: var(--text-xl);
+  font-size: var(--text-2xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
   margin: 0;
@@ -123,7 +128,7 @@
   font-family: var(--font-body);
   font-size: var(--text-sm);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-accent);
+  color: var(--color-green-vibrant);
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
@@ -136,7 +141,7 @@
 }
 
 .category-card:hover .category-card-link {
-  color: var(--color-focus);
+  color: var(--color-gold-bright);
 }
 
 .category-card:hover .arrow-inline {

@@ -314,24 +314,62 @@ main {
   color: var(--frugivore-green);
 }
 
-/* Mobile dropdown panel */
+/* Premium Mobile Drawer Navigation Panel (Apple x Shopify Level) */
 .mobile-navigation-dropdown {
   display: none;
   width: 100%;
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
-  background-color: var(--frugivore-white);
+  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, padding 0.3s ease;
+  background-color: #FFFDF8;
   border-radius: 20px;
-  border: 1px solid transparent;
+  border: 1px solid rgba(200, 155, 93, 0.25);
+  box-shadow: 0 20px 48px rgba(43, 43, 43, 0.12), 0 4px 16px rgba(200, 155, 93, 0.15);
+  opacity: 0;
 }
 
 .mobile-navigation-dropdown.open {
-  max-height: 480px;
+  max-height: 680px;
   overflow-y: auto;
-  border: 1px solid var(--frugivore-border);
-  padding: 1.8rem 2.4rem;
-  margin-top: 1.5rem;
+  padding: 1.8rem;
+  margin-top: 1.4rem;
+  opacity: 1;
+}
+
+.mobile-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1.2rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(200, 155, 93, 0.18);
+}
+
+.mobile-drawer-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #2B2B2B;
+  letter-spacing: 0.5px;
+}
+
+.mobile-drawer-close {
+  background: rgba(43, 43, 43, 0.06);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 1.4rem;
+  color: #2B2B2B;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+.mobile-drawer-close:hover {
+  background: #E67E8C;
+  color: #FFFDF8;
 }
 
 .mobile-navigation-dropdown .mobile-menu-list {
@@ -340,26 +378,122 @@ main {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 1.4rem;
+  gap: 0.6rem;
 }
 
+.mobile-menu-item {
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.25 ease;
+}
+
+/* Touch-friendly 56px menu row */
 .mobile-navigation-dropdown .mobile-menu-link {
   font-family: "Outfit", sans-serif;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 600;
-  color: var(--frugivore-dark) !important;
+  color: #2B2B2B !important;
   text-decoration: none;
-  text-transform: uppercase;
-  display: block;
-  padding: 0.6rem 0;
-  letter-spacing: 0.5px;
-  transition: color 0.2s ease;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.6rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid transparent;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
 }
 
-.mobile-navigation-dropdown .mobile-menu-link:hover {
-  color: var(--frugivore-green) !important;
-  padding-left: 0.4rem;
+.menu-item-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.menu-icon {
+  font-size: 1.8rem;
+}
+
+.mobile-menu-item:hover .mobile-menu-link,
+.accordion-trigger:hover {
+  background: rgba(200, 155, 93, 0.1);
+  color: #C89B5D !important;
+  transform: translateX(6px);
+}
+
+/* Active Item Indicator */
+.mobile-menu-item.active-item .mobile-menu-link,
+.active-trigger {
+  background: rgba(230, 126, 140, 0.12) !important;
+  color: #E67E8C !important;
+  border-left: 4px solid #E67E8C;
+  font-weight: 700;
+}
+
+/* Accordion Chevron Rotation */
+.accordion-chevron {
+  font-size: 1.3rem;
+  color: #2B2B2B;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
+}
+
+.accordion-chevron.rotated {
+  transform: rotate(180deg);
+  color: #C89B5D;
+}
+
+/* Expandable Accordion Submenu Panel */
+.mobile-submenu-collapse {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  padding-left: 1.6rem;
+}
+
+.mobile-submenu-collapse.expanded {
+  max-height: 320px;
+  opacity: 1;
+  margin-top: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+
+.mobile-submenu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  border-left: 2px dashed rgba(200, 155, 93, 0.3);
+  padding-left: 1rem;
+}
+
+.mobile-submenu-link {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: #2B2B2B !important;
+  text-decoration: none;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 1.2rem;
+  border-radius: 12px;
+  transition: all 0.25s ease;
+}
+
+.sub-icon {
+  font-size: 1.5rem;
+}
+
+.mobile-submenu-link:hover {
+  background: rgba(230, 126, 140, 0.1);
+  color: #E67E8C !important;
+  transform: translateX(4px);
 }
 
 /* Mobile & Tablet adjustments */

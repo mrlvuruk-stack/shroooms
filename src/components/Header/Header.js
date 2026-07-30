@@ -31,6 +31,7 @@ const Header = (props) => {
   }
 
   const [menuOpen, setMenuOpen] = useState(false);
+  const [productsAccordionOpen, setProductsAccordionOpen] = useState(false);
 
   React.useEffect(() => {
     let isScrolled = false;
@@ -166,35 +167,119 @@ const Header = (props) => {
           </button>
         </div>
 
-        {/* Mobile Navigation Dropdown */}
+        {/* Mobile Navigation Drawer */}
         <div className={`mobile-navigation-dropdown ${menuOpen ? "open" : ""}`}>
+          <div className="mobile-drawer-header">
+            <span className="mobile-drawer-brand">SHROOOMS Menu</span>
+            <button className="mobile-drawer-close" onClick={() => setMenuOpen(false)} aria-label="Close menu">✕</button>
+          </div>
+
           <ul className="mobile-menu-list">
-            <li className="mobile-menu-item">
-              <Link to="/" onClick={() => { setMenuOpen(false); dispatch(filteredProducts("")); }} className="mobile-menu-link">All Mushrooms</Link>
+            {/* 🏠 Home */}
+            <li className={`mobile-menu-item ${history.location.pathname === "/" ? "active-item" : ""}`}>
+              <Link to="/" onClick={() => setMenuOpen(false)} className="mobile-menu-link">
+                <span className="menu-item-left">
+                  <span className="menu-icon">🏠</span> Home
+                </span>
+              </Link>
             </li>
-            <li className="mobile-menu-item">
-              <Link to="/" onClick={() => { setMenuOpen(false); dispatch(filteredProducts("oyster")); }} className="mobile-menu-link">Oyster Mushrooms</Link>
+
+            {/* 🛍 Products (Expandable Accordion Menu) */}
+            <li className={`mobile-menu-item accordion-item ${productsAccordionOpen || history.location.pathname.startsWith("/shop") ? "accordion-expanded" : ""}`}>
+              <div 
+                className={`mobile-menu-link accordion-trigger ${history.location.pathname.startsWith("/shop") ? "active-trigger" : ""}`}
+                onClick={() => setProductsAccordionOpen(!productsAccordionOpen)}
+              >
+                <span className="menu-item-left">
+                  <span className="menu-icon">🛍</span> Products
+                </span>
+                <i className={`fa fa-chevron-down accordion-chevron ${productsAccordionOpen ? "rotated" : ""}`}></i>
+              </div>
+
+              {/* Accordion Submenu Panel */}
+              <div className={`mobile-submenu-collapse ${productsAccordionOpen ? "expanded" : ""}`}>
+                <ul className="mobile-submenu-list">
+                  <li className="mobile-submenu-item">
+                    <Link to="/shop" onClick={() => setMenuOpen(false)} className="mobile-submenu-link">
+                      <span className="sub-icon">🍄</span> Fresh Mushrooms
+                    </Link>
+                  </li>
+                  <li className="mobile-submenu-item">
+                    <Link to="/shop" onClick={() => setMenuOpen(false)} className="mobile-submenu-link">
+                      <span className="sub-icon">🌿</span> Dried Mushrooms
+                    </Link>
+                  </li>
+                  <li className="mobile-submenu-item">
+                    <Link to="/shop" onClick={() => setMenuOpen(false)} className="mobile-submenu-link">
+                      <span className="sub-icon">🌱</span> Mushroom Spawn
+                    </Link>
+                  </li>
+                  <li className="mobile-submenu-item">
+                    <Link to="/shop" onClick={() => setMenuOpen(false)} className="mobile-submenu-link">
+                      <span className="sub-icon">🧪</span> Liquid Culture
+                    </Link>
+                  </li>
+                  <li className="mobile-submenu-item">
+                    <Link to="/shop" onClick={() => setMenuOpen(false)} className="mobile-submenu-link">
+                      <span className="sub-icon">🛠</span> Tools & Accessories
+                    </Link>
+                  </li>
+                </ul>
+              </div>
             </li>
-            <li className="mobile-menu-item">
-              <Link to="/" onClick={() => { setMenuOpen(false); dispatch(filteredProducts("lion")); }} className="mobile-menu-link">Lion's Mane</Link>
+
+            {/* 📖 Mushroom Guide */}
+            <li className={`mobile-menu-item ${history.location.pathname === "/mushroom-guide" ? "active-item" : ""}`}>
+              <Link to="/mushroom-guide" onClick={() => setMenuOpen(false)} className="mobile-menu-link">
+                <span className="menu-item-left">
+                  <span className="menu-icon">📖</span> Mushroom Guide
+                </span>
+              </Link>
             </li>
-            <li className="mobile-menu-item">
-              <Link to="/our-story" onClick={() => setMenuOpen(false)} className="mobile-menu-link">OUR STORY</Link>
+
+            {/* 🍽 Recipes */}
+            <li className={`mobile-menu-item ${history.location.pathname === "/recipes" ? "active-item" : ""}`}>
+              <Link to="/recipes" onClick={() => setMenuOpen(false)} className="mobile-menu-link">
+                <span className="menu-item-left">
+                  <span className="menu-icon">🍽</span> Recipes
+                </span>
+              </Link>
             </li>
-            <li className="mobile-menu-item">
-              <Link to="/mushroom-guide" onClick={() => setMenuOpen(false)} className="mobile-menu-link">MUSHROOM GUIDE</Link>
+
+            {/* 🏢 Wholesale */}
+            <li className={`mobile-menu-item ${history.location.pathname === "/wholesale" ? "active-item" : ""}`}>
+              <Link to="/wholesale" onClick={() => setMenuOpen(false)} className="mobile-menu-link">
+                <span className="menu-item-left">
+                  <span className="menu-icon">🏢</span> Wholesale
+                </span>
+              </Link>
             </li>
-            <li className="mobile-menu-item">
-              <Link to="/recipes" onClick={() => setMenuOpen(false)} className="mobile-menu-link">RECIPES</Link>
+
+            {/* 📚 Blog */}
+            <li className={`mobile-menu-item ${history.location.pathname === "/blog" ? "active-item" : ""}`}>
+              <Link to="/blog" onClick={() => setMenuOpen(false)} className="mobile-menu-link">
+                <span className="menu-item-left">
+                  <span className="menu-icon">📚</span> Blog
+                </span>
+              </Link>
             </li>
-            <li className="mobile-menu-item">
-              <Link to="/wholesale" onClick={() => setMenuOpen(false)} className="mobile-menu-link">WHOLESALE</Link>
+
+            {/* ❤️ Our Story */}
+            <li className={`mobile-menu-item ${history.location.pathname === "/our-story" ? "active-item" : ""}`}>
+              <Link to="/our-story" onClick={() => setMenuOpen(false)} className="mobile-menu-link">
+                <span className="menu-item-left">
+                  <span className="menu-icon">❤️</span> Our Story
+                </span>
+              </Link>
             </li>
-            <li className="mobile-menu-item">
-              <Link to="/blog" onClick={() => setMenuOpen(false)} className="mobile-menu-link">BLOG</Link>
-            </li>
-            <li className="mobile-menu-item">
-              <Link to="/contact" onClick={() => setMenuOpen(false)} className="mobile-menu-link">CONTACT</Link>
+
+            {/* 📞 Contact */}
+            <li className={`mobile-menu-item ${history.location.pathname === "/contact" ? "active-item" : ""}`}>
+              <Link to="/contact" onClick={() => setMenuOpen(false)} className="mobile-menu-link">
+                <span className="menu-item-left">
+                  <span className="menu-icon">📞</span> Contact
+                </span>
+              </Link>
             </li>
           </ul>
         </div>

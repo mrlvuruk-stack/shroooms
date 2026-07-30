@@ -1202,6 +1202,7 @@ const Admin = () => {
     {
       label: "Store",
       items: [
+        { id: "website",     icon: "🌐", label: "Website Products Page", badge: "55+ Live" },
         { id: "products",    icon: "📦", label: "Products",       badge: vegetables ? vegetables.length : 0 },
         { id: "types",       icon: "🍄", label: "Mushroom Types", badge: types.length },
         { id: "orders",      icon: "🛒", label: "Orders",         badge: orders.length || null },
@@ -1460,6 +1461,7 @@ const Admin = () => {
           <div className="adm-topbar-title">
             <h1>
               {tab === "overview"    && "Operations Overview"}
+              {tab === "website"     && "Live Storefront & Products Page Manager"}
               {tab === "batches"     && "Cultivation Batches"}
               {tab === "products"    && "Product Catalog"}
               {tab === "types"       && "Mushroom Types"}
@@ -1478,13 +1480,88 @@ const Admin = () => {
             <span className="adm-topbar-chip online">● Live</span>
             {user && <span className="adm-topbar-chip" style={{ textTransform: "none" }}>{user.email}</span>}
             <span className="adm-topbar-chip">{clock}</span>
-            <button className="adm-btn adm-btn-ghost adm-btn-sm" onClick={() => window.location.href = "/"}>← Store</button>
+            <button className="adm-btn adm-btn-primary adm-btn-sm" onClick={() => window.open('/shop', '_blank')} style={{ background: "linear-gradient(135deg, #c89b5d, #b38647)", color: "#fff", border: "none", padding: "6px 14px", borderRadius: "20px", fontWeight: 600, cursor: "pointer" }}>🌐 View Live Products Page</button>
+            <button className="adm-btn adm-btn-ghost adm-btn-sm" onClick={() => window.location.href = "/"}>← Store Home</button>
             <button className="adm-btn adm-btn-ghost adm-btn-sm" onClick={handleLogout} style={{ marginLeft: "1rem", borderColor: "rgba(239, 68, 68, 0.4)", color: "#ef4444" }}>Logout</button>
           </div>
         </div>
 
         {/* CONTENT */}
         <div className="adm-content">
+
+          {/* ══════════════════ WEBSITE & PRODUCTS MANAGER ══════════════════ */}
+          {tab === "website" && (
+            <div className="adm-tab-content animate__animated animate__fadeIn">
+              <div className="adm-section-header" style={{ marginBottom: "2rem" }}>
+                <div>
+                  <h3 style={{ fontSize: "2rem", color: "#e0c98a", margin: "0 0 0.5rem 0" }}>🌐 Live Storefront & Products Page Console</h3>
+                  <p style={{ color: "var(--adm-text-muted)", fontSize: "1.4rem", margin: 0 }}>
+                    Manage and inspect the Apple x Shopify level luxury Products Page (55+ Products, Spawn, LC, Farm Supplies & Grow Kits).
+                  </p>
+                </div>
+                <button
+                  className="adm-btn adm-btn-primary"
+                  onClick={() => window.open("/shop", "_blank")}
+                  style={{ background: "linear-gradient(135deg, #c89b5d, #b38647)", color: "#fff", border: "none" }}
+                >
+                  🚀 Open Live Products Page (/shop) ↗
+                </button>
+              </div>
+
+              {/* Website Category Stats Grid */}
+              <div className="adm-metrics-row" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1.6rem", marginBottom: "3rem" }}>
+                <div className="adm-metric-card" style={{ "--accent": "linear-gradient(90deg, #1B2D1F, #267A3F)" }}>
+                  <div className="adm-metric-label">🍄 Mushroom Spawn</div>
+                  <div className="adm-metric-val">16 Strains</div>
+                  <div className="adm-metric-sub">Blue Oyster, Lion's Mane, Cordyceps...</div>
+                </div>
+
+                <div className="adm-metric-card" style={{ "--accent": "linear-gradient(90deg, #C89B5D, #B38647)" }}>
+                  <div className="adm-metric-label">🧪 Liquid Culture</div>
+                  <div className="adm-metric-val">14 Syringes</div>
+                  <div className="adm-metric-sub">Pure isolated liquid mycelium</div>
+                </div>
+
+                <div className="adm-metric-card" style={{ "--accent": "linear-gradient(90deg, #267A3F, #1B5E2F)" }}>
+                  <div className="adm-metric-label">🌱 Grow Kits</div>
+                  <div className="adm-metric-val">11 All-In-One</div>
+                  <div className="adm-metric-sub">Countertop ready-to-fruit blocks</div>
+                </div>
+
+                <div className="adm-metric-card" style={{ "--accent": "linear-gradient(90deg, #E67E8C, #C25B69)" }}>
+                  <div className="adm-metric-label">⚗ Farm Supplies</div>
+                  <div className="adm-metric-val">13 Products</div>
+                  <div className="adm-metric-sub">PP Bags, Chuna, Bavistin, Sawdust...</div>
+                </div>
+              </div>
+
+              {/* Quick Navigation Panel */}
+              <div className="adm-card" style={{ padding: "2.4rem", background: "var(--adm-surface)", borderRadius: "20px", border: "1px solid var(--adm-border)" }}>
+                <h4 style={{ fontSize: "1.8rem", color: "#e0c98a", marginBottom: "1.6rem" }}>🔗 Quick Storefront Navigation Links</h4>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "1.2rem" }}>
+                  {[
+                    { label: "🛒 Products Page", url: "/shop" },
+                    { label: "🏠 Homepage", url: "/" },
+                    { label: "📖 Our Story", url: "/our-story" },
+                    { label: "🍄 Mushroom Guide", url: "/mushroom-guide" },
+                    { label: "🍳 Recipes", url: "/recipes" },
+                    { label: "📰 Blog Articles", url: "/blog" },
+                    { label: "🤝 Wholesale Inquiry", url: "/wholesale" }
+                  ].map((link, idx) => (
+                    <button
+                      key={idx}
+                      className="adm-btn adm-btn-ghost"
+                      onClick={() => window.open(link.url, "_blank")}
+                      style={{ justifyContent: "space-between", padding: "12px 18px" }}
+                    >
+                      <span>{link.label}</span>
+                      <span style={{ opacity: 0.6 }}>↗</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* ══════════════════ OVERVIEW ══════════════════ */}
           {tab === "overview" && (

@@ -142,28 +142,16 @@ axios.interceptors.request.use(async (config) => {
           const { data: dbProducts, error } = await supabase
             .from("products")
             .select("*");
-          if (error) throw error;
-
-          if (!dbProducts || dbProducts.length === 0) {
-            console.warn("Supabase products table is empty. Production catalog requires manual DB seeding.");
-            if (process.env.NODE_ENV === "production") {
-              return Promise.reject(new Error("Catalog temporarily empty. Please contact support."));
-            }
-            productsData = mockProducts;
-          } else {
+          if (!error && dbProducts && dbProducts.length > 0) {
             productsData = dbProducts;
+          } else {
+            productsData = mockProducts;
           }
         } catch (err) {
-          console.error("Failed to fetch products from Supabase:", err);
-          if (process.env.NODE_ENV === "production") {
-            return Promise.reject(new Error("Catalog temporarily unavailable. Database connection issue."));
-          }
+          console.error("Failed to fetch products from Supabase, using fallback:", err);
           productsData = mockProducts;
         }
       } else {
-        if (process.env.NODE_ENV === "production") {
-          return Promise.reject(new Error("Catalog temporarily unavailable. Supabase is not configured."));
-        }
         productsData = mockProducts;
       }
 

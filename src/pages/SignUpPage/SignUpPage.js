@@ -1,11 +1,7 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation, Link } from "react-router-dom";
-import axios from "axios";
-import { supabase } from "../../supabase";
-import * as actionTypes from "../../store/actions/actionTypes/signInTypes";
-import "animate.css";
+import { useHistory, useLocation } from "react-router-dom";
+import { firebaseGoogleSignIn } from "../../store/actions/actionCreators/signInAction";
 import "./SignUpPage.css";
 
 const SignUpPage = () => {
@@ -14,19 +10,8 @@ const SignUpPage = () => {
   const location = useLocation();
 
   const userSignIn = useSelector((state) => state.userSignIn);
-  const { userInfo } = userSignIn;
-
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  
-  const [step, setStep] = useState(1); // 1: Sign up details, 2: OTP Verification
-  const [otp, setOtp] = useState("");
-  const [loading, setLoading] = useState(false);
+  const { userInfo, loading, error: authError } = userSignIn;
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
-  const [sandboxOtp, setSandboxOtp] = useState(""); // For displaying OTP on screen in sandbox mode
 
   // Redirect if already logged in
   useEffect(() => {
@@ -36,159 +21,16 @@ const SignUpPage = () => {
     }
   }, [userInfo, history, location]);
 
-  const handleSignUp = async (e) => {
-    e.preventDefault();
+  const handleGoogleSignIn = async () => {
     setError("");
-    setSandboxOtp("");
-    if (!fullName || !email || !password) {
-      setError("Please fill in all fields.");
-      return;
-    }
-
-    // Email format validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setError("Please enter a valid email address.");
-      return;
-    }
-
-    setLoading(true);
     try {
-      // 1. Check if user already exists
-      const { data: existingUser, error: checkErr } = await supabase
-        .from("users")
-        .select("*")
-        .eq("email", email.toLowerCase())
-        .single();
-
-      if (!checkErr && existingUser) {
-        setError("An account with this email already exists. Please Sign In.");
-        setLoading(false);
-        return;
-      }
-
-      // 2. Generate 4-digit OTP
-      const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
-      console.log("%c[Dev Fallback] OTP for " + email + " is: " + generatedOtp, "color: #ff9900; font-size: 16px; font-weight: bold;");
-
-      // 3. Upsert to Supabase 'email_otps' table
-      const expiresAt = new Date(Date.now() + 5 * 60 * 1000).toISOString();
-      const { error: dbErr } = await supabase.from("email_otps").upsert(
-        [
-          {
-            email: email.toLowerCase(),
-            otp: generatedOtp,
-            expires_at: expiresAt
-          }
-        ],
-        { onConflict: "email" }
-      );
-
-      if (dbErr) throw dbErr;
-
-      // 4. Send Email via nodemailer API
-      try {
-        const res = await axios.post("/api/send-email", {
-          email: email.toLowerCase(),
-          otp: generatedOtp
-        });
-        
-        if (res.data && res.data.sandbox) {
-          setSandboxOtp(generatedOtp);
-        }
-      } catch (mailErr) {
-        console.warn("Mail API failed but proceeding to OTP verification (Sandbox Mode):", mailErr.message);
-        setSandboxOtp(generatedOtp); // Fallback to displaying on screen
-      }
-
-      setStep(2);
+      await dispatch(firebaseGoogleSignIn());
     } catch (err) {
-      console.error(err);
-      setError("Failed to register: " + (err.response?.data?.message || err.message || "Please try again."));
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleOtpVerify = async (e) => {
-    e.preventDefault();
-    setError("");
-    if (otp.length < 4) {
-      setError("Please enter the 4-digit code.");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const emailValue = email.trim().toLowerCase();
-
-      // 1. Fetch OTP record from Supabase 'email_otps' table
-      const { data, error: dbErr } = await supabase
-        .from("email_otps")
-        .select("*")
-        .eq("email", emailValue)
-        .single();
-
-      if (dbErr || !data) {
-        setError("Verification code expired or not found. Please request a new one.");
-        setLoading(false);
-        return;
+      if (err.code === "auth/popup-closed-by-user") {
+        setError("Google Sign-In was cancelled. Please try again.");
+      } else {
+        setError(err.message || "Google Sign-In failed. Please try again.");
       }
-
-      // 2. Verify OTP code and expiration time
-      const now = new Date();
-      const expirationTime = new Date(data.expires_at);
-
-      if (data.otp !== otp) {
-        setError("Invalid code. Please try again.");
-        setLoading(false);
-        return;
-      }
-
-      if (now > expirationTime) {
-        setError("Verification code expired. Please request a new one.");
-        setLoading(false);
-        return;
-      }
-
-      // Clear the OTP row
-      await supabase.from("email_otps").delete().eq("email", emailValue);
-
-      // 3. Insert user into Supabase 'users' table
-      const mockPhone = "email_" + Date.now();
-      const { error: insertErr } = await supabase.from("users").insert([
-        {
-          name: fullName,
-          email: emailValue,
-          phone: mockPhone,
-          wishlist: []
-        }
-      ]);
-
-      if (insertErr) throw insertErr;
-
-      const registeredUser = {
-        _id: "usr_" + Date.now(),
-        name: fullName,
-        email: emailValue,
-        phone: "",
-        token: "email_session_" + Date.now()
-      };
-
-      // Dispatch login success in Redux
-      dispatch({
-        type: actionTypes.USER_SIGNIN_SUCCESS,
-        payload: registeredUser
-      });
-
-      // Save session in local storage
-      localStorage.setItem("userInfo", JSON.stringify(registeredUser));
-      setSuccess(true);
-    } catch (err) {
-      console.error(err);
-      setError("Verification failed: " + (err.message || "Please try again."));
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -196,7 +38,7 @@ const SignUpPage = () => {
     <div className="signup-page-container">
       <div className="signup-split-wrapper">
         
-        {/* Left Side: Art of Fungi Panel */}
+        {/* Left Side: Art Panel */}
         <div className="signup-left-art" style={{ backgroundImage: "url('/signin_mushrooms_split.png')" }}>
           <div className="signup-art-overlay"></div>
           <div className="signup-art-content animate__animated animate__fadeInLeft">
@@ -208,156 +50,68 @@ const SignUpPage = () => {
 
         {/* Right Side: Form Panel */}
         <div className="signup-right-form-panel">
-
-
           <div className="signup-form-box animate__animated animate__fadeIn">
             
-            {/* Logo Icon */}
-            <div className="signup-logo-header">
-              <span className="signup-brand-icon">🍄</span>
+            <div className="signup-logo-header" style={{ textAlign: "center", marginBottom: "1.5rem" }}>
+              <span className="signup-brand-icon" style={{ fontSize: "3rem" }}>🍄</span>
+              <h2 className="signup-form-title" style={{ marginTop: "0.5rem" }}>Create Your Account</h2>
+              <p style={{ fontSize: "1.3rem", color: "#555", marginTop: "0.5rem" }}>
+                Join SHROOOMS with your Google account for an instant, secure customer profile.
+              </p>
             </div>
 
-            {step === 1 && (
-              <>
-                <h2 className="signup-form-title">Begin Your Wellness Journey</h2>
-                
-                <div className="signup-maintenance-banner" style={{
-                  padding: "1.2rem",
-                  background: "rgba(220, 95, 0, 0.1)",
-                  border: "1px solid rgba(220, 95, 0, 0.3)",
-                  borderRadius: "8px",
-                  color: "#c05600",
-                  fontSize: "1.3rem",
-                  textAlign: "center",
-                  margin: "1.5rem 0",
-                  fontWeight: "500"
-                }}>
-                  Authentication features are temporarily offline for security upgrades. Please browse the store as a guest.
-                </div>
-
-                <form onSubmit={(e) => e.preventDefault()} className="signup-form">
-                  
-                  {/* Full Name Input */}
-                  <div className="signup-form-group">
-                    <label className="signup-label">Full Name</label>
-                    <div className="signup-input-wrapper">
-                      <i className="fa fa-user signup-input-icon"></i>
-                      <input
-                        disabled
-                        type="text"
-                        placeholder="Sage Everly"
-                        value={fullName}
-                        className="signup-line-input"
-                        style={{ backgroundColor: "#fafafa", cursor: "not-allowed" }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Email Address Input */}
-                  <div className="signup-form-group">
-                    <label className="signup-label">Email Address</label>
-                    <div className="signup-input-wrapper">
-                      <i className="fa fa-envelope signup-input-icon"></i>
-                      <input
-                        disabled
-                        type="email"
-                        placeholder="wellness@shroooms.com"
-                        value={email}
-                        className="signup-line-input"
-                        style={{ backgroundColor: "#fafafa", cursor: "not-allowed" }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Password Input */}
-                  <div className="signup-form-group">
-                    <label className="signup-label">Password</label>
-                    <div className="signup-input-wrapper">
-                      <i className="fa fa-lock signup-input-icon"></i>
-                      <input
-                        disabled
-                        type="password"
-                        placeholder="••••••••"
-                        value={password}
-                        className="signup-line-input"
-                        style={{ backgroundColor: "#fafafa", cursor: "not-allowed" }}
-                      />
-                    </div>
-                  </div>
-
-                  <button type="button" className="signup-primary-btn" disabled style={{ backgroundColor: "#ccc", color: "#666", cursor: "not-allowed" }}>
-                    Create Account (Disabled)
-                  </button>
-
-                </form>
-
-                <p className="signup-footer-text">
-                  Already have an account? <Link to="/signin" className="signup-link">Log in</Link>
-                </p>
-              </>
+            {(error || authError) && (
+              <div className="signup-err-msg" style={{
+                padding: "1rem",
+                background: "#ffebee",
+                color: "#c62828",
+                borderRadius: "8px",
+                margin: "1rem 0",
+                fontSize: "1.2rem",
+                textAlign: "center"
+              }}>
+                {error || authError}
+              </div>
             )}
 
-            {step === 2 && (
-              <>
-                <h2 className="signup-form-title">Verify Your Email</h2>
-                <p className="signup-form-desc">
-                  Enter the 4-digit code sent to {email}
-                </p>
+            {/* Google Sign Up Button */}
+            <button
+              type="button"
+              className="signup-google-btn"
+              onClick={handleGoogleSignIn}
+              disabled={loading}
+              style={{
+                width: "100%",
+                padding: "1.2rem",
+                borderRadius: "30px",
+                border: "1.5px solid #d4af37",
+                backgroundColor: "#ffffff",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "12px",
+                fontWeight: "700",
+                fontSize: "1.4rem",
+                color: "#1b4d2e",
+                cursor: loading ? "not-allowed" : "pointer",
+                boxShadow: "0 4px 15px rgba(27, 77, 46, 0.08)",
+                transition: "all 0.25s ease",
+                marginTop: "1rem"
+              }}
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+              {loading ? "Connecting to Google..." : "Continue with Google"}
+            </button>
 
-                {sandboxOtp && (
-                  <div className="signup-sandbox-alert" style={{ backgroundColor: "#fdf5e6", border: "1px dashed #d2691e", padding: "1.1rem", borderRadius: "0.6rem", margin: "1.2rem 0", color: "#8b4513", textAlign: "left", fontSize: "1.25rem" }}>
-                    <strong>Sandbox Testing Active:</strong> Use code <code style={{ backgroundColor: "#f5f5dc", border: "1px solid #d3d3d3", padding: "0.1rem 0.5rem", borderRadius: "0.3rem", fontFamily: "monospace", fontWeight: "bold", fontSize: "1.35rem", color: "#b22222" }}>{sandboxOtp}</code> to verify.
-                    <div style={{ fontSize: "1.1rem", marginTop: "0.5rem", color: "#666" }}>
-                      Note: Real emails will be sent once SMTP credentials are set up in Vercel.
-                    </div>
-                  </div>
-                )}
-
-                {error && <div className="signup-err-msg">{error}</div>}
-                {success && <div className="signup-success-msg">Email Verified! Setting up your space...</div>}
-
-                <form onSubmit={handleOtpVerify} className="signup-form">
-                  <div className="signup-form-group">
-                    <label className="signup-label">4-DIGIT OTP CODE</label>
-                    <input
-                      type="password"
-                      maxLength="4"
-                      pattern="[0-9]*"
-                      placeholder="••••"
-                      value={otp}
-                      onChange={(e) => {
-                        setOtp(e.target.value.replace(/[^0-9]/g, ""));
-                        setError("");
-                      }}
-                      className="signup-line-input"
-                      required
-                    />
-                  </div>
-
-                  <button type="submit" className="signup-primary-btn" disabled={loading || success}>
-                    {loading ? "Verifying..." : "Verify & Complete Signup"}
-                  </button>
-
-                  <div className="signup-verify-actions" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1.5rem', fontSize: '1.2rem' }}>
-                    <span 
-                      style={{ color: '#5a1827', cursor: 'pointer', fontWeight: '600' }} 
-                      onClick={() => setStep(1)}
-                    >
-                      ← Change Details
-                    </span>
-                    <span 
-                      style={{ color: '#5a1827', cursor: 'pointer', fontWeight: '600' }} 
-                      onClick={handleSignUp}
-                    >
-                      Resend Code
-                    </span>
-                  </div>
-                </form>
-              </>
-            )}
-
-            <div className="signup-bottom-quote">
-              "Your daily dose of natural intelligence."
+            <div style={{ marginTop: "3rem", padding: "1.2rem", background: "#fbf9f5", borderRadius: "12px", border: "1px solid #e8e2d5", textAlign: "center" }}>
+              <p style={{ fontSize: "1.2rem", color: "#666", margin: 0, lineHeight: 1.5 }}>
+                🔒 Fast 1-click Google Sign-Up. No password required. Phone number is requested only during order checkout.
+              </p>
             </div>
           </div>
         </div>

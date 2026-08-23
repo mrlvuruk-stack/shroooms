@@ -76,8 +76,12 @@
 
 .why-item-header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: var(--space-3);
+}
+
+.inline-why-info-btn {
+  margin-left: auto;
 }
 
 .why-item-index {

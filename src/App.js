@@ -1,5 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Switch, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { auth, onAuthStateChanged } from "./firebase";
+import { syncFirebaseUser } from "./store/actions/actionCreators/signInAction";
+
 import { Footer } from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
 import HeaderCheckout from "./components/HeaderCheckout/HeaderCheckout";
@@ -29,9 +33,20 @@ import Profile from "./pages/Profile/Profile";
 import Policies from "./pages/Policies/Policies";
 import MushroomGuide from "./pages/MushroomGuide/MushroomGuide";
 import ProductsPage from "./pages/Shop/ProductsPage";
+import GlobalLoader from "./components/GlobalLoader/GlobalLoader";
 
 const App = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        dispatch(syncFirebaseUser(user));
+      }
+    });
+    return () => unsubscribe();
+  }, [dispatch]);
 
   // Admin panel is full-screen standalone — skip header/footer
   if (location.pathname === "/admin") {
@@ -47,7 +62,8 @@ const App = () => {
   };
 
   return (
-    <div className="grid-container">
+    <GlobalLoader>
+      <div className="grid-container">
       {getHeader()}
       {/* Nature/Botanical & Spore Side Background Decorations */}
       <div className="global-decor-container">
@@ -180,6 +196,7 @@ const App = () => {
       <SignIn />
       <Footer />
     </div>
+    </GlobalLoader>
   );
 };
 

@@ -58,6 +58,93 @@
   padding: 0 1.5rem;
 }
 
+
+/* Category Filter Pills Bar */
+.category-filter-pills-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .category-filter-pills-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.8rem;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    scrollbar-width: thin;
+  }
+  
+  .category-pill-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-size: 1.2rem;
+    padding: 0.5rem 1.2rem;
+  }
+}
+
+.category-pill-btn {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1.5px solid rgba(46, 125, 50, 0.2);
+  color: #2c3e2e;
+  padding: 0.6rem 1.4rem;
+  border-radius: 25px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(8px);
+}
+
+.category-pill-btn:hover {
+  border-color: #2e7d32;
+  background: #e8f5e9;
+  transform: translateY(-2px);
+}
+
+.category-pill-btn.active-pill {
+  background: linear-gradient(135deg, #1b4d2e, #2e7d32);
+  color: #ffffff;
+  border-color: #1b4d2e;
+  box-shadow: 0 4px 12px rgba(27, 77, 46, 0.25);
+}
+
+.active-category-card {
+  outline: 3px solid #2e7d32 !important;
+  transform: scale(1.02);
+}
+
+/* Empty Category Notice */
+.empty-category-notice {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: #fdfbf7;
+  border: 2px dashed #e2ebd5;
+  border-radius: 20px;
+  margin: 3rem auto;
+  max-width: 550px;
+}
+
+.empty-notice-icon {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.empty-category-notice h3 {
+  font-size: 2.2rem;
+  color: #1b4d2e;
+  margin-bottom: 0.8rem;
+}
+
+.empty-category-notice p {
+  font-size: 1.4rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
 /* Responsiveness */
 @media (max-width: 1100px) {
   .home-hero {
@@ -80,6 +167,11 @@
 @media (max-width: 900px) {
   .home-trust {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .section-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
   }
 }
 
@@ -131,3 +223,4 @@
     letter-spacing: 0.5px;
   }
 }
+

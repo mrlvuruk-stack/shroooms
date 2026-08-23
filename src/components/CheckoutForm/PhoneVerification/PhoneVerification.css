@@ -76,3 +76,27 @@
     transform: none;
   }
 }
+
+/* Mobile & Touch Target Responsiveness */
+.new-delivery-address__label input.input {
+  width: 100%;
+  min-height: 48px;
+  font-size: 1.5rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+  .new-delivery-address__form-sub {
+    width: 100%;
+  }
+  .new-delivery-address__label input.input {
+    font-size: 16px; /* Prevents auto-zoom on iOS Safari */
+    min-height: 48px;
+  }
+  .guest-details-summary p {
+    font-size: 1.3rem;
+  }
+}

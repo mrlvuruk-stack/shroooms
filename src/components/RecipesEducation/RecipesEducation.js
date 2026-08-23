@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { RECIPES_DATA } from "../../pages/Recipes/Recipes";
+import { InfoModal } from "../ModalSystem/ModalSystem";
 import "./RecipesEducation.css";
 
 const RecipesEducation = () => {
-  // Use maximum 3 recipes
-  const items = RECIPES_DATA.slice(0, 3);
+  const items = RECIPES_DATA;
+  const [activeRecipeInfo, setActiveRecipeInfo] = useState(null);
 
-  // Map recipe ID to verified public assets for visual representation
   const getRecipeImage = (id) => {
     switch (id) {
       case "lions-mane-steaks":
@@ -16,84 +16,66 @@ const RecipesEducation = () => {
         return "/banner_boxes.jpg";
       case "pink-oyster-tacos":
         return "/banner_pouches.jpg";
+      case "blue-oyster-stir-fry":
+        return "/box_blue_oyster.jpg";
       default:
         return "/banner_doorstep.jpg";
     }
   };
 
-  const getRecipeAlt = (id) => {
-    switch (id) {
-      case "lions-mane-steaks":
-        return "Gourmet mushrooms growing inside clean chambers";
-      case "king-oyster-scallops":
-        return "Packed mushroom crates on shelves";
-      case "pink-oyster-tacos":
-        return "Sealed gourmet products packaging";
-      default:
-        return "Mushrooms inside a delivery basket";
-    }
-  };
-
   if (!items || items.length === 0) return null;
-
-  const leadItem = items[0];
-  const secondaryItems = items.slice(1);
 
   return (
     <section className="recipes-edu-section home-section container-wide" aria-labelledby="recipes-title">
       <div className="recipes-header">
         <span className="recipes-eyebrow" id="recipes-title">Kitchen Guides</span>
-        <h2 className="recipes-main-heading">Culinary Inspiration</h2>
-        <p className="recipes-intro">Explore simple preparation methods and recipes utilizing our gourmet cultivars.</p>
+        <h2 className="recipes-main-heading">Culinary Inspiration Carousel</h2>
+        <p className="recipes-intro">Swipe through simple gourmet preparation techniques crafted for gourmet cultivars.</p>
       </div>
 
-      <div className="recipes-asymmetric-layout">
-        {/* Left Column: Asymmetric Lead Card */}
-        <div className="recipes-lead-column">
-          <div className="recipe-lead-card">
-            <div className="recipe-lead-img-wrapper">
-              <img
-                src={getRecipeImage(leadItem.id)}
-                alt={getRecipeAlt(leadItem.id)}
-                className="recipe-lead-img"
-                loading="lazy"
-                decoding="async"
-                style={{ aspectRatio: "16 / 10" }}
-              />
-              <span className="recipe-lead-badge">{leadItem.difficulty}</span>
-            </div>
-            <div className="recipe-lead-content">
-              <span className="recipe-meta-text">{leadItem.time} · {leadItem.mushroom}</span>
-              <h3 className="recipe-lead-title">{leadItem.name}</h3>
-              <p className="recipe-lead-summary">{leadItem.summary}</p>
-              <Link to="/recipes" className="btn-text recipe-lead-link">
-                View Preparation Steps <span className="arrow-inline">→</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Column: Secondary Cards stacked */}
-        <div className="recipes-secondary-column">
-          {secondaryItems.map((item) => (
-            <div className="recipe-row-card" key={item.id}>
-              <div className="recipe-row-img-wrapper">
+      {/* Horizontal Carousel Viewport */}
+      <div className="recipes-carousel-viewport">
+        <div className="recipes-carousel-track">
+          {items.map((item) => (
+            <div className="recipe-carousel-card" key={item.id}>
+              {/* Circular Organic Image Container */}
+              <div className="recipe-circle-img-container">
                 <img
                   src={getRecipeImage(item.id)}
-                  alt={getRecipeAlt(item.id)}
-                  className="recipe-row-img"
+                  alt={item.name}
+                  className="recipe-circle-img"
                   loading="lazy"
                   decoding="async"
-                  style={{ aspectRatio: "4 / 3" }}
                 />
+                <span className="recipe-badge-tag">{item.difficulty}</span>
+                <button
+                  className="recipe-info-float-btn"
+                  onClick={() => setActiveRecipeInfo(item)}
+                  aria-label={`View details for ${item.name}`}
+                  title="View Culinary Policy & Recipe Info"
+                >
+                  i
+                </button>
               </div>
-              <div className="recipe-row-content">
-                <span className="recipe-meta-text">{item.time} · {item.mushroom}</span>
-                <h3 className="recipe-row-title">{item.name}</h3>
-                <p className="recipe-row-summary">{item.summary}</p>
-                <Link to="/recipes" className="btn-text recipe-row-link">
-                  Details <span className="arrow-inline">→</span>
-                </Link>
+
+              {/* Text Description Area below visual */}
+              <div className="recipe-card-content">
+                <span className="recipe-meta-text">⏱ {item.time} · {item.mushroom}</span>
+                <h3 className="recipe-card-title">{item.name}</h3>
+                <p className="recipe-card-desc">{item.summary}</p>
+                <div className="recipe-card-actions">
+                  <Link to={`/recipes`} className="btn-secondary recipe-view-btn">
+                    View Recipe →
+                  </Link>
+                  <button
+                    className="info-trigger-btn"
+                    onClick={() => setActiveRecipeInfo(item)}
+                    aria-label={`More info about ${item.name}`}
+                    title="Recipe Policy & Nutritional Info"
+                  >
+                    i
+                  </button>
+                </div>
               </div>
             </div>
           ))}
@@ -102,9 +84,26 @@ const RecipesEducation = () => {
 
       <div className="recipes-footer-action">
         <Link to="/recipes" className="btn-primary recipes-all-btn">
-          Explore All Recipes <span className="btn-arrow" aria-hidden="true">→</span>
+          Explore Complete Culinary Guide <span className="btn-arrow" aria-hidden="true">→</span>
         </Link>
       </div>
+
+      {/* Culinary Recipe Info Modal */}
+      {activeRecipeInfo && (
+        <InfoModal
+          isOpen={!!activeRecipeInfo}
+          onClose={() => setActiveRecipeInfo(null)}
+          title={`${activeRecipeInfo.name} — Culinary Guide`}
+          icon="🍳"
+          details={activeRecipeInfo.summary || "Gourmet preparation guide for SHROOOMS fresh cultivars."}
+          bullets={[
+            `Preparation Time: ${activeRecipeInfo.time}`,
+            `Recommended Cultivar: ${activeRecipeInfo.mushroom}`,
+            `Difficulty Rating: ${activeRecipeInfo.difficulty}`,
+            "Pro Chef Tip: Pan-sear mushrooms in high heat dry pan first before adding butter & garlic for maximum golden crispiness!"
+          ]}
+        />
+      )}
     </section>
   );
 };

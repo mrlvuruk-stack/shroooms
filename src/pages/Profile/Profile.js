@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { supabase } from "../../supabase";
+import { auth } from "../../firebase";
+import { getUserProfile, syncUserProfile, getUserOrders } from "../../services/firebaseService";
 import * as actionTypes from "../../store/actions/actionTypes/signInTypes";
 import "animate.css";
 import "./Profile.css";
@@ -29,7 +30,7 @@ const Profile = () => {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
-  const [photo, setPhoto] = useState("🍄"); // Default Classic Shrooom avatar or Base64 string
+  const [photo, setPhoto] = useState("🍄");
 
   // Loading and Notification states
   const [profileLoading, setProfileLoading] = useState(true);
@@ -42,7 +43,7 @@ const Profile = () => {
   const [ordersList, setOrdersList] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
 
-  // Fetch full user profile details from Supabase on mount
+  // Fetch full user profile details from Firebase Firestore on mount
   useEffect(() => {
     const fetchUserProfile = async () => {
       if (!userInfo) {
@@ -52,33 +53,23 @@ const Profile = () => {
 
       setProfileLoading(true);
       try {
-        const emailValue = userInfo.email?.toLowerCase() || "";
-        const phoneValue = userInfo.phone || "";
+        const uid = userInfo._id || auth.currentUser?.uid;
+        const profile = await getUserProfile(uid);
 
-        // Query Supabase users table by email or phone
-        let query = supabase.from("users").select("*");
-        if (emailValue) {
-          query = query.eq("email", emailValue);
-        } else if (phoneValue) {
-          query = query.eq("phone", phoneValue);
-        }
-
-        const { data, error: dbErr } = await query;
-        if (!dbErr && data && data.length > 0) {
-          const userRecord = data[0];
-          setName(userRecord.name || "");
-          setPhone(userRecord.phone || "");
-          setEmail(userRecord.email || "");
-          setAddress(userRecord.address || "");
-          setPhoto(userRecord.photo || "🍄");
+        if (profile) {
+          setName(profile.displayName || profile.name || userInfo.name || "");
+          setPhone(profile.phoneNumber || profile.phone || userInfo.phone || "");
+          setEmail(profile.email || userInfo.email || "");
+          setAddress(profile.address || "");
+          setPhoto(profile.photoURL || profile.photo || "🍄");
         } else {
-          // Fallback to userInfo state values if not found in db
           setName(userInfo.name || "");
           setPhone(userInfo.phone || "");
           setEmail(userInfo.email || "");
+          setPhoto(userInfo.photoURL || "🍄");
         }
       } catch (err) {
-        console.error("Failed to load user profile:", err);
+        console.error("Failed to load user profile from Firestore:", err);
       } finally {
         setProfileLoading(false);
       }
@@ -94,31 +85,11 @@ const Profile = () => {
 
       setOrdersLoading(true);
       try {
-        const { data: dbOrders, error: orderErr } = await supabase
-          .from("orders")
-          .select("*")
-          .order("created_at", { ascending: false });
-
-        if (!orderErr && dbOrders) {
-          // Filter orders belonging to this user
-          const mapped = dbOrders
-            .map((row) => ({
-              ...row.order_data,
-              _id: row._id,
-              createdAt: row.created_at,
-              status: row.order_data?.status || row.status || "Paid"
-            }))
-            .filter((o) => {
-              const emailMatch =
-                o.customerAddress?.email?.toLowerCase() === userInfo.email?.toLowerCase();
-              const phoneMatch = o.customerAddress?.phone === userInfo.phone;
-              return emailMatch || phoneMatch;
-            });
-
-          setOrdersList(mapped);
-          if (mapped.length > 0) {
-            setSelectedOrder(mapped[0]); // Select latest order by default
-          }
+        const uid = userInfo._id || auth.currentUser?.uid;
+        const userOrders = await getUserOrders(uid);
+        setOrdersList(userOrders);
+        if (userOrders.length > 0) {
+          setSelectedOrder(userOrders[0]);
         }
       } catch (err) {
         console.error("Failed to fetch user orders:", err);
@@ -130,7 +101,7 @@ const Profile = () => {
     fetchUserOrders();
   }, [activeTab, userInfo]);
 
-  // Handle saving the user profile details
+  // Handle saving the user profile details to Firestore
   const handleSaveProfile = async (e) => {
     e.preventDefault();
     setError("");
@@ -141,19 +112,24 @@ const Profile = () => {
       const emailValue = email.toLowerCase().trim();
       const phoneValue = phone.trim();
 
-      // 1. Update record in Supabase users table
-      const { error: updateErr } = await supabase
-        .from("users")
-        .update({
-          name,
-          email: emailValue,
-          phone: phoneValue,
-          address,
-          photo
-        })
-        .eq("email", emailValue); // Update by email
+      const userObj = auth.currentUser || {
+        uid: userInfo._id || "usr_" + Date.now(),
+        email: emailValue,
+        displayName: name,
+        phoneNumber: phoneValue
+      };
 
-      if (updateErr) throw updateErr;
+      // 1. Sync & Update profile in Firestore
+      await syncUserProfile(userObj, {
+        displayName: name,
+        name: name,
+        email: emailValue,
+        phone: phoneValue,
+        phoneNumber: phoneValue,
+        address: address,
+        photoURL: photo,
+        photo: photo
+      });
 
       // 2. Sync Redux state and local storage session
       const updatedUser = {
@@ -161,7 +137,8 @@ const Profile = () => {
         name,
         email: emailValue,
         phone: phoneValue,
-        photo // Include photo avatar
+        photoURL: photo,
+        photo
       };
 
       dispatch({
@@ -170,7 +147,7 @@ const Profile = () => {
       });
 
       localStorage.setItem("userInfo", JSON.stringify(updatedUser));
-      setSuccessMsg("Profile details updated successfully!");
+      setSuccessMsg("Profile details saved to Firebase successfully!");
     } catch (err) {
       console.error(err);
       setError("Failed to save profile: " + err.message);
@@ -189,7 +166,7 @@ const Profile = () => {
       }
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPhoto(reader.result); // Set photo state to base64 string
+        setPhoto(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -220,7 +197,6 @@ const Profile = () => {
       steps[2].done = true;
       steps[3].done = true;
     } else {
-      // Default: Paid
       steps[0].done = true;
       steps[0].active = true;
     }
@@ -232,7 +208,7 @@ const Profile = () => {
     return (
       <div className="profile-loading-container">
         <div className="profile-spinner"></div>
-        <p>Loading your forest profile...</p>
+        <p>Loading your profile...</p>
       </div>
     );
   }
@@ -245,10 +221,10 @@ const Profile = () => {
         <div className="profile-sidebar-panel">
           <div className="profile-user-summary">
             <div className="profile-avatar-wrapper">
-              {photo.startsWith("data:image") ? (
+              {photo && photo.startsWith("data:image") ? (
                 <img src={photo} alt="Avatar" className="profile-image-custom" />
               ) : (
-                <div className="profile-avatar-emoji">{photo}</div>
+                <div className="profile-avatar-emoji">{photo || "🍄"}</div>
               )}
             </div>
             <h3 className="profile-summary-name">{name || "Forest Explorer"}</h3>
@@ -332,8 +308,9 @@ const Profile = () => {
                   <input
                     type="email"
                     value={email}
-                    className="profile-box-input disabled"
-                    disabled
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="user@shrooom.in"
+                    className="profile-box-input"
                   />
                 </div>
 
@@ -341,10 +318,9 @@ const Profile = () => {
                   <label className="profile-form-label">PHONE NUMBER</label>
                   <input
                     type="tel"
-                    maxLength="10"
                     value={phone}
-                    onChange={(e) => { setPhone(e.target.value.replace(/[^0-9]/g, "")); setError(""); }}
-                    placeholder="e.g. 9826012345"
+                    onChange={(e) => { setPhone(e.target.value); setError(""); }}
+                    placeholder="e.g. +919826012345"
                     className="profile-box-input"
                   />
                 </div>
@@ -354,7 +330,7 @@ const Profile = () => {
                   <textarea
                     value={address}
                     onChange={(e) => { setAddress(e.target.value); setError(""); }}
-                    placeholder="Enter your flat/house number, street address, area locality, city, state and pincode for shipping."
+                    placeholder="Enter your house number, street address, city, state and pincode for shipping."
                     rows="4"
                     className="profile-box-textarea"
                   />
@@ -380,7 +356,7 @@ const Profile = () => {
               {ordersLoading ? (
                 <div className="profile-orders-loader">
                   <div className="profile-spinner"></div>
-                  <p>Fetching your orders from the forest...</p>
+                  <p>Fetching your orders...</p>
                 </div>
               ) : ordersList.length === 0 ? (
                 <div className="profile-empty-orders animate__animated animate__fadeIn">
@@ -398,14 +374,14 @@ const Profile = () => {
                     <div className="orders-cards-scroll-container">
                       {ordersList.map((ord) => (
                         <div 
-                          key={ord._id}
-                          className={`order-summary-card ${selectedOrder?._id === ord._id ? "selected" : ""}`}
+                          key={ord.id || ord._id}
+                          className={`order-summary-card ${selectedOrder?.id === ord.id || selectedOrder?._id === ord._id ? "selected" : ""}`}
                           onClick={() => setSelectedOrder(ord)}
                         >
                           <div className="order-card-header">
-                            <span className="order-card-id">#{ord._id?.substr(0, 8).toUpperCase()}</span>
-                            <span className={`order-card-status-badge ${ord.status?.toLowerCase().replace(/\s+/g, "-")}`}>
-                              {ord.status}
+                            <span className="order-card-id">#{(ord.id || ord._id)?.substr(0, 8).toUpperCase()}</span>
+                            <span className={`order-card-status-badge ${(ord.status || "Paid").toLowerCase().replace(/\s+/g, "-")}`}>
+                              {ord.status || "Paid"}
                             </span>
                           </div>
                           <div className="order-card-details">
@@ -417,7 +393,7 @@ const Profile = () => {
                               ))}
                             </div>
                             <div className="order-card-footer">
-                              <span className="order-card-date">{new Date(ord.createdAt).toLocaleDateString("en-IN")}</span>
+                              <span className="order-card-date">{ord.createdAt ? new Date(ord.createdAt.seconds ? ord.createdAt.seconds * 1000 : ord.createdAt).toLocaleDateString("en-IN") : "Recent"}</span>
                               <span className="order-card-price">₹{ord.totalPrice}</span>
                             </div>
                           </div>
@@ -434,7 +410,7 @@ const Profile = () => {
                         <div className="tracking-header-info">
                           <div>
                             <span className="info-label">ORDER ID:</span>
-                            <span className="info-value">#{selectedOrder._id?.toUpperCase()}</span>
+                            <span className="info-value">#{(selectedOrder.id || selectedOrder._id)?.toUpperCase()}</span>
                           </div>
                           <div>
                             <span className="info-label">PAYMENT:</span>
@@ -472,7 +448,7 @@ const Profile = () => {
                               selectedOrder.customerAddress?.locality,
                               selectedOrder.customerAddress?.city,
                               selectedOrder.customerAddress?.state
-                            ].filter(Boolean).join(", ")}
+                            ].filter(Boolean).join(", ") || address}
                           </p>
                         </div>
                       </div>

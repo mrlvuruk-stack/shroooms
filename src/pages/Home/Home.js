@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import LoadingBox from "../../components/LoadingBox/LoadingBox";
 import ErrorBox from "../../components/ErrorBox/ErrorBox";
 import { withRouter } from "react-router-dom";
@@ -16,6 +16,7 @@ import WhyChooseUs from "../../components/WhyChooseUs/WhyChooseUs";
 import RecipesEducation from "../../components/RecipesEducation/RecipesEducation";
 import WholesaleCTA from "../../components/WholesaleCTA/WholesaleCTA";
 import SocialProof from "../../components/SocialProof/SocialProof";
+import { CANONICAL_CATEGORIES, getCanonicalCategoryName } from "../../config/categoryConfig";
 import "./Home.css";
 
 const Home = (props) => {
@@ -28,6 +29,14 @@ const Home = (props) => {
 
   const { loading, error, vegetables } = vegetablesData;
 
+  // Category URL Query Parameter state synchronization
+  const queryParams = new URLSearchParams(props.location.search);
+  const categoryParam = queryParams.get("category");
+
+  const [selectedCategory, setSelectedCategory] = useState(
+    categoryParam ? getCanonicalCategoryName(categoryParam) : "All"
+  );
+
   useEffect(() => {
     dispatch(vegetablesList());
     document.title = "Shroooms | Buy Fresh Gourmet Mushrooms & Grow Kits Online";
@@ -37,7 +46,13 @@ const Home = (props) => {
     }
   }, [dispatch]);
 
-
+  // Keep state in sync with URL query param if present
+  useEffect(() => {
+    if (categoryParam) {
+      const norm = getCanonicalCategoryName(categoryParam);
+      setSelectedCategory(norm);
+    }
+  }, [categoryParam]);
 
   useEffect(() => {
     if (removeFromWishlist.loading === false) {
@@ -63,37 +78,81 @@ const Home = (props) => {
     }
   }, [props.history.location.state, dispatch]);
 
-  const filterProducts =
-    vegetables &&
-    vegetables.filter((vegetable) => {
-      if (
-        vegetable.name.toLowerCase().includes(searchTerm) ||
-        vegetable.description.toLowerCase().includes(searchTerm)
-      ) {
-        return vegetable;
-      }
-      return false;
+  const handleSelectCategory = (catName) => {
+    setSelectedCategory(catName);
+    const slug = catName.toLowerCase().replace(/[^a-z0-9]/g, "-");
+    props.history.push({
+      pathname: "/",
+      search: catName === "All" ? "" : `?category=${slug}`
     });
+  };
+
+  // STRICT Product Category Isolation
+  const filterProducts = vegetables && vegetables.filter((veg) => {
+    // 1. Strict Category Match
+    if (selectedCategory && selectedCategory !== "All") {
+      const prodCategory = getCanonicalCategoryName(veg.category);
+      if (prodCategory.toLowerCase() !== selectedCategory.toLowerCase()) {
+        return false;
+      }
+    }
+
+    // 2. Search Term Filter
+    if (searchTerm && searchTerm.trim() !== "") {
+      const term = searchTerm.toLowerCase();
+      const matchName = veg.name?.toLowerCase().includes(term);
+      const matchDesc = veg.description?.toLowerCase().includes(term);
+      if (!matchName && !matchDesc) return false;
+    }
+
+    return true;
+  });
 
   return (
     <Fragment>
       <Hero />
-      <CategoryGrid />
+      <CategoryGrid selectedCategory={selectedCategory} onSelectCategory={handleSelectCategory} />
       <FeaturedProducts />
 
-      {/* Product Section Header */}
+      {/* Product Section Header & Category Isolation Filter Tabs */}
       <div className="section-head" id="produce-list">
         <div>
-          <div className="section-eyebrow">Our Cultivars</div>
-          <h2 className="section-title">Shop by <em>variety</em></h2>
+          <div className="section-eyebrow">Strict Catalog Curation</div>
+          <h2 className="section-title">Shop by <em>category</em></h2>
         </div>
-        <a href="/" className="section-link">View all gourmet mushrooms →</a>
+
+        {/* Category Pill Tabs */}
+        <div className="category-filter-pills-row" role="tablist">
+          {CANONICAL_CATEGORIES.map((cat) => {
+            const isActive = selectedCategory.toLowerCase() === cat.name.toLowerCase();
+            return (
+              <button
+                key={cat.id}
+                role="tab"
+                aria-selected={isActive}
+                className={`category-pill-btn ${isActive ? "active-pill" : ""}`}
+                onClick={() => handleSelectCategory(cat.name)}
+              >
+                {cat.icon} {cat.name}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {loading ? (
         <LoadingBox />
       ) : error ? (
         <ErrorBox varient="error">{error}</ErrorBox>
+      ) : filterProducts && filterProducts.length === 0 ? (
+        <div className="empty-category-notice">
+          <span className="empty-notice-icon">🍄</span>
+          <h3>No items found in "{selectedCategory}"</h3>
+          <p>Try selecting another category or view our complete catalog.</p>
+          <button className="btn-primary" onClick={() => handleSelectCategory("All")}>
+            Show All Products
+          </button>
+        </div>
       ) : (
         <div className="row center">
           {filterProducts &&
@@ -116,3 +175,4 @@ const Home = (props) => {
   );
 };
 export default withRouter(Home);
+

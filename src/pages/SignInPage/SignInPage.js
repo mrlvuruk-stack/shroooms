@@ -1,11 +1,7 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation, Link } from "react-router-dom";
-import axios from "axios";
-import { signin } from "../../store/actions/actionCreators/signInAction";
-import { supabase } from "../../supabase";
-import * as actionTypes from "../../store/actions/actionTypes/signInTypes";
+import { useHistory, useLocation } from "react-router-dom";
+import { firebaseGoogleSignIn } from "../../store/actions/actionCreators/signInAction";
 import "./SignInPage.css";
 
 const SignInPage = () => {
@@ -14,17 +10,8 @@ const SignInPage = () => {
   const location = useLocation();
 
   const userSignIn = useSelector((state) => state.userSignIn);
-  const { userInfo, error: authError } = userSignIn;
-
-  const [identifier, setIdentifier] = useState(""); // Phone number or Email address
-  const [isEmailFlow, setIsEmailFlow] = useState(false);
-  const [hash, setHash] = useState("");
-  const [otp, setOtp] = useState("");
-  const [step, setStep] = useState(1);
+  const { userInfo, loading, error: authError } = userSignIn;
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [truecallerLoading, setTruecallerLoading] = useState(false);
-  const [sandboxOtp, setSandboxOtp] = useState(""); // For displaying OTP on screen in sandbox mode
 
   // Redirect if already logged in
   useEffect(() => {
@@ -34,277 +21,24 @@ const SignInPage = () => {
     }
   }, [userInfo, history, location]);
 
-  const handleIdentifierSubmit = async (e) => {
-    e.preventDefault();
+  const handleGoogleSignIn = async () => {
     setError("");
-    setSandboxOtp("");
-
-    const value = identifier.trim();
-    if (!value) {
-      setError("Please enter a phone number or email address.");
-      return;
-    }
-
-    const isEmail = value.includes("@");
-    setIsEmailFlow(isEmail);
-
-    setLoading(true);
     try {
-      if (isEmail) {
-        // Validate Email format
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(value)) {
-          setError("Please enter a valid email address.");
-          setLoading(false);
-          return;
-        }
-
-        // 1. Generate 4-digit OTP code
-        const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
-        console.log("%c[Dev Fallback] OTP for " + value + " is: " + generatedOtp, "color: #ff9900; font-size: 16px; font-weight: bold;");
-
-        // 2. Upsert OTP to Supabase 'email_otps' table
-        const expiresAt = new Date(Date.now() + 5 * 60 * 1000).toISOString(); // 5 minutes validity
-        const { error: dbErr } = await supabase.from("email_otps").upsert(
-          [
-            {
-              email: value.toLowerCase(),
-              otp: generatedOtp,
-              expires_at: expiresAt
-            }
-          ],
-          { onConflict: "email" }
-        );
-
-        if (dbErr) throw dbErr;
-
-        // 3. Send email via serverless function (and handle fallback dynamically)
-        try {
-          const res = await axios.post("/api/send-email", {
-            email: value.toLowerCase(),
-            otp: generatedOtp
-          });
-          
-          if (res.data && res.data.sandbox) {
-            setSandboxOtp(generatedOtp);
-          }
-        } catch (mailErr) {
-          console.warn("Mail API failed but proceeding to OTP verification (Sandbox Mode):", mailErr.message);
-          setSandboxOtp(generatedOtp); // Fallback to displaying on screen
-        }
-
-        setStep(2);
-      } else {
-        // Phone number flow
-        const cleanPhone = value.replace(/[^0-9]/g, "");
-        if (cleanPhone.length < 10) {
-          setError("Please enter a valid 10-digit phone number.");
-          setLoading(false);
-          return;
-        }
-
-        const res = await axios.post("/api/users/sendOTP", { phone: cleanPhone });
-        setHash(res.data.hash);
-        setStep(2);
-      }
+      await dispatch(firebaseGoogleSignIn());
     } catch (err) {
-      console.error("Error sending verification code:", err);
-      setError("Failed to send verification code: " + (err.response?.data?.message || err.message || "Please try again."));
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleOtpSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    if (otp.length < 4) {
-      setError("Please enter the 4-digit code.");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      if (isEmailFlow) {
-        const emailValue = identifier.trim().toLowerCase();
-
-        // 1. Fetch OTP record from Supabase 'email_otps' table
-        const { data, error: dbErr } = await supabase
-          .from("email_otps")
-          .select("*")
-          .eq("email", emailValue)
-          .single();
-
-        if (dbErr || !data) {
-          setError("Verification code expired or not found. Please request a new one.");
-          setLoading(false);
-          return;
-        }
-
-        // 2. Verify OTP code and expiration time
-        const now = new Date();
-        const expirationTime = new Date(data.expires_at);
-
-        if (data.otp !== otp) {
-          setError("Invalid code. Please try again.");
-          setLoading(false);
-          return;
-        }
-
-        if (now > expirationTime) {
-          setError("Verification code expired. Please request a new one.");
-          setLoading(false);
-          return;
-        }
-
-        // OTP is correct! Clear the row from db
-        await supabase.from("email_otps").delete().eq("email", emailValue);
-
-        // 3. Check if user already exists in 'users' table
-        const { data: userData, error: userErr } = await supabase
-          .from("users")
-          .select("*")
-          .eq("email", emailValue)
-          .single();
-
-        let loggedInUser;
-
-        if (!userErr && userData) {
-          // Existing User
-          loggedInUser = {
-            _id: userData.id || "usr_" + Date.now(),
-            name: userData.name || emailValue.split("@")[0],
-            email: userData.email,
-            phone: userData.phone || "",
-            token: "email_session_" + Date.now()
-          };
-        } else {
-          // New User signup/login on the fly
-          const mockPhone = "email_" + Date.now();
-          await supabase
-            .from("users")
-            .insert([
-              {
-                name: emailValue.split("@")[0],
-                email: emailValue,
-                phone: mockPhone,
-                wishlist: []
-              }
-            ]);
-
-          loggedInUser = {
-            _id: "usr_" + Date.now(),
-            name: emailValue.split("@")[0],
-            email: emailValue,
-            phone: "",
-            token: "email_session_" + Date.now()
-          };
-        }
-
-        // Log user in
-        dispatch({
-          type: actionTypes.USER_SIGNIN_SUCCESS,
-          payload: loggedInUser
-        });
-
-        localStorage.setItem("userInfo", JSON.stringify(loggedInUser));
+      if (err.code === "auth/popup-closed-by-user") {
+        setError("Google Sign-In was cancelled. Please try again.");
       } else {
-        // Phone flow: verify through standard Redux thunk
-        const cleanPhone = identifier.trim().replace(/[^0-9]/g, "");
-        dispatch(signin(cleanPhone, hash, otp));
+        setError(err.message || "Google Sign-In failed. Please try again.");
       }
-    } catch (err) {
-      console.error(err);
-      setError("Verification failed. Please try again.");
-    } finally {
-      setLoading(false);
     }
-  };
-
-  const handleTruecallerLogin = async (e) => {
-    e.preventDefault();
-    setError("");
-    
-    // Detect mobile device
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    if (!isMobile) {
-      setError("Truecaller One-Tap is only supported on mobile devices with the Truecaller app installed.");
-      return;
-    }
-
-    setTruecallerLoading(true);
-    const reqId = "tc_" + Math.random().toString(36).substring(2) + Date.now();
-    const appKey = "N0lIN65efea9e6a9a4953881ce21d74c8f24e";
-    const appName = "shroooms";
-    
-    sessionStorage.setItem("tc_request_id", reqId);
-
-    // Open Truecaller app using the correct web_verify deep link scheme
-    const deepLink = `truecallersdk://truesdk/web_verify?type=btmsheet&requestNonce=${reqId}&partnerKey=${appKey}&partnerName=${encodeURIComponent(appName)}&lang=en`;
-    window.location.href = deepLink;
-
-    // Fallback check: if the document still has focus after 2.5 seconds, the Truecaller app failed to launch
-    const focusTimeout = setTimeout(() => {
-      if (document.hasFocus()) {
-        clearInterval(interval);
-        setTruecallerLoading(false);
-        setError("Truecaller app not detected or failed to open. Please use Phone or Email OTP instead.");
-      }
-    }, 2500);
-
-    // Start polling the Supabase 'truecaller_sessions' table for callback status
-    let attempts = 0;
-    const interval = setInterval(async () => {
-      attempts++;
-      if (attempts > 12) { // 30 seconds timeout limit
-        clearInterval(interval);
-        clearTimeout(focusTimeout);
-        setTruecallerLoading(false);
-        setError("Truecaller verification timed out. Please try again or use Phone/Email OTP.");
-        return;
-      }
-
-      try {
-        const { data, error: dbErr } = await supabase
-          .from("truecaller_sessions")
-          .select("*")
-          .eq("request_id", reqId)
-          .single();
-
-        if (!dbErr && data) {
-          clearInterval(interval);
-          clearTimeout(focusTimeout);
-          setTruecallerLoading(false);
-
-          // Clean up database row in Supabase
-          await supabase.from("truecaller_sessions").delete().eq("request_id", reqId);
-
-          const loggedInUser = {
-            _id: "usr_" + Date.now(),
-            name: data.user_data?.name || "Truecaller User",
-            phone: data.user_data?.phone || "",
-            email: data.user_data?.email || "",
-            token: data.token
-          };
-
-          dispatch({
-            type: actionTypes.USER_SIGNIN_SUCCESS,
-            payload: loggedInUser
-          });
-
-          localStorage.setItem("userInfo", JSON.stringify(loggedInUser));
-        }
-      } catch (pollErr) {
-        console.error("Truecaller polling error:", pollErr);
-      }
-    }, 2500);
   };
 
   return (
     <div className="signin-page-container">
       <div className="signin-split-wrapper">
         
-        {/* Left Side: Art of Fungi Panel */}
+        {/* Left Side: Art Panel */}
         <div className="signin-left-art" style={{ backgroundImage: "url('/signin_mushrooms_split.png')" }}>
           <div className="signin-art-overlay"></div>
           <div className="signin-art-content animate__animated animate__fadeInLeft">
@@ -317,115 +51,68 @@ const SignInPage = () => {
 
         {/* Right Side: Form Panel */}
         <div className="signin-right-form-panel">
-
-
           <div className="signin-form-box animate__animated animate__fadeIn">
-            {step === 1 && (
-              <>
-                <h2 className="signin-form-title font-serif">Welcome Back</h2>
-                
-                <div className="signin-maintenance-banner" style={{
-                  padding: "1.2rem",
-                  background: "rgba(220, 95, 0, 0.1)",
-                  border: "1px solid rgba(220, 95, 0, 0.3)",
-                  borderRadius: "8px",
-                  color: "#c05600",
-                  fontSize: "1.3rem",
-                  textAlign: "center",
-                  margin: "1.5rem 0",
-                  fontWeight: "500"
-                }}>
-                  Authentication features are temporarily offline for security upgrades. Please browse the store as a guest.
-                </div>
+            <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+              <span style={{ fontSize: "3rem" }}>🍄</span>
+              <h2 className="signin-form-title font-serif" style={{ marginTop: "0.5rem" }}>Welcome to SHROOOMS</h2>
+              <p style={{ fontSize: "1.3rem", color: "#555", marginTop: "0.5rem" }}>
+                Sign in with your Google account to access your gourmet cultivars, order tracking, and express checkout.
+              </p>
+            </div>
 
-                <form onSubmit={(e) => e.preventDefault()} className="signin-form">
-                  <div className="signin-form-group">
-                    <label className="signin-label">PHONE OR EMAIL ADDRESS</label>
-                    <input
-                      disabled
-                      type="text"
-                      placeholder="e.g. 9826012345 or user@shrooom.in"
-                      value={identifier}
-                      className="signin-line-input"
-                      style={{ backgroundColor: "#fafafa", cursor: "not-allowed" }}
-                    />
-                  </div>
-
-                  <button type="button" className="signin-primary-btn" disabled style={{ backgroundColor: "#ccc", color: "#666", cursor: "not-allowed" }}>
-                    Get OTP Code (Disabled)
-                  </button>
-
-                  {/* Truecaller verification option */}
-                  <button 
-                    type="button"
-                    className="signin-truecaller-btn" 
-                    disabled
-                    style={{ backgroundColor: "#eee", color: "#999", cursor: "not-allowed" }}
-                  >
-                    <i className="fa fa-phone-square truecaller-icon" style={{ color: "#999" }}></i>
-                    <span>Verify with Truecaller (Disabled)</span>
-                  </button>
-                </form>
-
-                <p className="signin-footer-text">
-                  Don't have an account? <Link to="/signup" className="signin-link">Sign up</Link>
-                </p>
-              </>
+            {(error || authError) && (
+              <div className="signin-err-msg" style={{
+                padding: "1rem",
+                background: "#ffebee",
+                color: "#c62828",
+                borderRadius: "8px",
+                margin: "1rem 0",
+                fontSize: "1.2rem",
+                textAlign: "center"
+              }}>
+                {error || authError}
+              </div>
             )}
 
-            {step === 2 && (
-              <>
-                <h2 className="signin-form-title font-serif">Verify Account</h2>
-                <p className="signin-form-desc">
-                  Enter the 4-digit code sent to {identifier}
-                </p>
+            {/* Google Sign In Button */}
+            <button
+              type="button"
+              className="signin-google-btn"
+              onClick={handleGoogleSignIn}
+              disabled={loading}
+              style={{
+                width: "100%",
+                padding: "1.2rem",
+                borderRadius: "30px",
+                border: "1.5px solid #d4af37",
+                backgroundColor: "#ffffff",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "12px",
+                fontWeight: "700",
+                fontSize: "1.4rem",
+                color: "#1b4d2e",
+                cursor: loading ? "not-allowed" : "pointer",
+                boxShadow: "0 4px 15px rgba(27, 77, 46, 0.08)",
+                transition: "all 0.25s ease",
+                marginTop: "1rem"
+              }}
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+              {loading ? "Connecting to Google..." : "Continue with Google"}
+            </button>
 
-                {sandboxOtp && (
-                  <div className="signin-sandbox-alert">
-                    <strong>Sandbox Testing Active:</strong> Use code <code>{sandboxOtp}</code> to verify.
-                    <div style={{ fontSize: "1.1rem", marginTop: "0.5rem", color: "#666" }}>
-                      Note: Real emails will be sent once SMTP credentials are set up in Vercel.
-                    </div>
-                  </div>
-                )}
-
-                {(error || authError) && (
-                  <div className="signin-err-msg">{error || authError}</div>
-                )}
-
-                <form onSubmit={handleOtpSubmit} className="signin-form">
-                  <div className="signin-form-group">
-                    <label className="signin-label">4-DIGIT OTP CODE</label>
-                    <input
-                      type="password"
-                      maxLength="4"
-                      pattern="[0-9]*"
-                      placeholder="••••"
-                      value={otp}
-                      onChange={(e) => {
-                        setOtp(e.target.value.replace(/[^0-9]/g, ""));
-                        setError("");
-                      }}
-                      className="signin-line-input"
-                      required
-                    />
-                  </div>
-
-                  <button type="submit" className="signin-primary-btn" disabled={loading}>
-                    {loading ? "Verifying..." : "Verify & Sign In"}
-                  </button>
-
-                  <div className="signin-verify-actions">
-                    <span className="signin-back-link" onClick={() => setStep(1)}>
-                      ← Change Details
-                    </span>
-                    <span className="signin-resend-link" onClick={handleIdentifierSubmit}>
-                      Resend Code
-                    </span>
-                  </div>
-                </form>
-              </>
-            )}
+            <div style={{ marginTop: "3rem", padding: "1.2rem", background: "#fbf9f5", borderRadius: "12px", border: "1px solid #e8e2d5", textAlign: "center" }}>
+              <p style={{ fontSize: "1.2rem", color: "#666", margin: 0, lineHeight: 1.5 }}>
+                ℹ️ <strong>Order Notice:</strong> SHROOOMS requires a phone number ONLY during order placement for delivery coordination.
+              </p>
+            </div>
           </div>
         </div>
 

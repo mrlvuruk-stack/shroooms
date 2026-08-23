@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { CANONICAL_CATEGORIES, matchesCategory } from "../../config/categoryConfig";
 import "./ProductsPage.css";
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -1598,8 +1599,8 @@ const ProductsPage = () => {
         if (!matchName && !matchSci && !strokeCat) return false;
       }
 
-      // Category
-      if (selectedCategory !== "all" && prod.categorySlug !== selectedCategory) {
+      // Strict Category Filtering
+      if (!matchesCategory(prod.category, selectedCategory) && selectedCategory !== "all") {
         return false;
       }
 
@@ -1928,23 +1929,17 @@ const ProductsPage = () => {
 
           {/* Filter Group: Category */}
           <div className="filter-group">
-            <h4 className="filter-group-title">Category</h4>
+            <h4 className="filter-group-title">Category Isolation</h4>
             <div className="filter-options-stack">
-              {[
-                { id: "all", label: "All Products" },
-                { id: "spawn", label: "Mushroom Spawn" },
-                { id: "liquid-culture", label: "Liquid Culture" },
-                { id: "grow-kits", label: "Grow Kits" },
-                { id: "equipment", label: "Farm Equipment & Supplies" }
-              ].map((c, i) => (
+              {CANONICAL_CATEGORIES.map((c, i) => (
                 <label key={i} className="filter-radio-label">
                   <input
                     type="radio"
                     name="category-radio"
-                    checked={selectedCategory === c.id}
-                    onChange={() => setSelectedCategory(c.id)}
+                    checked={selectedCategory.toLowerCase() === c.name.toLowerCase() || (selectedCategory === "all" && c.name === "All")}
+                    onChange={() => setSelectedCategory(c.name)}
                   />
-                  <span>{c.label}</span>
+                  <span>{c.icon} {c.name}</span>
                 </label>
               ))}
             </div>

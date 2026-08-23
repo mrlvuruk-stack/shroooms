@@ -23,6 +23,7 @@ import {
 } from "./store/reducer/wishlistReducer";
 import axios from "axios";
 import "./mockAPI";
+import "./firebase";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

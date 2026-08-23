@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { sidebarClose } from "../../store/actions/actionCreators/addToCartAction";
 import SidebarItem from "./SidebarItem";
+import LedMarquee from "../LedMarquee/LedMarquee";
 
 const SidebarDesign = (props) => {
   const dispatch = useDispatch();
@@ -19,6 +20,7 @@ const SidebarDesign = (props) => {
             <h6>No items in your cart</h6>
             <p>Your favourite items are just a click away</p>
           </div>
+          <LedMarquee />
           <Link
             to="/"
             className="sidebar__shopping"
@@ -34,6 +36,10 @@ const SidebarDesign = (props) => {
               <SidebarItem key={vegetable._id} vegetable={vegetable} />
             ))}
           </div>
+
+          {/* LED Cross-Selling Ticker Marquee */}
+          <LedMarquee />
+
           <Link
             to="/checkout"
             className="sidebar__shopping sidebar__checkout"

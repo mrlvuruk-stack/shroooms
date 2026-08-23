@@ -1,5 +1,16 @@
 import axios from "axios";
 import * as actionTypes from "../actionTypes/signInTypes";
+import {
+  auth,
+  googleProvider,
+  signInWithPopup,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+  signOut
+} from "../../../firebase";
+import { syncUserProfile } from "../../../services/firebaseService";
 
 export const signin = (phone, hash, otp) => async (dispatch) => {
   dispatch({
@@ -25,6 +36,185 @@ export const signin = (phone, hash, otp) => async (dispatch) => {
           ? error.response.data.message
           : error.message,
     });
+  }
+};
+
+const formatFirebaseError = (error) => {
+  if (!error) return "Authentication error occurred.";
+  const code = error.code || "";
+  if (code === "auth/operation-not-allowed") {
+    return "This authentication provider is not enabled yet in your Firebase Console. Please enable Email/Password, Google, or Phone Sign-in under Firebase Console -> Authentication -> Sign-in method.";
+  }
+  if (code === "auth/email-already-in-use") {
+    return "An account with this email address already exists. Please log in instead.";
+  }
+  if (code === "auth/user-not-found" || code === "auth/wrong-password" || code === "auth/invalid-credential") {
+    return "Invalid email or password. Please check your credentials.";
+  }
+  if (code === "auth/weak-password") {
+    return "Password is too weak. Please use at least 6 characters.";
+  }
+  if (code === "auth/invalid-phone-number") {
+    return "Invalid phone number format. Please include country code (e.g. +91).";
+  }
+  return error.message || "Authentication failed";
+};
+
+/**
+ * Firebase Email / Password Sign In or Sign Up
+ */
+export const firebaseEmailSignIn = (email, password, isSignUp = false, displayName = "", phoneNumber = "") => async (dispatch) => {
+  dispatch({ type: actionTypes.USER_SIGNIN_REQUEST });
+  try {
+    let userCredential;
+    if (isSignUp) {
+      userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    } else {
+      userCredential = await signInWithEmailAndPassword(auth, email, password);
+    }
+    const user = userCredential.user;
+    const profile = await syncUserProfile(user, { displayName, phoneNumber, phone: phoneNumber });
+    
+    const userInfo = {
+      _id: user.uid,
+      name: user.displayName || profile?.displayName || displayName || email.split("@")[0],
+      email: user.email,
+      phone: user.phoneNumber || profile?.phoneNumber || phoneNumber || "",
+      token: await user.getIdToken(),
+      isFirebase: true
+    };
+
+    dispatch({ type: actionTypes.USER_SIGNIN_SUCCESS, payload: userInfo });
+    localStorage.setItem("userInfo", JSON.stringify(userInfo));
+    dispatch(signInClose());
+    return userInfo;
+  } catch (error) {
+    const message = formatFirebaseError(error);
+    dispatch({
+      type: actionTypes.USER_SIGNIN_FAIL,
+      payload: message,
+    });
+    throw new Error(message);
+  }
+};
+
+/**
+ * Firebase Google Sign-In
+ */
+export const firebaseGoogleSignIn = () => async (dispatch) => {
+  dispatch({ type: actionTypes.USER_SIGNIN_REQUEST });
+  try {
+    const userCredential = await signInWithPopup(auth, googleProvider);
+    const user = userCredential.user;
+    const profile = await syncUserProfile(user);
+
+    const userInfo = {
+      _id: user.uid,
+      name: user.displayName || profile.displayName || "Google User",
+      email: user.email,
+      photoURL: user.photoURL,
+      token: await user.getIdToken(),
+      isFirebase: true
+    };
+
+    dispatch({ type: actionTypes.USER_SIGNIN_SUCCESS, payload: userInfo });
+    localStorage.setItem("userInfo", JSON.stringify(userInfo));
+    dispatch(signInClose());
+    return userInfo;
+  } catch (error) {
+    const message = formatFirebaseError(error);
+    dispatch({
+      type: actionTypes.USER_SIGNIN_FAIL,
+      payload: message,
+    });
+    throw new Error(message);
+  }
+};
+
+/**
+ * Firebase Phone Auth - Send OTP
+ */
+export const firebasePhoneSendOtp = (phoneNumber, containerId = "recaptcha-container") => async (dispatch) => {
+  dispatch({ type: actionTypes.USER_SIGNIN_REQUEST });
+  try {
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(auth, containerId, {
+        size: "invisible",
+        callback: () => {
+          console.log("reCAPTCHA solved");
+        }
+      });
+    }
+    const appVerifier = window.recaptchaVerifier;
+    const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
+    window.confirmationResult = confirmationResult;
+    dispatch({ type: "PHONE_OTP_SENT" });
+    return confirmationResult;
+  } catch (error) {
+    if (window.recaptchaVerifier) {
+      window.recaptchaVerifier.clear();
+      window.recaptchaVerifier = null;
+    }
+    const message = formatFirebaseError(error);
+    dispatch({
+      type: actionTypes.USER_SIGNIN_FAIL,
+      payload: message,
+    });
+    throw new Error(message);
+  }
+};
+
+/**
+ * Firebase Phone Auth - Verify OTP
+ */
+export const firebasePhoneVerifyOtp = (confirmationResult, code) => async (dispatch) => {
+  dispatch({ type: actionTypes.USER_SIGNIN_REQUEST });
+  try {
+    const userCredential = await confirmationResult.confirm(code);
+    const user = userCredential.user;
+    const profile = await syncUserProfile(user);
+
+    const userInfo = {
+      _id: user.uid,
+      name: user.displayName || profile?.displayName || user.phoneNumber,
+      phone: user.phoneNumber,
+      token: await user.getIdToken(),
+      isFirebase: true
+    };
+
+    dispatch({ type: actionTypes.USER_SIGNIN_SUCCESS, payload: userInfo });
+    localStorage.setItem("userInfo", JSON.stringify(userInfo));
+    dispatch(signInClose());
+    return userInfo;
+  } catch (error) {
+    const message = formatFirebaseError(error);
+    dispatch({
+      type: actionTypes.USER_SIGNIN_FAIL,
+      payload: message,
+    });
+    throw new Error(message);
+  }
+};
+
+/**
+ * Sync Firebase listener user state
+ */
+export const syncFirebaseUser = (user) => async (dispatch) => {
+  if (user) {
+    const profile = await syncUserProfile(user);
+    const userInfo = {
+      _id: user.uid,
+      name: user.displayName || profile.displayName || (user.email ? user.email.split("@")[0] : user.phoneNumber),
+      email: user.email || "",
+      phone: user.phoneNumber || "",
+      photoURL: user.photoURL || "",
+      token: await user.getIdToken(),
+      isFirebase: true
+    };
+    dispatch({ type: actionTypes.USER_SIGNIN_SUCCESS, payload: userInfo });
+    localStorage.setItem("userInfo", JSON.stringify(userInfo));
+  } else {
+    dispatch(userSignOut());
   }
 };
 
@@ -78,6 +268,11 @@ export const sendCustomerName = (name) => async (dispatch, getState) => {
 };
 
 export const userSignOut = () => (dispatch) => {
+  try {
+    signOut(auth);
+  } catch (e) {
+    console.warn("Firebase signOut error", e);
+  }
   localStorage.removeItem("userInfo");
   localStorage.removeItem("cartItems");
   localStorage.removeItem("customerAddress");

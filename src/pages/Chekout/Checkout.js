@@ -23,9 +23,12 @@ const Checkout = (props) => {
   const vegetablesCart = cart.cartData.vegetablesCart;
   const currentFingerprint = getCartFingerprint(vegetablesCart);
 
+  const userSignIn = useSelector((state) => state.userSignIn);
+  const { userInfo } = userSignIn;
+
   // States
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState(userInfo?.email || "");
+  const [phone, setPhone] = useState(userInfo?.phone || localStorage.getItem("customerPhone") || "");
   const [addressDetails, setAddressDetails] = useState(null);
   const [submissionStatus, setSubmissionStatus] = useState("IDLE"); // IDLE, PENDING, RETRYABLE_FAILURE, SUCCESS
   const [idempotencyKey, setIdempotencyKey] = useState("");
@@ -38,6 +41,17 @@ const Checkout = (props) => {
   const [step1Status, setStep1Status] = useState("active"); // active, complete
   const [step2Status, setStep2Status] = useState("");       // "", active, complete
   const [step3Status, setStep3Status] = useState("");       // "", active
+
+  // Auto-sync Google email/phone if changed
+  useEffect(() => {
+    if (userInfo?.email && !email) {
+      setEmail(userInfo.email);
+    }
+    const savedPhone = localStorage.getItem("customerPhone");
+    if (savedPhone && !phone) {
+      setPhone(savedPhone);
+    }
+  }, [userInfo, email, phone]);
 
   // Redirect if cart is empty and order is not successfully completed
   useEffect(() => {
@@ -112,7 +126,7 @@ const Checkout = (props) => {
     }
   };
 
-  const handleOrderSubmit = async () => {
+  const handleOrderSubmit = async (paymentDetails = null) => {
     if (submissionStatus === "PENDING") return;
 
     // Immediately before RPC invocation, lock the submission in sessionStorage
@@ -123,16 +137,16 @@ const Checkout = (props) => {
 
     // Concatenate address
     const addressParts = [
-      addressDetails.flatNumber.trim(),
-      addressDetails.streetName.trim(),
-      addressDetails.locality.trim(),
-      addressDetails.city.trim(),
-      addressDetails.state.trim(),
+      addressDetails ? addressDetails.flatNumber.trim() : "",
+      addressDetails ? addressDetails.streetName.trim() : "",
+      addressDetails ? addressDetails.locality.trim() : "",
+      addressDetails ? addressDetails.city.trim() : "",
+      addressDetails ? addressDetails.state.trim() : "",
     ].filter((part) => part && part.length > 0);
     const p_address = addressParts.join(", ");
 
     // Client-side verification (UX only)
-    if (addressDetails.name.trim().length < 1 || addressDetails.name.trim().length > 100) {
+    if (addressDetails && (addressDetails.name.trim().length < 1 || addressDetails.name.trim().length > 100)) {
       setSubmissionStatus("IDLE");
       setErrorMsg("Name length must be between 1 and 100 characters inclusive.");
       return;
@@ -146,11 +160,12 @@ const Checkout = (props) => {
     const result = await dispatch(
       sendOrderDetails({
         idempotencyKey,
-        name: addressDetails.name.trim(),
+        name: addressDetails ? addressDetails.name.trim() : "",
         email: email.trim(),
         phone: phone.trim(),
         address: p_address,
         cartItems: vegetablesCart,
+        paymentDetails: paymentDetails || null,
       })
     );
 
@@ -336,6 +351,9 @@ const Checkout = (props) => {
           submissionStatus={submissionStatus}
           errorMsg={errorMsg}
           onStartNewOrder={handleStartNewOrder}
+          addressDetails={addressDetails}
+          email={email}
+          phone={phone}
         />
       </div>
       <CheckOutOrder />

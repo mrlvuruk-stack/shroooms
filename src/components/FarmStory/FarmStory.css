@@ -22,32 +22,106 @@
 .story-visual-side {
   position: relative;
   width: 100%;
-  border-radius: 24px;
+  border-radius: 36px;
   overflow: hidden;
-  box-shadow: 0 14px 36px rgba(27, 46, 35, 0.12);
-  border: 1px solid rgba(197, 160, 89, 0.3);
+  box-shadow: 0 16px 40px rgba(27, 46, 35, 0.14);
+  border: 2px solid rgba(212, 175, 55, 0.35);
   background: linear-gradient(135deg, #f7f5ee 0%, #ece5d6 100%);
 }
 
-.story-visual-side::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(27, 46, 35, 0.2) 0%, transparent 45%);
-  pointer-events: none;
+.organic-image-mask-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 36px;
+  overflow: hidden;
 }
 
-.story-large-visual-img {
+.organic-spore-ring-glow {
+  position: absolute;
+  top: -20%;
+  left: -20%;
+  width: 140%;
+  height: 140%;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, rgba(38, 122, 63, 0.1) 60%, transparent 80%);
+  pointer-events: none;
+  animation: sporeRingRotate 12s linear infinite;
+}
+
+@keyframes sporeRingRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.story-organic-visual-img {
   width: 100%;
   height: auto;
   display: block;
   object-fit: cover;
-  border-radius: 24px;
+  border-radius: 36px;
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  aspect-ratio: 16 / 10;
 }
 
-.story-visual-side:hover .story-large-visual-img {
-  transform: scale(1.05);
+.story-visual-side:hover .story-organic-visual-img {
+  transform: scale(1.04);
+}
+
+.visual-caption-tag {
+  position: absolute;
+  bottom: 1.2rem;
+  left: 1.2rem;
+  background: rgba(15, 28, 19, 0.85);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 0.5rem 1.2rem;
+  border-radius: 20px;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.caption-dot {
+  width: 8px;
+  height: 8px;
+  background: #00ff66;
+  border-radius: 50%;
+}
+
+.step-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.info-trigger-btn {
+  background: rgba(46, 125, 50, 0.12);
+  color: #1b4d2e;
+  border: 1.5px solid rgba(46, 125, 50, 0.3);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  font-weight: 800;
+  font-style: italic;
+  font-family: Georgia, serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  line-height: 1;
+}
+
+.info-trigger-btn:hover {
+  background: #1b4d2e;
+  color: #ffffff;
+  transform: scale(1.15);
 }
 
 /* Right Copy Column */

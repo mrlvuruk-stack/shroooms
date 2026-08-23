@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { HOMEPAGE_CONFIG } from "../../config/homepageConfig";
 import { AddItemPrimary } from "../Buttons/AddItem";
 import { RemoveItemPrimary } from "../Buttons/RemoveItem";
 import { purchasingState } from "../../store/actions/actionCreators/addToCartAction";
+import { InfoModal } from "../ModalSystem/ModalSystem";
 import "./FeaturedMushroom.css";
 
 const FeaturedMushroom = () => {
@@ -12,18 +13,17 @@ const FeaturedMushroom = () => {
   const vegetables = useSelector((state) => state.products.vegetables) || [];
   const cart = useSelector((state) => state.cart);
   const { featuredMushroom, featuredProducts } = HOMEPAGE_CONFIG;
+  const [showInfoModal, setShowInfoModal] = useState(false);
 
   const selectSpotlight = () => {
     if (!vegetables || vegetables.length === 0) return null;
 
-    // Priority 1: Match targetNameKeyword in config
     const target = featuredMushroom.targetNameKeyword;
     let match = vegetables.find((veg) =>
       veg.name?.toLowerCase().includes(target.toLowerCase())
     );
     if (match) return match;
 
-    // Priority 2: First item of Featured Products configured names
     const firstFeaturedName = featuredProducts?.configuredNames?.[0];
     if (firstFeaturedName) {
       match = vegetables.find((veg) =>
@@ -32,7 +32,6 @@ const FeaturedMushroom = () => {
       if (match) return match;
     }
 
-    // Priority 3: First catalog product
     return vegetables[0];
   };
 
@@ -40,7 +39,6 @@ const FeaturedMushroom = () => {
 
   if (!product) return null;
 
-  // Retrieve dynamic cart info for the selected spotlight product
   const cartItem = cart?.cartData?.vegetablesCart?.find((x) => x._id === product._id);
   const isPurchasing = cartItem ? cartItem.purchasing : false;
   const quantity = cartItem ? cartItem.quantity : 0;
@@ -49,18 +47,25 @@ const FeaturedMushroom = () => {
     <section className="spotlight-section home-section container-wide" aria-labelledby="spotlight-title">
       <div className="spotlight-container">
         
-        {/* Left Column: Visual stage, holds image now, reserves 3D stage */}
+        {/* Left Column: Organic Circular Visual Stage */}
         <div className="spotlight-visual-col">
-          <div className="featured-mushroom-3d-boundary">
+          <div className="organic-circular-stage">
             <div className="spotlight-radial-glow" aria-hidden="true" />
             <img
               src={product.image}
               alt={`Gourmet ${product.name} ready for kitchen preparation`}
-              className="spotlight-product-image"
+              className="spotlight-product-image organic-circle-img"
               loading="lazy"
               decoding="async"
-              style={{ aspectRatio: "1 / 1" }}
             />
+            <button
+              className="spotlight-info-float-btn"
+              onClick={() => setShowInfoModal(true)}
+              aria-label="View spotlight species policy & details"
+              title="View Species Policy"
+            >
+              i
+            </button>
           </div>
         </div>
 
@@ -68,7 +73,17 @@ const FeaturedMushroom = () => {
         <div className="spotlight-content-col">
           <div className="spotlight-header">
             <span className="spotlight-eyebrow" id="spotlight-title">{featuredMushroom.badge}</span>
-            <h2 className="spotlight-name">{product.name}</h2>
+            <div className="title-with-info">
+              <h2 className="spotlight-name">{product.name}</h2>
+              <button
+                className="info-trigger-btn inline-info-btn"
+                onClick={() => setShowInfoModal(true)}
+                aria-label="View information"
+                title="View details & policy"
+              >
+                i
+              </button>
+            </div>
             <div className="spotlight-meta-row">
               <span className="spotlight-scientific">{featuredMushroom.scientificName}</span>
               <span className="spotlight-sep" aria-hidden="true">·</span>
@@ -112,6 +127,22 @@ const FeaturedMushroom = () => {
         </div>
 
       </div>
+
+      {/* Flagship Cultivar Info Modal */}
+      {showInfoModal && (
+        <InfoModal
+          isOpen={showInfoModal}
+          onClose={() => setShowInfoModal(false)}
+          title={`${product.name} — Flagship Cultivar Standard`}
+          icon="🦁"
+          details={product.description || "Premium Lion's Mane gourmet variety cultivated inside clean vertical chambers."}
+          bullets={[
+            "Rich in bioactive Hericenones & Erinacines for natural focus and nerve growth support",
+            "Dense meaty texture with delicate seafood & lobster culinary flavor notes",
+            "Harvested fresh daily at dawn in Indore and shipped in insulated cold packs"
+          ]}
+        />
+      )}
     </section>
   );
 };

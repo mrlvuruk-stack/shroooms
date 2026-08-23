@@ -1,0 +1,122 @@
+# Implementation Plan - SHROOOMS UI/UX & Functional Enhancements
+
+This plan outlines the technical changes to implement the owner's UI/UX feedback while preserving the existing SHROOOMS visual identity, catalog products, backend integrations, cart system, and responsive layout.
+
+## User Review Required
+
+> [!IMPORTANT]
+> **No Breaking Changes**: All existing functionality (Redux store, cart logic, Razorpay/Firebase API calls, routing, existing pages) will be strictly preserved.
+> 
+> **Category Normalization**: We will normalize product categories across `mockAPI.js`, `productsListAction.js`, and `Shop/ProductsPage.js` to ensure 100% strict matching for the required categories:
+> - **Sponges**
+> - **Accessories**
+> - **Liquid Culture**
+> - **Fresh Mushrooms**
+> - **Dried Mushrooms**
+> - **Spawn**
+> - **Tools & Accessories**
+> - **All**
+
+---
+
+## Open Questions
+
+> [!NOTE]
+> None. All specifications, category requirements, loading behavior, marquee specs, and modal rules are clearly detailed in the prompt.
+
+---
+
+## Proposed Changes
+
+### 1. Global Loading & Initial Page Render System
+
+#### [NEW] [GlobalLoader.js](file:///u:/VeggiesShop-main/src/components/GlobalLoader/GlobalLoader.js)
+#### [NEW] [GlobalLoader.css](file:///u:/VeggiesShop-main/src/components/GlobalLoader/GlobalLoader.css)
+- Implement a branded full-screen loader featuring the SHROOOMS spore emblem, gold/emerald glow orbs, and pulse animation.
+- Preload critical images (Hero assets, brand logos, top cultivar images) using `Image()` preload promises and `document.readyState` check.
+- Keep main application UI hidden with CSS until asset readiness is confirmed to prevent section-by-section pop-in.
+- Include safety cap timeout fallback (max 3.5s) to guarantee rendering even on slow network responses or broken image URLs.
+- Include `prefers-reduced-motion` check to bypass complex spin animations for accessibility.
+- Do NOT display loader on internal category changes or minor user clicks.
+
+#### [MODIFY] [App.js](file:///u:/VeggiesShop-main/src/App.js)
+- Wrap root application in `GlobalLoader` wrapper to manage initial mount lifecycle.
+
+---
+
+### 2. Below-The-Fold UI Redesign
+
+#### [MODIFY] [FarmStory.js](file:///u:/VeggiesShop-main/src/components/FarmStory/FarmStory.js) & [FarmStory.css](file:///u:/VeggiesShop-main/src/components/FarmStory/FarmStory.css)
+#### [MODIFY] [FeaturedMushroom.js](file:///u:/VeggiesShop-main/src/components/FeaturedMushroom/FeaturedMushroom.js) & [FeaturedMushroom.css](file:///u:/VeggiesShop-main/src/components/FeaturedMushroom/FeaturedMushroom.css)
+#### [MODIFY] [WhyChooseUs.js](file:///u:/VeggiesShop-main/src/components/WhyChooseUs/WhyChooseUs.js) & [WhyChooseUs.css](file:///u:/VeggiesShop-main/src/components/WhyChooseUs/WhyChooseUs.css)
+#### [MODIFY] [RecipesEducation.js](file:///u:/VeggiesShop-main/src/components/RecipesEducation/RecipesEducation.js) & [RecipesEducation.css](file:///u:/VeggiesShop-main/src/components/RecipesEducation/RecipesEducation.css)
+- Replace oversized rigid square image containers with organic organic/circular/curved masks and floating spore ambient glows.
+- Convert static item grid displays (e.g., Recipe guides and cultivation process steps) into smooth, responsive touch-friendly horizontal carousels.
+- Add small description text below items and an interactive "i" information button.
+- Wire the "i" info icon to open the unified `InfoModal` displaying details, policies, or strain growing notes.
+
+---
+
+### 3. Strict Product Category Filtering
+
+#### [MODIFY] [mockAPI.js](file:///u:/VeggiesShop-main/src/mockAPI.js)
+#### [MODIFY] [productsListAction.js](file:///u:/VeggiesShop-main/src/store/actions/actionCreators/productsListAction.js)
+#### [MODIFY] [ProductsPage.js](file:///u:/VeggiesShop-main/src/pages/Shop/ProductsPage.js)
+- Normalize and assign canonical categories to all catalog products:
+  - `Sponges` (e.g. Mushroom Sponges, Cleaning & Substrate Sponges)
+  - `Accessories` (e.g. Spray Misters, Temperature Monitors,Scalpels)
+  - `Liquid Culture` (e.g. Lion's Mane LC, Blue Oyster LC, Reishi LC Syringes)
+  - `Fresh Mushrooms` (e.g. Fresh Lion's Mane, Fresh King Oyster, Fresh Pink Oyster)
+  - `Dried Mushrooms` (e.g. Dried Shiitake, Dried Reishi Slices, Dried Cordyceps)
+  - `Spawn` (e.g. Blue Oyster Grain Spawn, Pink Oyster Grain Spawn, Shiitake Spawn)
+  - `Tools & Accessories` (e.g. Inoculation Tools, HEPA Filters, Autoclavable PP Bags)
+- Update filter logic to perform **strict exact equality checks** (`product.category === selectedCategory`) rather than loose string includes.
+- Support URL query parameter (`?category=sponges`, `?category=liquid-culture`, etc.) to persist category selection across page refreshes.
+- Provide a smooth empty-state view when a category has zero matching products.
+
+#### [MODIFY] [CategoryGrid.js](file:///u:/VeggiesShop-main/src/components/CategoryGrid/CategoryGrid.js)
+- Render all 8 canonical category chips/cards with icons and descriptions.
+- Synchronize category clicks with Redux and URL state.
+
+---
+
+### 4. Cart Cross-Selling LED Marquee
+
+#### [NEW] [LedMarquee.js](file:///u:/VeggiesShop-main/src/components/LedMarquee/LedMarquee.js)
+#### [NEW] [LedMarquee.css](file:///u:/VeggiesShop-main/src/components/LedMarquee/LedMarquee.css)
+- Create a continuous horizontal scrolling ticker component for "You can add these things as well".
+- Use duplicated track element with seamless CSS `-100%` translate animation.
+- Style with a retro-modern glowing LED ticker bar in cute green/gold SHROOOMS branding.
+- Implement pause-on-hover, touch scroll support, and `prefers-reduced-motion` compliance.
+- Keep item cards fully interactive with working "Add to Cart" actions.
+
+#### [MODIFY] [SidebarDesign.js](file:///u:/VeggiesShop-main/src/components/Sidebar/SidebarDesign.js)
+- Insert `LedMarquee` inside the Cart Sidebar drawer under cart items.
+
+---
+
+### 5. Unified Popup / Modal System
+
+#### [NEW] [ModalSystem.js](file:///u:/VeggiesShop-main/src/components/ModalSystem/ModalSystem.js)
+#### [NEW] [ModalSystem.css](file:///u:/VeggiesShop-main/src/components/ModalSystem/ModalSystem.css)
+- Build unified reusable components:
+  - `InfoModal`: Soft rounded corners, cute icons, readable typography for product info, policies, and FAQs.
+  - `PromotionalModal`: Vibrant banner style with bold discount CTAs, distinct from system alerts.
+  - `ToastNotification`: Floating toast banner for cart and action alerts.
+- Support keydown `Escape` listener, backdrop click-to-close, body scroll locking (`document.body.style.overflow = "hidden"`), and accessibility ARIA dialog roles.
+
+---
+
+## Verification Plan
+
+### Automated & Static Verification
+- Run `npm test` or React build verification (`npm run build`) to ensure zero TypeScript/JS compile errors.
+
+### Manual Visual & Functional QA
+1. **Initial Load**: Refresh page with cleared cache; verify full-screen branded SHROOOMS loader appears without layout jumps or raw pop-in.
+2. **Category Filtering**: Click each of the 8 category filters (**Sponges**, **Accessories**, **Liquid Culture**, **Fresh Mushrooms**, **Dried Mushrooms**, **Spawn**, **Tools & Accessories**, **All**). Verify ONLY items belonging to that category are shown.
+3. **URL Refresh**: Select `Liquid Culture`, copy URL, refresh page; verify `Liquid Culture` remains selected.
+4. **Below-The-Fold**: Verify organic rounded visual containers and carousels on desktop (1440px), tablet (768px), and mobile (390px).
+5. **Info Modal**: Click "i" icon on items; verify `InfoModal` opens cleanly, locks background scroll, closes with Escape key or backdrop click.
+6. **Cart LED Marquee**: Open Cart drawer; verify smooth 60fps continuous horizontal marquee without horizontal scrollbars or visual jumps. Test adding cross-sell item to cart directly from marquee.
+7. **Promotional & Info Popups**: Test promotional modal styling vs informational modal styling.

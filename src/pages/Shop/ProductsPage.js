@@ -1799,20 +1799,12 @@ const ProductsPage = () => {
         </div>
 
         <div className="shop-category-grid">
-          {[
-            { id: "spawn", icon: "🍄", name: "Mushroom Spawn", count: "16 Strains", desc: "Grain spawn ready for substrate inoculation." },
-            { id: "liquid-culture", icon: "🧪", name: "Liquid Culture", count: "14 Syringes", desc: "Pure isolated liquid mycelium syringes." },
-            { id: "grow-kits", icon: "🌱", name: "Grow Kits", count: "11 All-In-One", desc: "Countertop ready-to-fruit gourmet blocks." },
-            { id: "equipment", icon: "🪵", name: "Substrates", count: "4 Products", desc: "Hardwood sawdust, straw & supplements." },
-            { id: "equipment", icon: "🛍", name: "Farm Equipment", count: "5 Products", desc: "0.2 micron filter patch PP bags & supplies." },
-            { id: "equipment", icon: "🌿", name: "Supplements", count: "4 Products", desc: "Gypsum, chalk powder & mineral nutrients." },
-            { id: "equipment", icon: "⚗", name: "Chemicals", count: "4 Products", desc: "Hydrated lime, Bavistin & lab disinfectants." }
-          ].map((cat, idx) => (
+          {CANONICAL_CATEGORIES.map((cat, idx) => (
             <button
               key={idx}
-              className={`category-nav-card ${selectedCategory === cat.id ? "active-cat" : ""}`}
+              className={`category-nav-card ${selectedCategory.toLowerCase() === cat.name.toLowerCase() ? "active-cat" : ""}`}
               onClick={() => {
-                setSelectedCategory(cat.id);
+                setSelectedCategory(cat.name);
                 const gridElem = document.getElementById("catalog-grid");
                 if (gridElem) gridElem.scrollIntoView({ behavior: "smooth" });
               }}
@@ -1820,8 +1812,7 @@ const ProductsPage = () => {
               <div className="cat-card-glass-glow" />
               <div className="cat-3d-icon">{cat.icon}</div>
               <h3 className="cat-card-name">{cat.name}</h3>
-              <span className="cat-card-count">{cat.count}</span>
-              <p className="cat-card-desc">{cat.desc}</p>
+              <span className="cat-card-count">{cat.description}</span>
               <span className="cat-card-link">Explore Category →</span>
             </button>
           ))}

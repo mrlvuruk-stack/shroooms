@@ -12,15 +12,15 @@ export const CANONICAL_CATEGORIES = [
 ];
 
 export const getCanonicalCategoryName = (val) => {
-  if (!val || val === "all" || val === "All" || val === "") return "All";
+  if (!val || val === "all" || val === "All" || val === "" || val === "all-products") return "All";
   const s = val.toLowerCase().replace(/[^a-z0-9]/g, "");
   if (s.includes("sponge")) return "Sponges";
-  if (s.includes("liquidculture") || s === "lc") return "Liquid Culture";
+  if (s.includes("liquid") || s.includes("lc")) return "Liquid Culture";
   if (s.includes("fresh")) return "Fresh Mushrooms";
   if (s.includes("dried")) return "Dried Mushrooms";
-  if (s === "spawn" || s.includes("grainspawn")) return "Spawn";
-  if (s.includes("tools")) return "Tools & Accessories";
-  if (s.includes("accessory") || s.includes("accessories")) return "Accessories";
+  if (s.includes("spawn")) return "Spawn";
+  if (s.includes("tool") || s.includes("kit") || s.includes("equip") || s.includes("substr") || s.includes("suppl") || s.includes("chem") || s.includes("farm")) return "Tools & Accessories";
+  if (s.includes("accessor")) return "Accessories";
   return val;
 };
 
@@ -30,5 +30,6 @@ export const matchesCategory = (productCategory, selectedCategory) => {
   }
   const normProduct = getCanonicalCategoryName(productCategory);
   const normSelected = getCanonicalCategoryName(selectedCategory);
-  return normProduct === normSelected;
+  if (normSelected === "All") return true;
+  return normProduct.toLowerCase() === normSelected.toLowerCase();
 };

@@ -60,7 +60,6 @@ const CategoryGrid = ({ selectedCategory, onSelectCategory }) => {
                   className="category-image"
                   loading="lazy"
                   decoding="async"
-                  style={{ aspectRatio: "4 / 3" }}
                 />
                 <div className="category-overlay" />
                 <span className="category-badge-chip">{cat.icon} {count} Items</span>

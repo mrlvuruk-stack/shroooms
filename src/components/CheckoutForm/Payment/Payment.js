@@ -221,9 +221,6 @@ const Payment = (props) => {
           <button
             type="button"
             onClick={handleRazorpayCheckout}
-          <button
-            type="button"
-            onClick={handleRazorpayCheckout}
             disabled={isPending || loading}
             className="btn-pay-demo"
             style={{

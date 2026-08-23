@@ -5,14 +5,14 @@ import { CANONICAL_CATEGORIES } from "../../config/categoryConfig";
 import "./CategoryGrid.css";
 
 const CATEGORY_IMAGES = {
-  "All": "/banner_nourish.jpg",
-  "Sponges": "/banner_nourish.jpg",
-  "Accessories": "/box_blue_oyster.jpg",
-  "Liquid Culture": "/box_lions_mane.jpg",
-  "Fresh Mushrooms": "/box_pink_oyster.jpg",
-  "Dried Mushrooms": "/cultivar_chaga.jpg",
-  "Spawn": "/box_king_oyster.jpg",
-  "Tools & Accessories": "/banner_pouches.jpg"
+  "All": "/category_all.jpg",
+  "Sponges": "/category_sponges.jpg",
+  "Accessories": "/category_accessories.jpg",
+  "Liquid Culture": "/category_liquid_culture.jpg",
+  "Fresh Mushrooms": "/category_fresh_mushrooms.jpg",
+  "Dried Mushrooms": "/category_dried_mushrooms.jpg",
+  "Spawn": "/category_spawn.jpg",
+  "Tools & Accessories": "/category_tools_accessories.jpg"
 };
 
 const CategoryGrid = ({ selectedCategory, onSelectCategory }) => {

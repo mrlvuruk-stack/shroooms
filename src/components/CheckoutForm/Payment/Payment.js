@@ -221,6 +221,9 @@ const Payment = (props) => {
           <button
             type="button"
             onClick={handleRazorpayCheckout}
+          <button
+            type="button"
+            onClick={handleRazorpayCheckout}
             disabled={isPending || loading}
             className="btn-pay-demo"
             style={{
@@ -239,7 +242,29 @@ const Payment = (props) => {
               transition: "background-color 0.2s"
             }}
           >
-            {loading ? "Initializing Razorpay..." : isPending ? "Processing Order..." : `Pay ₹${cartTotal} with Razorpay`}
+            {loading ? "Initializing Razorpay..." : isPending ? "Processing Order..." : `Pay ₹${cartTotal} Online with Razorpay`}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => onSubmit && onSubmit({ paymentId: "COD_" + Date.now(), mode: "Cash on Delivery" })}
+            disabled={isPending || loading}
+            style={{
+              width: "100%",
+              padding: "1.2rem 2.4rem",
+              backgroundColor: "transparent",
+              color: "#1b2e23",
+              fontSize: "1.4rem",
+              fontWeight: "700",
+              border: "1.5px solid #1b2e23",
+              borderRadius: "30px",
+              cursor: (isPending || loading) ? "not-allowed" : "pointer",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          >
+            🚚 Place Order with Cash on Delivery / Direct Contact
           </button>
 
           {isRetryable && (

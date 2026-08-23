@@ -877,6 +877,48 @@ axios.interceptors.request.use(async (config) => {
     };
   }
 
+  // 10. POST /api/create-order
+  else if (url.includes("/api/create-order") && method === "post") {
+    await delay(200);
+    const parsedData = getParsedData(data);
+    const amount = parsedData.amount || 10000;
+    const currency = parsedData.currency || "INR";
+    const mockOrderId = "order_" + Math.random().toString(36).substr(2, 12);
+    config.adapter = async () => {
+      return Promise.resolve({
+        data: {
+          order_id: mockOrderId,
+          amount: amount,
+          currency: currency
+        },
+        status: 200,
+        statusText: "OK",
+        headers: {},
+        config
+      });
+    };
+  }
+
+  // 11. POST /api/verify-payment
+  else if (url.includes("/api/verify-payment") && method === "post") {
+    await delay(200);
+    const parsedData = getParsedData(data);
+    config.adapter = async () => {
+      return Promise.resolve({
+        data: {
+          success: true,
+          message: "Payment verified successfully",
+          order_id: parsedData.razorpay_order_id || "order_mock",
+          payment_id: parsedData.razorpay_payment_id || "pay_mock"
+        },
+        status: 200,
+        statusText: "OK",
+        headers: {},
+        config
+      });
+    };
+  }
+
   return config;
 }, (error) => {
   return Promise.reject(error);

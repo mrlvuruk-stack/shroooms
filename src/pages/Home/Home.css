@@ -47,6 +47,38 @@
   transform: translateX(4px);
 }
 
+/* Product Catalog Grid Container — Compact 4 columns desktop, 3 tablet, 2 mobile */
+.product-catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 0 1.5rem;
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .product-catalog-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.6rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-catalog-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-catalog-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+  }
+}
+
 /* Center product layout row */
 .row.center {
   display: flex;

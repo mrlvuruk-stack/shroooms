@@ -154,7 +154,7 @@ const Home = (props) => {
           </button>
         </div>
       ) : (
-        <div className="row center">
+        <div className="product-catalog-grid">
           {filterProducts &&
             filterProducts.map((vegetable) => (
               <Product key={vegetable._id} product={vegetable} />

@@ -47,7 +47,7 @@ const Wishlist = () => {
         <h2 className="wishlistempty">Please add some products to wishlist</h2>
       ) : (
         <React.Fragment>
-          <div className="row center">
+          <div className="product-catalog-grid">
             {wishlist &&
               vegetables &&
               wishlist.map((wishlist) => (

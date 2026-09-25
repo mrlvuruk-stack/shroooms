@@ -27,7 +27,7 @@
   --frugivore-gray: #5c665e;
   --frugivore-border: rgba(197, 160, 89, 0.22);
 
-  /* TYPOGRAPHY Scale */
+  /* TYPOGRAPHY Scale - Fluid & Mobile-First */
   --font-display: 'Playfair Display', Georgia, serif;
   --font-body:    'Outfit', 'Inter', sans-serif;
 
@@ -36,11 +36,11 @@
   --text-base:  1.6rem;   /* 16px */
   --text-lg:    1.8rem;   /* 18px */
   --text-xl:    2.0rem;   /* 20px */
-  --text-2xl:   2.4rem;   /* 24px */
-  --text-3xl:   3.2rem;   /* 32px */
-  --text-4xl:   4.8rem;   /* 48px */
-  --text-5xl:   7.2rem;   /* 72px */
-  --text-hero:  clamp(5.6rem, 7vw, 10rem);
+  --text-2xl:   clamp(1.8rem, 2.5vw, 2.4rem);   /* 18-24px */
+  --text-3xl:   clamp(2.2rem, 3.2vw, 3.2rem);   /* 22-32px */
+  --text-4xl:   clamp(2.6rem, 4.2vw, 4.8rem);   /* 26-48px */
+  --text-5xl:   clamp(3.2rem, 5.5vw, 6.4rem);   /* 32-64px */
+  --text-hero:  clamp(3.4rem, 6.5vw, 8.4rem);
 
   /* SPACING SCALE */
   --space-1:  0.4rem;   /* 4px */
@@ -60,7 +60,7 @@
   --container-wide: 1440px;
   --container-content: 1200px;
   --container-reading: 800px;
-  --page-gutter: clamp(1.6rem, 5vw, 6.4rem);
+  --page-gutter: clamp(1.4rem, 4vw, 4.8rem);
 
   /* RADII - Smooth Organic Corners */
   --radius-sm: 10px;
@@ -97,12 +97,17 @@
 html {
   font-size: 62.5%; /* 62.5% = 62.5/100 * 16 = 10px */
   scroll-behavior: smooth;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 body {
   box-sizing: border-box;
   font-size: 1.6rem;
   font-family: "Outfit", "Inter", "Poppins", Helvetica, Arial, sans-serif;
   min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
   background-color: #f7f5ef;
   background-image: 
     radial-gradient(ellipse 90% 50% at 50% -20%, rgba(212, 175, 55, 0.15) 0%, transparent 60%),
@@ -116,8 +121,10 @@ body {
 }
 #root {
   height: 100%;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
-
 
 /* Basic Layout */
 .grid-container {
@@ -127,19 +134,26 @@ body {
     "header"
     "main"
     "footer";
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto 1fr auto;
   min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 .grid-container > header {
   grid-area: header;
-  height: 14.5rem;
 }
 main {
   grid-area: main;
-  padding-top: 14.5rem;
+  padding-top: 11.5rem;
   min-height: calc(100vh - 19.5rem);
   padding-bottom: 2rem;
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 footer {
   grid-area: footer;
@@ -147,6 +161,10 @@ footer {
   color: var(--frugivore-white);
   padding: 1.5rem 0;
   text-align: center;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 /* Reusable components */
@@ -256,20 +274,14 @@ img.medium {
   background: var(--frugivore-green);
 }
 
-@media (max-width: 823px) {
-  .grid-container > header {
-    height: 13rem;
-  }
+@media (max-width: 991px) {
   main {
-    padding-top: 13rem;
+    padding-top: 9.5rem;
   }
 }
 @media (max-width: 600px) {
-  .grid-container > header {
-    height: 17.5rem;
-  }
   main {
-    padding-top: 17.5rem;
+    padding-top: 7.6rem;
   }
 }
 
@@ -280,6 +292,8 @@ img.medium {
   left: 0;
   right: 0;
   bottom: 0;
+  width: 100%;
+  max-width: 100vw;
   overflow: hidden;
   pointer-events: none;
   z-index: 0;
@@ -291,6 +305,7 @@ img.medium {
   border-radius: 50%;
   filter: blur(60px);
   pointer-events: none;
+  max-width: 90vw;
   animation: floatGlow 12s ease-in-out infinite alternate;
 }
 
@@ -382,26 +397,19 @@ img.medium {
 @media (max-width: 1560px) {
   .global-nature-decor.left-decor {
     left: 0;
-    transform: scale(0.85) translateX(-20px);
+    transform: scale(0.85);
     transform-origin: top left;
   }
   .global-nature-decor.right-decor {
     right: 0;
-    transform: scale(0.85) translateX(20px);
+    transform: scale(0.85);
     transform-origin: top right;
   }
 }
 
 @media (max-width: 1200px) {
   .global-nature-decor {
-    opacity: 0.35;
-    transform: scale(0.65);
-  }
-}
-
-@media (max-width: 900px) {
-  .global-nature-decor {
-    display: none; /* Hide side art on mobile to prevent overlapping content */
+    display: none; /* Hide side art under 1200px to completely eliminate horizontal overflow */
   }
 }
 

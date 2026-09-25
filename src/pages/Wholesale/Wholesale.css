@@ -492,17 +492,27 @@
 @media (max-width: 576px) {
   .wholesale-container {
     padding: 2rem 1rem 4rem 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
   }
   .wholesale-inner {
-    padding: 3rem 1.5rem;
-    border-radius: 16px;
+    padding: 2.5rem 1.2rem;
+    border-radius: 18px;
+    width: 100%;
+    box-sizing: border-box;
   }
   .wholesale-title {
-    font-size: 2.6rem;
+    font-size: clamp(2.4rem, 5vw, 3rem);
   }
   .wholesale-form-card, .form-success-card {
-    padding: 2.5rem 2rem;
+    padding: 2rem 1.4rem;
     border-radius: 16px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .benefit-card-wholesale {
+    padding: 2.5rem 1.6rem;
   }
   .form-row-ws {
     flex-direction: column;
@@ -510,5 +520,27 @@
   }
   .form-row-ws .half-ws {
     width: 100%;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 380px) {
+  .wholesale-container {
+    padding: 1.5rem 0.6rem 3rem 0.6rem;
+  }
+  .wholesale-inner {
+    padding: 2rem 0.8rem;
+  }
+  .wholesale-form-card, .form-success-card {
+    padding: 1.8rem 1rem;
+  }
+  .benefit-card-wholesale {
+    padding: 2rem 1.2rem;
   }
 }

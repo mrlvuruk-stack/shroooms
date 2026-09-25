@@ -13,6 +13,7 @@
   justify-content: center;
   opacity: 1;
   transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s;
+  overflow: hidden;
 }
 
 .shroooms-global-loader.fade-out {
@@ -24,7 +25,9 @@
 .loader-backdrop-glow {
   position: absolute;
   width: 400px;
+  max-width: 85vw;
   height: 400px;
+  max-height: 85vw;
   background: radial-gradient(circle, rgba(212, 175, 55, 0.25) 0%, rgba(38, 122, 63, 0.15) 50%, transparent 70%);
   filter: blur(50px);
   animation: loaderGlowPulse 3s infinite ease-in-out;

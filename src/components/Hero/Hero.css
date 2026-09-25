@@ -251,7 +251,7 @@
 @media (max-width: 1024px) {
   .home-hero {
     grid-template-columns: 1fr;
-    gap: var(--space-10);
+    gap: var(--space-8);
     text-align: center;
     padding: var(--space-8) var(--page-gutter);
     min-height: auto;
@@ -259,6 +259,7 @@
 
   .hero-left {
     align-items: center;
+    width: 100%;
   }
 
   .hero-top-strip {
@@ -273,10 +274,70 @@
   .hero-cta {
     justify-content: center;
   }
+
+  .hero-box-showcase::before {
+    left: 0;
+    top: 10px;
+  }
 }
 
 @media (max-width: 768px) {
   .hero-3d-wrapper {
+    display: none;
+  }
+  .box-glow {
+    width: 240px;
+    height: 240px;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-hero {
+    padding: var(--space-6) var(--page-gutter);
+    gap: var(--space-6);
+  }
+
+  .hero-title {
+    font-size: clamp(3.0rem, 9.5vw, 4.2rem);
+    line-height: 1.1;
+    margin-bottom: var(--space-4);
+  }
+
+  .hero-subtitle {
+    font-size: 1.45rem;
+    line-height: 1.5;
+    margin-bottom: var(--space-6);
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    width: 100%;
+    gap: var(--space-3);
+  }
+
+  .hero-cta .btn-primary,
+  .hero-cta .btn-secondary {
+    width: 100%;
+    min-width: unset;
+    padding: 1.2rem 2rem;
+  }
+
+  .premium-quality-stamp {
+    width: 68px;
+    height: 68px;
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .stamp-premium {
+    font-size: 1.1rem;
+  }
+
+  .stamp-gourmet {
+    font-size: 0.75rem;
+  }
+
+  .stamp-sustainable {
     display: none;
   }
 }

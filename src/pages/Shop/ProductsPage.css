@@ -1098,7 +1098,10 @@
 
 /* ─── RESPONSIVE BREAKPOINTS ─── */
 @media (max-width: 1024px) {
-  .shop-main-layout { grid-template-columns: 1fr; }
+  .shop-main-layout { 
+    grid-template-columns: 1fr; 
+    gap: 2rem;
+  }
   .shop-sidebar-filters { display: none; }
   .shop-sidebar-filters.mobile-drawer-open {
     display: flex;
@@ -1107,14 +1110,74 @@
     z-index: 1050;
     overflow-y: auto;
     border-radius: 0;
+    padding: 2.4rem 2rem;
   }
   .mobile-close-drawer { display: block; }
   .mobile-filter-drawer-btn { display: flex; }
-  .products-grid-wrapper { grid-template-columns: repeat(2, 1fr); }
-  .modal-content-grid { grid-template-columns: 1fr; }
+  .products-grid-wrapper { grid-template-columns: repeat(2, 1fr); gap: 1.6rem; }
+  .modal-content-grid { grid-template-columns: 1fr; gap: 2rem; }
+}
+
+@media (max-width: 768px) {
+  .hero-metrics-bar {
+    gap: 1.6rem;
+    padding: 1.6rem;
+  }
+  .metric-divider {
+    display: none;
+  }
+  .shop-hero-section {
+    padding: 5rem 1.5rem 4rem 1.5rem;
+  }
 }
 
 @media (max-width: 600px) {
   .products-grid-wrapper { grid-template-columns: 1fr; }
-  .shop-category-grid { grid-template-columns: repeat(2, 1fr); }
+  .shop-category-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .category-nav-card { padding: 1.6rem 1rem; }
+  .cat-card-desc { display: none; }
+  .shop-categories-section,
+  .shop-toolbar-section,
+  .shop-main-layout {
+    padding: 0 1.2rem;
+  }
+  .toolbar-controls-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.2rem;
+  }
+  .controls-right-group {
+    justify-content: space-between;
+    width: 100%;
+  }
+  .modal-action-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .shroooms-product-modal {
+    padding: 2rem 1.6rem;
+    border-radius: 20px;
+  }
+}
+
+@media (max-width: 360px) {
+  .shop-category-grid { 
+    grid-template-columns: 1fr; 
+  }
+  .category-nav-card {
+    padding: 1.4rem 1rem;
+  }
+  .shop-categories-section,
+  .shop-toolbar-section,
+  .shop-main-layout {
+    padding: 0 0.8rem;
+  }
+  .search-input-capsule {
+    padding: 2px 8px;
+  }
+  .shop-search-input {
+    height: 44px;
+    font-size: 1.3rem;
+    padding: 0 8px;
+  }
 }

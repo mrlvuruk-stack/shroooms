@@ -26,3 +26,5 @@ backend/.env
 /verification/
 /design_specs/
 .vercel
+/scratch/
+

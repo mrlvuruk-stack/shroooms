@@ -4,6 +4,7 @@ import {
   auth,
   googleProvider,
   signInWithPopup,
+  signInWithRedirect,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   RecaptchaVerifier,
@@ -42,6 +43,12 @@ export const signin = (phone, hash, otp) => async (dispatch) => {
 const formatFirebaseError = (error) => {
   if (!error) return "Authentication error occurred.";
   const code = error.code || "";
+  if (code === "auth/popup-blocked") {
+    return "Pop-up was blocked by your browser settings. Redirecting to Google Login...";
+  }
+  if (code === "auth/popup-closed-by-user") {
+    return "Google Sign-In window was closed. Please click 'Continue with Google' to try again.";
+  }
   if (code === "auth/operation-not-allowed") {
     return "This authentication provider is not enabled yet in your Firebase Console. Please enable Email/Password, Google, or Phone Sign-in under Firebase Console -> Authentication -> Sign-in method.";
   }
@@ -99,7 +106,7 @@ export const firebaseEmailSignIn = (email, password, isSignUp = false, displayNa
 };
 
 /**
- * Firebase Google Sign-In
+ * Firebase Google Sign-In with Popup-Blocked Fallback
  */
 export const firebaseGoogleSignIn = () => async (dispatch) => {
   dispatch({ type: actionTypes.USER_SIGNIN_REQUEST });
@@ -122,6 +129,15 @@ export const firebaseGoogleSignIn = () => async (dispatch) => {
     dispatch(signInClose());
     return userInfo;
   } catch (error) {
+    if (error && (error.code === "auth/popup-blocked" || error.code === "auth/cancelled-popup-request")) {
+      try {
+        console.warn("Popup blocked by browser. Redirecting to Google Login...");
+        await signInWithRedirect(auth, googleProvider);
+        return;
+      } catch (redirectErr) {
+        console.error("Redirect login error:", redirectErr);
+      }
+    }
     const message = formatFirebaseError(error);
     dispatch({
       type: actionTypes.USER_SIGNIN_FAIL,

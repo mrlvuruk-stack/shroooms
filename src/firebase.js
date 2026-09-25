@@ -31,13 +31,13 @@ import {
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "AIzaSyAq95OYFnwivm3w0UnUN6cNvHZezvWpwyk",
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "shrooom-6b9b8.firebaseapp.com",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "AIzaSyAPW9cJQLZbCYZOrchoJYV0oZa84_w-IG0",
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "shroooms.firebaseapp.com",
   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || "shroooms",
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || "shrooom-6b9b8.firebasestorage.app",
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || "1001458273119",
-  appId: process.env.REACT_APP_FIREBASE_APP_ID || "1:1001458273119:web:e7aa84b9c3952b4e7104ea",
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID || "G-1DJWKY905L"
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || "shroooms.firebasestorage.app",
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || "1024943326650",
+  appId: process.env.REACT_APP_FIREBASE_APP_ID || "1:1024943326650:web:aae96d9ba92419ea8e4983",
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID || "G-C14ZJ9PDMX"
 };
 
 // Initialize Firebase App

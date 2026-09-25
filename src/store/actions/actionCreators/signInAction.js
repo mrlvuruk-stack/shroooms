@@ -77,6 +77,13 @@ const formatFirebaseError = (error) => {
   if (code === "auth/network-request-failed") {
     return "Network error. Please check your internet connection and try again.";
   }
+  if (code === "auth/unauthorized-domain") {
+    const currentHost = typeof window !== "undefined" ? window.location.hostname : "current domain";
+    if (currentHost === "127.0.0.1") {
+      return "This domain (127.0.0.1) is not authorized in Firebase. Please open http://localhost:3000 in your browser instead, or add 127.0.0.1 to Authorized Domains in Firebase Console.";
+    }
+    return `Domain "${currentHost}" is not authorized for Firebase Google Sign-In. Please add "${currentHost}" under Firebase Console -> Authentication -> Settings -> Authorized domains.`;
+  }
   if (code === "auth/invalid-phone-number") {
     return "Invalid phone number format. Please include country code (e.g. +91).";
   }

@@ -9,7 +9,8 @@ import {
   createUserWithEmailAndPassword,
   RecaptchaVerifier,
   signInWithPhoneNumber,
-  signOut
+  signOut,
+  updateProfile
 } from "../../../firebase";
 import { syncUserProfile } from "../../../services/firebaseService";
 
@@ -46,25 +47,40 @@ const formatFirebaseError = (error) => {
   if (code === "auth/popup-blocked") {
     return "Pop-up was blocked by your browser settings. Redirecting to Google Login...";
   }
-  if (code === "auth/popup-closed-by-user") {
+  if (code === "auth/popup-closed-by-user" || code === "auth/cancelled-popup-request") {
     return "Google Sign-In window was closed. Please click 'Continue with Google' to try again.";
   }
   if (code === "auth/operation-not-allowed") {
-    return "This authentication provider is not enabled yet in your Firebase Console. Please enable Email/Password, Google, or Phone Sign-in under Firebase Console -> Authentication -> Sign-in method.";
+    return "This authentication provider is not enabled yet in your Firebase Console. Please enable Email/Password or Google under Firebase Console -> Authentication -> Sign-in method.";
   }
   if (code === "auth/email-already-in-use") {
     return "An account with this email address already exists. Please log in instead.";
   }
-  if (code === "auth/user-not-found" || code === "auth/wrong-password" || code === "auth/invalid-credential") {
-    return "Invalid email or password. Please check your credentials.";
+  if (code === "auth/user-not-found") {
+    return "No user found with this email. Please check your email or sign up.";
+  }
+  if (code === "auth/wrong-password") {
+    return "Incorrect password. Please verify your password and try again.";
+  }
+  if (code === "auth/invalid-credential") {
+    return "Invalid email or password. Please check your credentials and try again.";
   }
   if (code === "auth/weak-password") {
     return "Password is too weak. Please use at least 6 characters.";
   }
+  if (code === "auth/invalid-email") {
+    return "Please enter a valid email address.";
+  }
+  if (code === "auth/too-many-requests") {
+    return "Access temporarily locked due to multiple failed login attempts. Please try again later.";
+  }
+  if (code === "auth/network-request-failed") {
+    return "Network error. Please check your internet connection and try again.";
+  }
   if (code === "auth/invalid-phone-number") {
     return "Invalid phone number format. Please include country code (e.g. +91).";
   }
-  return error.message || "Authentication failed";
+  return error.message || "Authentication failed. Please try again.";
 };
 
 /**
@@ -76,6 +92,13 @@ export const firebaseEmailSignIn = (email, password, isSignUp = false, displayNa
     let userCredential;
     if (isSignUp) {
       userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      if (displayName && userCredential.user) {
+        try {
+          await updateProfile(userCredential.user, { displayName });
+        } catch (profileErr) {
+          console.warn("Could not update displayName:", profileErr);
+        }
+      }
     } else {
       userCredential = await signInWithEmailAndPassword(auth, email, password);
     }

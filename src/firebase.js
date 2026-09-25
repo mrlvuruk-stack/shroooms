@@ -33,7 +33,7 @@ import {
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "AIzaSyAq95OYFnwivm3w0UnUN6cNvHZezvWpwyk",
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "shrooom-6b9b8.firebaseapp.com",
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || "shrooom-6b9b8",
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || "shroooms",
   storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || "shrooom-6b9b8.firebasestorage.app",
   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || "1001458273119",
   appId: process.env.REACT_APP_FIREBASE_APP_ID || "1:1001458273119:web:e7aa84b9c3952b4e7104ea",

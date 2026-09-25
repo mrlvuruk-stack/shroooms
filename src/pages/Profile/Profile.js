@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { auth } from "../../firebase";
 import { getUserProfile, syncUserProfile, getUserOrders } from "../../services/firebaseService";
+import { userSignOut } from "../../store/actions/actionCreators/signInAction";
 import * as actionTypes from "../../store/actions/actionTypes/signInTypes";
 import "animate.css";
 import "./Profile.css";
@@ -243,6 +244,14 @@ const Profile = () => {
               onClick={() => { setActiveTab("orders"); setError(""); setSuccessMsg(""); }}
             >
               <i className="fa fa-shopping-bag"></i> Orders & Tracking
+            </button>
+            <button 
+              type="button"
+              className="profile-nav-item"
+              onClick={() => dispatch(userSignOut())}
+              style={{ color: "#c62828", borderTop: "1px solid rgba(198, 40, 40, 0.15)", marginTop: "1rem" }}
+            >
+              <i className="fa fa-sign-out" style={{ color: "#c62828" }}></i> Sign Out
             </button>
           </div>
         </div>

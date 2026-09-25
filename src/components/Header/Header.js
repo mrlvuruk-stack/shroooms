@@ -282,6 +282,101 @@ const Header = (props) => {
               </Link>
             </li>
           </ul>
+
+          {/* Mobile Drawer Auth & Account Section */}
+          <div className="mobile-drawer-auth" style={{ padding: "1.4rem 1.8rem", borderTop: "1px solid var(--frugivore-border)", marginTop: "1rem" }}>
+            {userInfo ? (
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <span style={{ fontSize: "2rem" }}>🍄</span>
+                  <div style={{ overflow: "hidden" }}>
+                    <div style={{ fontSize: "1.3rem", fontWeight: "700", color: "var(--frugivore-forest)", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }}>
+                      {userInfo.name || "Customer"}
+                    </div>
+                    <div style={{ fontSize: "1.1rem", color: "var(--frugivore-gray)", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }}>
+                      {userInfo.email || userInfo.phone}
+                    </div>
+                  </div>
+                </div>
+                <div style={{ display: "flex", gap: "8px", marginTop: "4px" }}>
+                  <Link
+                    to="/profile"
+                    onClick={() => setMenuOpen(false)}
+                    style={{
+                      flex: 1,
+                      textAlign: "center",
+                      padding: "10px",
+                      borderRadius: "8px",
+                      background: "var(--frugivore-cream)",
+                      color: "var(--frugivore-forest)",
+                      fontWeight: "600",
+                      fontSize: "1.2rem",
+                      textDecoration: "none"
+                    }}
+                  >
+                    My Profile
+                  </Link>
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      dispatch(userSignOut());
+                    }}
+                    style={{
+                      flex: 1,
+                      padding: "10px",
+                      borderRadius: "8px",
+                      background: "#ffebee",
+                      color: "#c62828",
+                      border: "none",
+                      fontWeight: "600",
+                      fontSize: "1.2rem",
+                      cursor: "pointer"
+                    }}
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div style={{ display: "flex", gap: "8px" }}>
+                <Link
+                  to="/signin"
+                  onClick={() => setMenuOpen(false)}
+                  style={{
+                    flex: 1,
+                    textAlign: "center",
+                    padding: "11px",
+                    borderRadius: "8px",
+                    background: "var(--frugivore-forest)",
+                    color: "#ffffff",
+                    fontWeight: "600",
+                    fontSize: "1.3rem",
+                    textDecoration: "none"
+                  }}
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/signup"
+                  onClick={() => setMenuOpen(false)}
+                  style={{
+                    flex: 1,
+                    textAlign: "center",
+                    padding: "11px",
+                    borderRadius: "8px",
+                    background: "var(--frugivore-cream)",
+                    color: "var(--frugivore-forest)",
+                    border: "1px solid var(--frugivore-border)",
+                    fontWeight: "600",
+                    fontSize: "1.3rem",
+                    textDecoration: "none"
+                  }}
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </header>
     </div>

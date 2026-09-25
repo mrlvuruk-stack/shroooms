@@ -341,3 +341,27 @@
     padding: 2rem 1.5rem;
   }
 }
+
+@media (max-width: 480px) {
+  .signup-page-container {
+    padding: 1.5rem 1rem;
+  }
+  .signup-right-form-panel {
+    padding: 3rem 1.6rem;
+  }
+  .signup-form-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .signup-page-container {
+    padding: 1rem 0.5rem;
+  }
+  .signup-right-form-panel {
+    padding: 2.2rem 1.2rem;
+  }
+  .signup-form-title {
+    font-size: 1.8rem;
+  }
+}

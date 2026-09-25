@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
-import { firebaseGoogleSignIn } from "../../store/actions/actionCreators/signInAction";
+import { useHistory, useLocation, Link } from "react-router-dom";
+import {
+  firebaseEmailSignIn,
+  firebaseGoogleSignIn
+} from "../../store/actions/actionCreators/signInAction";
 import "./SignUpPage.css";
 
 const SignUpPage = () => {
@@ -11,6 +14,12 @@ const SignUpPage = () => {
 
   const userSignIn = useSelector((state) => state.userSignIn);
   const { userInfo, loading, error: authError } = userSignIn;
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
   // Redirect if already logged in
@@ -21,15 +30,43 @@ const SignUpPage = () => {
     }
   }, [userInfo, history, location]);
 
-  const handleGoogleSignIn = async () => {
+  const handleEmailSignUp = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (!email.trim() || !password) {
+      setError("Please fill in all required fields.");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match. Please re-enter.");
+      return;
+    }
+
+    try {
+      await dispatch(
+        firebaseEmailSignIn(email.trim(), password, true, name.trim())
+      );
+    } catch (err) {
+      setError(err.message || "Failed to create account. Please try again.");
+    }
+  };
+
+  const handleGoogleSignUp = async () => {
     setError("");
     try {
       await dispatch(firebaseGoogleSignIn());
     } catch (err) {
       if (err.code === "auth/popup-closed-by-user") {
-        setError("Google Sign-In was cancelled. Please try again.");
+        setError("Google Sign-Up was cancelled. Please try again.");
       } else {
-        setError(err.message || "Google Sign-In failed. Please try again.");
+        setError(err.message || "Google Sign-Up failed. Please try again.");
       }
     }
   };
@@ -45,6 +82,12 @@ const SignUpPage = () => {
             <span className="signup-floating-quote">
               Nurturing Wellness, Naturally.
             </span>
+            <h1 className="signin-art-title font-serif" style={{ marginTop: "1.5rem" }}>
+              Join the Shroooms Family.
+            </h1>
+            <p className="signin-art-subtitle">
+              Fresh organic cultivars, farm-to-table tracking, and exclusive harvest reservations.
+            </p>
           </div>
         </div>
 
@@ -53,32 +96,157 @@ const SignUpPage = () => {
           <div className="signup-form-box animate__animated animate__fadeIn">
             
             <div className="signup-logo-header" style={{ textAlign: "center", marginBottom: "1.5rem" }}>
-              <span className="signup-brand-icon" style={{ fontSize: "3rem" }}>🍄</span>
-              <h2 className="signup-form-title" style={{ marginTop: "0.5rem" }}>Create Your Account</h2>
+              <span className="signup-brand-icon" style={{ fontSize: "3.2rem" }}>🍄</span>
+              <h2 className="signup-form-title font-serif" style={{ marginTop: "0.5rem" }}>
+                Create Your Account
+              </h2>
               <p style={{ fontSize: "1.3rem", color: "#555", marginTop: "0.5rem" }}>
-                Join SHROOOMS with your Google account for an instant, secure customer profile.
+                Sign up with your email or Google account to get started.
               </p>
             </div>
 
             {(error || authError) && (
-              <div className="signup-err-msg" style={{
-                padding: "1rem",
-                background: "#ffebee",
-                color: "#c62828",
-                borderRadius: "8px",
-                margin: "1rem 0",
-                fontSize: "1.2rem",
-                textAlign: "center"
-              }}>
+              <div
+                className="signup-err-msg"
+                style={{
+                  width: "100%",
+                  padding: "1.2rem",
+                  background: "#ffebee",
+                  color: "#c62828",
+                  borderRadius: "10px",
+                  marginBottom: "1.5rem",
+                  fontSize: "1.25rem",
+                  lineHeight: 1.4,
+                  textAlign: "center",
+                  borderLeft: "4px solid #d32f2f"
+                }}
+              >
                 {error || authError}
               </div>
             )}
+
+            {/* Email / Password Sign Up Form */}
+            <form onSubmit={handleEmailSignUp} className="signin-form" style={{ width: "100%" }}>
+              <div className="signin-form-group">
+                <label className="signin-label" htmlFor="signup-name">
+                  Full Name
+                </label>
+                <input
+                  id="signup-name"
+                  type="text"
+                  className="signin-line-input"
+                  placeholder="e.g. Sage Everly"
+                  value={name}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                    setError("");
+                  }}
+                  autoComplete="name"
+                />
+              </div>
+
+              <div className="signin-form-group">
+                <label className="signin-label" htmlFor="signup-email">
+                  Email Address *
+                </label>
+                <input
+                  id="signup-email"
+                  type="email"
+                  className="signin-line-input"
+                  placeholder="e.g. explorer@shrooom.in"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setError("");
+                  }}
+                  autoComplete="email"
+                  required
+                />
+              </div>
+
+              <div className="signin-form-group">
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <label className="signin-label" htmlFor="signup-password">
+                    Password (Min 6 chars) *
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      color: "#b89b5c",
+                      fontSize: "1.1rem",
+                      cursor: "pointer",
+                      padding: 0
+                    }}
+                  >
+                    {showPassword ? "Hide" : "Show"}
+                  </button>
+                </div>
+                <input
+                  id="signup-password"
+                  type={showPassword ? "text" : "password"}
+                  className="signin-line-input"
+                  placeholder="Create a secure password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setError("");
+                  }}
+                  autoComplete="new-password"
+                  required
+                />
+              </div>
+
+              <div className="signin-form-group">
+                <label className="signin-label" htmlFor="signup-confirm-password">
+                  Confirm Password *
+                </label>
+                <input
+                  id="signup-confirm-password"
+                  type={showPassword ? "text" : "password"}
+                  className="signin-line-input"
+                  placeholder="Re-enter your password"
+                  value={confirmPassword}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                    setError("");
+                  }}
+                  autoComplete="new-password"
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="signin-primary-btn font-serif"
+                disabled={loading}
+                style={{
+                  width: "100%",
+                  padding: "1.3rem",
+                  fontSize: "1.35rem",
+                  borderRadius: "30px",
+                  marginTop: "0.5rem",
+                  backgroundColor: "#1b4d2e",
+                  color: "#ffffff",
+                  cursor: loading ? "not-allowed" : "pointer"
+                }}
+              >
+                {loading ? "Creating Account..." : "Create Account with Email"}
+              </button>
+            </form>
+
+            {/* Divider */}
+            <div className="signin-divider" style={{ width: "100%", margin: "2rem 0" }}>
+              <span>OR CONTINUE WITH</span>
+            </div>
 
             {/* Google Sign Up Button */}
             <button
               type="button"
               className="signup-google-btn"
-              onClick={handleGoogleSignIn}
+              onClick={handleGoogleSignUp}
               disabled={loading}
               style={{
                 width: "100%",
@@ -95,8 +263,7 @@ const SignUpPage = () => {
                 color: "#1b4d2e",
                 cursor: loading ? "not-allowed" : "pointer",
                 boxShadow: "0 4px 15px rgba(27, 77, 46, 0.08)",
-                transition: "all 0.25s ease",
-                marginTop: "1rem"
+                transition: "all 0.25s ease"
               }}
             >
               <svg width="22" height="22" viewBox="0 0 24 24">
@@ -108,11 +275,14 @@ const SignUpPage = () => {
               {loading ? "Connecting to Google..." : "Continue with Google"}
             </button>
 
-            <div style={{ marginTop: "3rem", padding: "1.2rem", background: "#fbf9f5", borderRadius: "12px", border: "1px solid #e8e2d5", textAlign: "center" }}>
-              <p style={{ fontSize: "1.2rem", color: "#666", margin: 0, lineHeight: 1.5 }}>
-                🔒 Fast 1-click Google Sign-Up. No password required. Phone number is requested only during order checkout.
-              </p>
+            {/* Switch to Sign In */}
+            <div className="signup-footer-text" style={{ marginTop: "2.5rem", fontSize: "1.2rem", color: "#666" }}>
+              Already have an account?{" "}
+              <Link to="/signin" className="signup-link" style={{ color: "#1b4d2e", fontWeight: "700" }}>
+                Sign In
+              </Link>
             </div>
+
           </div>
         </div>
 

@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
-import { Route, Switch, useLocation } from "react-router-dom";
+import React, { useEffect, useRef } from "react";
+import { Route, Switch, useLocation, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { auth, onAuthStateChanged } from "./firebase";
-import { syncFirebaseUser } from "./store/actions/actionCreators/signInAction";
+import { syncFirebaseUser, userSignOut } from "./store/actions/actionCreators/signInAction";
 
 import { Footer } from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
@@ -37,16 +37,32 @@ import GlobalLoader from "./components/GlobalLoader/GlobalLoader";
 
 const App = () => {
   const location = useLocation();
+  const history = useHistory();
   const dispatch = useDispatch();
+  const prevUserRef = useRef(undefined);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         dispatch(syncFirebaseUser(user));
+        // Redirect to main application view or intended path when logged in
+        if (location.pathname === "/signin" || location.pathname === "/signup") {
+          const redirectPath = location.state?.from?.pathname || "/";
+          history.push(redirectPath);
+        }
+      } else {
+        // If user was previously authenticated and has now signed out
+        if (prevUserRef.current === true) {
+          dispatch(userSignOut());
+          if (location.pathname !== "/signin" && location.pathname !== "/signup") {
+            history.push("/signin");
+          }
+        }
       }
+      prevUserRef.current = !!user;
     });
     return () => unsubscribe();
-  }, [dispatch]);
+  }, [dispatch, history, location.pathname, location.state]);
 
   // Admin panel is full-screen standalone — skip header/footer
   if (location.pathname === "/admin") {

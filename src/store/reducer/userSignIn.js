@@ -10,11 +10,12 @@ const initialState = {
 const userSignIn = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.USER_SIGNIN_REQUEST:
-      return { ...state, loading: true };
+      return { ...state, loading: true, error: null };
     case actionTypes.USER_SIGNIN_SUCCESS:
       return {
         ...state,
         loading: false,
+        error: null,
         userInfo: action.payload,
       };
     case actionTypes.USER_SIGNIN_FAIL:
@@ -47,14 +48,16 @@ const userSignIn = (state = initialState, action) => {
       return {
         ...state,
         signInOpen: true,
+        error: null,
       };
     case actionTypes.SIGNIN_CLOSE:
       return {
         ...state,
         signInOpen: false,
+        error: null,
       };
     case actionTypes.USER_SIGNOUT:
-      return {};
+      return { userInfo: null, signInOpen: false };
     default:
       return state;
   }

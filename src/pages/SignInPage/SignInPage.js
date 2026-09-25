@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
-import { firebaseGoogleSignIn } from "../../store/actions/actionCreators/signInAction";
+import { useHistory, useLocation, Link } from "react-router-dom";
+import {
+  firebaseEmailSignIn,
+  firebaseGoogleSignIn
+} from "../../store/actions/actionCreators/signInAction";
 import "./SignInPage.css";
 
 const SignInPage = () => {
@@ -11,6 +14,10 @@ const SignInPage = () => {
 
   const userSignIn = useSelector((state) => state.userSignIn);
   const { userInfo, loading, error: authError } = userSignIn;
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
   // Redirect if already logged in
@@ -20,6 +27,22 @@ const SignInPage = () => {
       history.push(redirectPath);
     }
   }, [userInfo, history, location]);
+
+  const handleEmailSignIn = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (!email.trim() || !password) {
+      setError("Please enter both email and password.");
+      return;
+    }
+
+    try {
+      await dispatch(firebaseEmailSignIn(email.trim(), password, false));
+    } catch (err) {
+      setError(err.message || "Failed to sign in. Please check your credentials.");
+    }
+  };
 
   const handleGoogleSignIn = async () => {
     setError("");
@@ -44,7 +67,7 @@ const SignInPage = () => {
           <div className="signin-art-content animate__animated animate__fadeInLeft">
             <h1 className="signin-art-title font-serif">The Art of the Fungi.</h1>
             <p className="signin-art-subtitle">
-              Connecting the forest floor to the sophisticated palate.
+              Connecting the forest floor to the sophisticated palate. Fresh gourmet mushrooms delivered straight to your kitchen.
             </p>
           </div>
         </div>
@@ -52,27 +75,114 @@ const SignInPage = () => {
         {/* Right Side: Form Panel */}
         <div className="signin-right-form-panel">
           <div className="signin-form-box animate__animated animate__fadeIn">
+            
             <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-              <span style={{ fontSize: "3rem" }}>🍄</span>
-              <h2 className="signin-form-title font-serif" style={{ marginTop: "0.5rem" }}>Welcome to SHROOOMS</h2>
+              <span style={{ fontSize: "3.2rem" }}>🍄</span>
+              <h2 className="signin-form-title font-serif" style={{ marginTop: "0.5rem" }}>
+                Welcome to SHROOOMS
+              </h2>
               <p style={{ fontSize: "1.3rem", color: "#555", marginTop: "0.5rem" }}>
-                Sign in with your Google account to access your gourmet cultivars, order tracking, and express checkout.
+                Sign in to manage your orders, fresh harvests, and saved delivery preferences.
               </p>
             </div>
 
             {(error || authError) && (
-              <div className="signin-err-msg" style={{
-                padding: "1rem",
-                background: "#ffebee",
-                color: "#c62828",
-                borderRadius: "8px",
-                margin: "1rem 0",
-                fontSize: "1.2rem",
-                textAlign: "center"
-              }}>
+              <div
+                className="signin-err-msg"
+                style={{
+                  padding: "1.2rem",
+                  background: "#ffebee",
+                  color: "#c62828",
+                  borderRadius: "10px",
+                  marginBottom: "1.5rem",
+                  fontSize: "1.25rem",
+                  lineHeight: 1.4,
+                  textAlign: "center",
+                  borderLeft: "4px solid #d32f2f"
+                }}
+              >
                 {error || authError}
               </div>
             )}
+
+            {/* Email / Password Sign In Form */}
+            <form onSubmit={handleEmailSignIn} className="signin-form">
+              <div className="signin-form-group">
+                <label className="signin-label" htmlFor="signin-email">
+                  Email Address
+                </label>
+                <input
+                  id="signin-email"
+                  type="email"
+                  className="signin-line-input"
+                  placeholder="e.g. explorer@shrooom.in"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setError("");
+                  }}
+                  autoComplete="email"
+                  required
+                />
+              </div>
+
+              <div className="signin-form-group">
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <label className="signin-label" htmlFor="signin-password">
+                    Password
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      color: "#b89b5c",
+                      fontSize: "1.1rem",
+                      cursor: "pointer",
+                      padding: 0
+                    }}
+                  >
+                    {showPassword ? "Hide" : "Show"}
+                  </button>
+                </div>
+                <input
+                  id="signin-password"
+                  type={showPassword ? "text" : "password"}
+                  className="signin-line-input"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setError("");
+                  }}
+                  autoComplete="current-password"
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="signin-primary-btn font-serif"
+                disabled={loading}
+                style={{
+                  padding: "1.3rem",
+                  fontSize: "1.35rem",
+                  borderRadius: "30px",
+                  marginTop: "0.5rem",
+                  backgroundColor: "#1b4d2e",
+                  color: "#ffffff",
+                  cursor: loading ? "not-allowed" : "pointer"
+                }}
+              >
+                {loading ? "Signing In..." : "Sign In with Email"}
+              </button>
+            </form>
+
+            {/* Divider */}
+            <div className="signin-divider" style={{ margin: "2rem 0" }}>
+              <span>OR CONTINUE WITH</span>
+            </div>
 
             {/* Google Sign In Button */}
             <button
@@ -95,8 +205,7 @@ const SignInPage = () => {
                 color: "#1b4d2e",
                 cursor: loading ? "not-allowed" : "pointer",
                 boxShadow: "0 4px 15px rgba(27, 77, 46, 0.08)",
-                transition: "all 0.25s ease",
-                marginTop: "1rem"
+                transition: "all 0.25s ease"
               }}
             >
               <svg width="22" height="22" viewBox="0 0 24 24">
@@ -108,11 +217,14 @@ const SignInPage = () => {
               {loading ? "Connecting to Google..." : "Continue with Google"}
             </button>
 
-            <div style={{ marginTop: "3rem", padding: "1.2rem", background: "#fbf9f5", borderRadius: "12px", border: "1px solid #e8e2d5", textAlign: "center" }}>
-              <p style={{ fontSize: "1.2rem", color: "#666", margin: 0, lineHeight: 1.5 }}>
-                ℹ️ <strong>Order Notice:</strong> SHROOOMS requires a phone number ONLY during order placement for delivery coordination.
-              </p>
+            {/* Switch to Sign Up */}
+            <div className="signin-footer-text" style={{ marginTop: "2.5rem" }}>
+              Don't have an account yet?{" "}
+              <Link to="/signup" className="signin-link" style={{ color: "#1b4d2e", fontWeight: "700" }}>
+                Create an Account
+              </Link>
             </div>
+
           </div>
         </div>
 

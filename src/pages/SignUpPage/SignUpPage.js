@@ -50,9 +50,13 @@ const SignUpPage = () => {
     }
 
     try {
-      await dispatch(
+      const loggedUser = await dispatch(
         firebaseEmailSignIn(email.trim(), password, true, name.trim())
       );
+      if (loggedUser) {
+        const redirectPath = location.state?.from?.pathname || "/";
+        history.push(redirectPath);
+      }
     } catch (err) {
       setError(err.message || "Failed to create account. Please try again.");
     }
@@ -61,7 +65,11 @@ const SignUpPage = () => {
   const handleGoogleSignUp = async () => {
     setError("");
     try {
-      await dispatch(firebaseGoogleSignIn());
+      const loggedUser = await dispatch(firebaseGoogleSignIn());
+      if (loggedUser) {
+        const redirectPath = location.state?.from?.pathname || "/";
+        history.push(redirectPath);
+      }
     } catch (err) {
       if (err.code === "auth/popup-closed-by-user") {
         setError("Google Sign-Up was cancelled. Please try again.");

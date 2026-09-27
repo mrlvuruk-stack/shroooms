@@ -110,14 +110,24 @@ export const firebaseEmailSignIn = (email, password, isSignUp = false, displayNa
       userCredential = await signInWithEmailAndPassword(auth, email, password);
     }
     const user = userCredential.user;
-    const profile = await syncUserProfile(user, { displayName, phoneNumber, phone: phoneNumber });
+    let profile = null;
+    try {
+      profile = await syncUserProfile(user, { displayName, phoneNumber, phone: phoneNumber });
+    } catch (profileErr) {
+      console.warn("syncUserProfile non-fatal error:", profileErr);
+    }
     
+    const resolvedName = displayName || user.displayName || profile?.displayName || profile?.name || (user.email ? user.email.split("@")[0] : "User");
+    const token = await user.getIdToken().catch(() => "");
+
     const userInfo = {
       _id: user.uid,
-      name: user.displayName || profile?.displayName || displayName || email.split("@")[0],
+      name: resolvedName,
+      userName: resolvedName,
       email: user.email,
-      phone: user.phoneNumber || profile?.phoneNumber || phoneNumber || "",
-      token: await user.getIdToken(),
+      phone: user.phoneNumber || profile?.phoneNumber || profile?.phone || phoneNumber || "",
+      photoURL: user.photoURL || profile?.photoURL || "",
+      token: token,
       isFirebase: true
     };
 
@@ -143,14 +153,24 @@ export const firebaseGoogleSignIn = () => async (dispatch) => {
   try {
     const userCredential = await signInWithPopup(auth, googleProvider);
     const user = userCredential.user;
-    const profile = await syncUserProfile(user);
+    let profile = null;
+    try {
+      profile = await syncUserProfile(user);
+    } catch (profileErr) {
+      console.warn("syncUserProfile non-fatal error:", profileErr);
+    }
+
+    const resolvedName = user.displayName || profile?.displayName || profile?.name || "Google User";
+    const token = await user.getIdToken().catch(() => "");
 
     const userInfo = {
       _id: user.uid,
-      name: user.displayName || profile.displayName || "Google User",
+      name: resolvedName,
+      userName: resolvedName,
       email: user.email,
-      photoURL: user.photoURL,
-      token: await user.getIdToken(),
+      phone: user.phoneNumber || profile?.phoneNumber || profile?.phone || "",
+      photoURL: user.photoURL || profile?.photoURL || "",
+      token: token,
       isFirebase: true
     };
 
@@ -218,13 +238,23 @@ export const firebasePhoneVerifyOtp = (confirmationResult, code) => async (dispa
   try {
     const userCredential = await confirmationResult.confirm(code);
     const user = userCredential.user;
-    const profile = await syncUserProfile(user);
+    let profile = null;
+    try {
+      profile = await syncUserProfile(user);
+    } catch (profileErr) {
+      console.warn("syncUserProfile non-fatal error:", profileErr);
+    }
+
+    const resolvedName = user.displayName || profile?.displayName || profile?.name || user.phoneNumber || "User";
+    const token = await user.getIdToken().catch(() => "");
 
     const userInfo = {
       _id: user.uid,
-      name: user.displayName || profile?.displayName || user.phoneNumber,
+      name: resolvedName,
+      userName: resolvedName,
       phone: user.phoneNumber,
-      token: await user.getIdToken(),
+      email: user.email || "",
+      token: token,
       isFirebase: true
     };
 
@@ -247,20 +277,32 @@ export const firebasePhoneVerifyOtp = (confirmationResult, code) => async (dispa
  */
 export const syncFirebaseUser = (user) => async (dispatch) => {
   if (user) {
-    const profile = await syncUserProfile(user);
-    const userInfo = {
-      _id: user.uid,
-      name: user.displayName || profile.displayName || (user.email ? user.email.split("@")[0] : user.phoneNumber),
-      email: user.email || "",
-      phone: user.phoneNumber || "",
-      photoURL: user.photoURL || "",
-      token: await user.getIdToken(),
-      isFirebase: true
-    };
-    dispatch({ type: actionTypes.USER_SIGNIN_SUCCESS, payload: userInfo });
-    localStorage.setItem("userInfo", JSON.stringify(userInfo));
-  } else {
-    dispatch(userSignOut());
+    try {
+      let profile = null;
+      try {
+        profile = await syncUserProfile(user);
+      } catch (profileErr) {
+        console.warn("syncUserProfile non-fatal error in syncFirebaseUser:", profileErr);
+      }
+
+      const resolvedName = user.displayName || profile?.displayName || profile?.name || (user.email ? user.email.split("@")[0] : user.phoneNumber) || "User";
+      const token = await user.getIdToken().catch(() => "");
+
+      const userInfo = {
+        _id: user.uid,
+        name: resolvedName,
+        userName: resolvedName,
+        email: user.email || "",
+        phone: user.phoneNumber || profile?.phoneNumber || profile?.phone || "",
+        photoURL: user.photoURL || profile?.photoURL || "",
+        token: token,
+        isFirebase: true
+      };
+      dispatch({ type: actionTypes.USER_SIGNIN_SUCCESS, payload: userInfo });
+      localStorage.setItem("userInfo", JSON.stringify(userInfo));
+    } catch (err) {
+      console.warn("syncFirebaseUser non-fatal error:", err);
+    }
   }
 };
 

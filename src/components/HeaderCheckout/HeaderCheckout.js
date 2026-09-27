@@ -7,10 +7,10 @@ import "./HeaderCheckout.css";
 const HeaderCheckout = () => {
   const userInfo = useSelector((state) => state.userSignIn.userInfo);
 
-  let user;
-  if (userInfo && userInfo.userName) {
-    user = userInfo.userName.split(" ");
-  }
+  const displayName = userInfo
+    ? userInfo.name || userInfo.userName || (userInfo.email ? userInfo.email.split("@")[0] : "User")
+    : "";
+  const firstName = displayName ? displayName.split(" ")[0] : "";
 
   return (
     <header className="row header-checkout" style={{ backgroundColor: "var(--frugivore-bg)", borderBottom: "1px solid var(--frugivore-border)" }}>
@@ -22,8 +22,8 @@ const HeaderCheckout = () => {
       </div>
       <div className="header-item header-item--checkout-promise">
         <div className="checkout-promise-item">
-          {userInfo && userInfo.userName
-            ? `Hi ${user[0]} please complete your checkout`
+          {userInfo
+            ? `Hi ${firstName} please complete your checkout`
             : "Hi please complete your checkout"}
         </div>
       </div>

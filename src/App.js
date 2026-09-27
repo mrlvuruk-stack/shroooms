@@ -42,27 +42,31 @@ const App = () => {
   const prevUserRef = useRef(undefined);
 
   useEffect(() => {
+    let isInitial = true;
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         dispatch(syncFirebaseUser(user));
         // Redirect to main application view or intended path when logged in
-        if (location.pathname === "/signin" || location.pathname === "/signup") {
-          const redirectPath = location.state?.from?.pathname || "/";
+        const currentPath = history.location.pathname;
+        if (currentPath === "/signin" || currentPath === "/signup") {
+          const redirectPath = history.location.state?.from?.pathname || "/";
           history.push(redirectPath);
         }
       } else {
-        // If user was previously authenticated and has now signed out
-        if (prevUserRef.current === true) {
+        // Only if user was previously authenticated and has now explicitly signed out from Firebase
+        if (!isInitial && prevUserRef.current === true) {
           dispatch(userSignOut());
-          if (location.pathname !== "/signin" && location.pathname !== "/signup") {
+          const currentPath = history.location.pathname;
+          if (currentPath !== "/signin" && currentPath !== "/signup") {
             history.push("/signin");
           }
         }
       }
+      isInitial = false;
       prevUserRef.current = !!user;
     });
     return () => unsubscribe();
-  }, [dispatch, history, location.pathname, location.state]);
+  }, [dispatch, history]);
 
   // Admin panel is full-screen standalone — skip header/footer
   if (location.pathname === "/admin") {

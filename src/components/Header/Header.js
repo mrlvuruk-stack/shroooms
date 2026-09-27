@@ -24,11 +24,11 @@ const Header = (props) => {
   const userSignIn = useSelector((state) => state.userSignIn);
   const { userInfo } = userSignIn;
 
-  let user;
+  const displayName = userInfo
+    ? userInfo.name || userInfo.userName || (userInfo.email ? userInfo.email.split("@")[0] : "User")
+    : "";
 
-  if (userInfo && userInfo.userName) {
-    user = userInfo.userName.split(" ");
-  }
+  let user = displayName ? displayName.split(" ") : null;
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [productsAccordionOpen, setProductsAccordionOpen] = useState(false);
@@ -137,24 +137,50 @@ const Header = (props) => {
           <div className="profile-container">
             {userInfo ? (
               <div className="dropdown">
-                <Link to="#" className="icon-btn">
-                  <i className="fa fa-user-o"></i>
+                <Link to="/profile" className="icon-btn profile-active-btn" title={`Hi, ${user ? user[0] : "Profile"}`}>
+                  <span className="profile-btn-icon">
+                    <i className="fa fa-user"></i>
+                  </span>
+                  <span className="header-user-firstname">{user ? user[0] : "Profile"}</span>
+                  <i className="fa fa-angle-down header-profile-chevron"></i>
                 </Link>
                 <div className="dropdown-content">
-                  <span className="dropdown-user-welcome" style={{ padding: "0.8rem 1.6rem", display: "block", fontSize: "1.2rem", color: "var(--frugivore-gray)", borderBottom: "1px solid var(--frugivore-border)" }}>Hi, {user ? user[0] : "User"}</span>
-                  <Link to="/profile">My Profile</Link>
-                  <Link to="/orders">My Orders</Link>
-                  <Link to="/wishlist">Wishlist</Link>
-                  <Link to="#" onClick={() => dispatch(userSignOut())}>Sign Out</Link>
+                  <div className="dropdown-user-welcome">
+                    <span className="welcome-subtext">Signed in as</span>
+                    <strong className="welcome-name">{displayName}</strong>
+                    {userInfo.email && <span className="welcome-email">{userInfo.email}</span>}
+                  </div>
+                  <Link to="/profile">
+                    <i className="fa fa-user-circle-o" style={{ marginRight: "8px" }}></i> My Profile
+                  </Link>
+                  <Link to="/orders">
+                    <i className="fa fa-shopping-bag" style={{ marginRight: "8px" }}></i> My Orders
+                  </Link>
+                  <Link to="/wishlist">
+                    <i className="fa fa-heart-o" style={{ marginRight: "8px" }}></i> Wishlist
+                  </Link>
+                  <div className="dropdown-divider-line"></div>
+                  <button 
+                    type="button" 
+                    className="dropdown-signout-item" 
+                    onClick={() => dispatch(userSignOut())}
+                  >
+                    <i className="fa fa-sign-out" style={{ marginRight: "8px" }}></i> Sign Out
+                  </button>
                 </div>
               </div>
             ) : (
               <div className="dropdown">
-                <Link to="#" className="icon-btn">
+                <Link to="/signin" className="icon-btn" title="Sign In">
                   <i className="fa fa-user-o"></i>
                 </Link>
                 <div className="dropdown-content">
-                  <Link to="/signin">Sign In</Link>
+                  <Link to="/signin">
+                    <i className="fa fa-sign-in" style={{ marginRight: "8px" }}></i> Sign In
+                  </Link>
+                  <Link to="/signup">
+                    <i className="fa fa-user-plus" style={{ marginRight: "8px" }}></i> Create Account
+                  </Link>
                 </div>
               </div>
             )}

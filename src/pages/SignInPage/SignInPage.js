@@ -38,7 +38,11 @@ const SignInPage = () => {
     }
 
     try {
-      await dispatch(firebaseEmailSignIn(email.trim(), password, false));
+      const loggedUser = await dispatch(firebaseEmailSignIn(email.trim(), password, false));
+      if (loggedUser) {
+        const redirectPath = location.state?.from?.pathname || "/";
+        history.push(redirectPath);
+      }
     } catch (err) {
       setError(err.message || "Failed to sign in. Please check your credentials.");
     }
@@ -47,7 +51,11 @@ const SignInPage = () => {
   const handleGoogleSignIn = async () => {
     setError("");
     try {
-      await dispatch(firebaseGoogleSignIn());
+      const loggedUser = await dispatch(firebaseGoogleSignIn());
+      if (loggedUser) {
+        const redirectPath = location.state?.from?.pathname || "/";
+        history.push(redirectPath);
+      }
     } catch (err) {
       if (err.code === "auth/popup-closed-by-user") {
         setError("Google Sign-In was cancelled. Please try again.");

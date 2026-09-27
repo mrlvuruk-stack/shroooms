@@ -18,8 +18,12 @@ import {
  */
 export const clearUserCart = async (userId) => {
   if (!userId) return;
-  const cartRef = doc(db, "carts", userId);
-  await deleteDoc(cartRef);
+  try {
+    const cartRef = doc(db, "carts", userId);
+    await deleteDoc(cartRef);
+  } catch (err) {
+    console.warn("clearUserCart skipped (Firestore error):", err.message);
+  }
 };
 
 /**
@@ -27,28 +31,40 @@ export const clearUserCart = async (userId) => {
  */
 export const syncUserProfile = async (user, additionalData = {}) => {
   if (!user) return null;
-  const userRef = doc(db, "users", user.uid);
-  const snap = await getDoc(userRef);
-
-  const userData = {
+  const displayName = user.displayName || additionalData.displayName || (user.email ? user.email.split("@")[0] : "User");
+  const baseUserData = {
     uid: user.uid,
     email: user.email || null,
-    displayName: user.displayName || additionalData.displayName || "User",
+    displayName: displayName,
+    name: displayName,
     phoneNumber: user.phoneNumber || additionalData.phoneNumber || null,
+    phone: user.phoneNumber || additionalData.phoneNumber || null,
     photoURL: user.photoURL || null,
     providerId: user.providerData?.[0]?.providerId || "custom",
-    lastLoginAt: serverTimestamp(),
     ...additionalData
   };
 
-  if (!snap.exists()) {
-    userData.createdAt = serverTimestamp();
-    await setDoc(userRef, userData);
-  } else {
-    await updateDoc(userRef, userData);
-  }
+  try {
+    const userRef = doc(db, "users", user.uid);
+    const snap = await getDoc(userRef);
 
-  return userData;
+    const userData = {
+      ...baseUserData,
+      lastLoginAt: serverTimestamp(),
+    };
+
+    if (!snap.exists()) {
+      userData.createdAt = serverTimestamp();
+      await setDoc(userRef, userData);
+    } else {
+      await updateDoc(userRef, userData);
+    }
+
+    return userData;
+  } catch (err) {
+    console.warn("syncUserProfile fallback to local user data (Firestore unavailable or permissions):", err.message);
+    return baseUserData;
+  }
 };
 
 /**
@@ -56,32 +72,47 @@ export const syncUserProfile = async (user, additionalData = {}) => {
  */
 export const getUserProfile = async (uid) => {
   if (!uid) return null;
-  const userRef = doc(db, "users", uid);
-  const snap = await getDoc(userRef);
-  return snap.exists() ? { id: snap.id, ...snap.data() } : null;
+  try {
+    const userRef = doc(db, "users", uid);
+    const snap = await getDoc(userRef);
+    return snap.exists() ? { id: snap.id, ...snap.data() } : null;
+  } catch (err) {
+    console.warn("getUserProfile fallback (Firestore):", err.message);
+    return null;
+  }
 };
 
 /**
  * Fetch all products from Firestore
  */
 export const getProductsFromFirestore = async () => {
-  const productsCol = collection(db, "products");
-  const snap = await getDocs(productsCol);
-  return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  try {
+    const productsCol = collection(db, "products");
+    const snap = await getDocs(productsCol);
+    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  } catch (err) {
+    console.warn("getProductsFromFirestore fallback:", err.message);
+    return [];
+  }
 };
 
 /**
  * Save an order to Firestore
  */
 export const saveOrderToFirestore = async (userId, orderData) => {
-  const ordersCol = collection(db, "orders");
-  const docRef = await addDoc(ordersCol, {
-    userId,
-    ...orderData,
-    createdAt: serverTimestamp(),
-    status: orderData.status || "Pending"
-  });
-  return docRef.id;
+  try {
+    const ordersCol = collection(db, "orders");
+    const docRef = await addDoc(ordersCol, {
+      userId,
+      ...orderData,
+      createdAt: serverTimestamp(),
+      status: orderData.status || "Pending"
+    });
+    return docRef.id;
+  } catch (err) {
+    console.warn("saveOrderToFirestore fallback (generated local ID):", err.message);
+    return "ord_local_" + Date.now();
+  }
 };
 
 /**
@@ -89,10 +120,15 @@ export const saveOrderToFirestore = async (userId, orderData) => {
  */
 export const getUserOrders = async (userId) => {
   if (!userId) return [];
-  const ordersCol = collection(db, "orders");
-  const q = query(ordersCol, where("userId", "==", userId));
-  const snap = await getDocs(q);
-  return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  try {
+    const ordersCol = collection(db, "orders");
+    const q = query(ordersCol, where("userId", "==", userId));
+    const snap = await getDocs(q);
+    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  } catch (err) {
+    console.warn("getUserOrders fallback:", err.message);
+    return [];
+  }
 };
 
 /**
@@ -100,11 +136,15 @@ export const getUserOrders = async (userId) => {
  */
 export const saveUserCart = async (userId, cartItems) => {
   if (!userId) return;
-  const cartRef = doc(db, "carts", userId);
-  await setDoc(cartRef, {
-    items: cartItems,
-    updatedAt: serverTimestamp()
-  });
+  try {
+    const cartRef = doc(db, "carts", userId);
+    await setDoc(cartRef, {
+      items: cartItems,
+      updatedAt: serverTimestamp()
+    });
+  } catch (err) {
+    console.warn("saveUserCart fallback (local state preserved):", err.message);
+  }
 };
 
 /**
@@ -112,7 +152,12 @@ export const saveUserCart = async (userId, cartItems) => {
  */
 export const getUserCart = async (userId) => {
   if (!userId) return [];
-  const cartRef = doc(db, "carts", userId);
-  const snap = await getDoc(cartRef);
-  return snap.exists() ? snap.data().items || [] : [];
+  try {
+    const cartRef = doc(db, "carts", userId);
+    const snap = await getDoc(cartRef);
+    return snap.exists() ? snap.data().items || [] : [];
+  } catch (err) {
+    console.warn("getUserCart fallback:", err.message);
+    return [];
+  }
 };

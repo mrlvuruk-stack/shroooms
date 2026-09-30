@@ -199,6 +199,54 @@ const FALLBACK_PRODUCTS = [
     benefits: "Hardwood Log & Bag Ready · Dense Caps",
     badge: "Gourmet Grade"
   },
+  {
+    _id: "lc-7",
+    name: "White Oyster",
+    category: "Liquid Culture",
+    categorySlug: "liquid-culture",
+    image: "/banner_pouches.jpg",
+    price: 449,
+    unit: "10 ml Syringe",
+    description: "Pure isolated White Oyster (Pleurotus florida) liquid culture syringe. High commercial vigor with sterile 18G needle & alcohol wipe.",
+    benefits: "Commercial Vigor · Fast Colonizing",
+    badge: "Commercial Strain"
+  },
+  {
+    _id: "lc-8",
+    name: "Golden Yellow Oyster",
+    category: "Liquid Culture",
+    categorySlug: "liquid-culture",
+    image: "/shroooms_product_showcase.png",
+    price: 499,
+    unit: "10 ml Syringe",
+    description: "Vibrant Golden Yellow Oyster (Pleurotus citrinopileatus) pure liquid culture syringe with sterile 18G needle & alcohol wipe.",
+    benefits: "Vibrant Yellow Strain · High Yield",
+    badge: "Exotic Strain"
+  },
+  {
+    _id: "lc-9",
+    name: "Grey Oyster",
+    category: "Liquid Culture",
+    categorySlug: "liquid-culture",
+    image: "/shrooom.jpg",
+    price: 449,
+    unit: "10 ml Syringe",
+    description: "Resilient Grey Oyster (Pleurotus sajor-caju) isolated liquid culture syringe. Forgiving all-season cultivar.",
+    benefits: "Extremely Forgiving · Heavy Flushes",
+    badge: "Commercial Favorite"
+  },
+  {
+    _id: "lc-10",
+    name: "King Oyster",
+    category: "Liquid Culture",
+    categorySlug: "liquid-culture",
+    image: "/box_king_oyster.jpg",
+    price: 549,
+    unit: "10 ml Syringe",
+    description: "Heavy-yielding King Oyster (Pleurotus eryngii) stem clone isolated liquid culture syringe with sterile 18G needle.",
+    benefits: "Gourmet Chef Choice · Dense Stems",
+    badge: "Chef's Choice"
+  },
 
   // ── 4. FRESH MUSHROOMS (7 items) ──
   {
@@ -262,7 +310,7 @@ const FALLBACK_PRODUCTS = [
     badge: "Exotic Bloom"
   },
   {
-    _id: "p6",
+    _id: "fm-elm",
     name: "Elm Oyster Mushroom (Fresh Gourmet)",
     category: "Fresh Mushrooms",
     categorySlug: "fresh-mushrooms",
@@ -274,7 +322,7 @@ const FALLBACK_PRODUCTS = [
     badge: "Farm Harvest"
   },
   {
-    _id: "p7",
+    _id: "fm-chestnut",
     name: "Chestnut Mushroom (Fresh Gourmet)",
     category: "Fresh Mushrooms",
     categorySlug: "fresh-mushrooms",
@@ -420,6 +468,90 @@ const FALLBACK_PRODUCTS = [
     description: "Ganoderma lucidum grain spawn for hardwood log inoculation and antler grow bags.",
     benefits: "Medicinal Grade · Dense Colonizer",
     badge: "Adaptogen"
+  },
+  {
+    _id: "spn-7",
+    name: "Blue Oyster",
+    category: "Spawn",
+    categorySlug: "spawn",
+    image: "/box_blue_oyster.jpg",
+    price: 399,
+    unit: "1 kg Bag",
+    description: "Vibrant ocean-blue clusters known for high yields, tender texture, and mild earthy flavor. Rapid colonization on grain.",
+    benefits: "Fast Colonizing · High Yield",
+    badge: "Grower Favorite"
+  },
+  {
+    _id: "spn-8",
+    name: "Pink Oyster",
+    category: "Spawn",
+    categorySlug: "spawn",
+    image: "/box_pink_oyster.jpg",
+    price: 399,
+    unit: "1 kg Bag",
+    description: "Striking tropical pink bouquet clusters. Extremely fast colonizer perfectly suited for warm Indian climate conditions.",
+    benefits: "Warm Climate · Rapid Flush",
+    badge: "Fast Crop"
+  },
+  {
+    _id: "spn-9",
+    name: "Elm Oyster",
+    category: "Spawn",
+    categorySlug: "spawn",
+    image: "/category_fresh_mushrooms.jpg",
+    price: 349,
+    unit: "1 kg Bag",
+    description: "Robust white to cream colored caps with thick stems. Highly resistant to green mold contamination with dependable yields.",
+    benefits: "Contamination Resistant · All-Season",
+    badge: "Resilient Strain"
+  },
+  {
+    _id: "spn-10",
+    name: "White Oyster",
+    category: "Spawn",
+    categorySlug: "spawn",
+    image: "/category_spawn.jpg",
+    price: 349,
+    unit: "1 kg Bag",
+    description: "Classic commercial white oyster cultivar. Soft fleshy caps, pleasant aroma, and dependable commercial yields.",
+    benefits: "High Flush Yield · Easy Cultivation",
+    badge: "All-Season"
+  },
+  {
+    _id: "spn-11",
+    name: "Golden Yellow Oyster",
+    category: "Spawn",
+    categorySlug: "spawn",
+    image: "/shroooms_product_showcase.png",
+    price: 399,
+    unit: "1 kg Bag",
+    description: "Bright sunshine-yellow clusters with fragrant nutty, cashewnut-like aroma upon cooking. Rapid grain colonizer.",
+    benefits: "Vibrant Color · Exotic Gourmet",
+    badge: "Exotic Strain"
+  },
+  {
+    _id: "spn-12",
+    name: "Grey Oyster",
+    category: "Spawn",
+    categorySlug: "spawn",
+    image: "/shrooom.jpg",
+    price: 349,
+    unit: "1 kg Bag",
+    description: "India's most popular commercial cultivation variety. Broad grey-brown caps with incredible environmental adaptability.",
+    benefits: "Commercial Benchmark · High Adaptability",
+    badge: "Commercial Favorite"
+  },
+  {
+    _id: "spn-13",
+    name: "King Oyster",
+    category: "Spawn",
+    categorySlug: "spawn",
+    image: "/box_king_oyster.jpg",
+    price: 449,
+    unit: "1 kg Bag",
+    description: "Thick meaty stems with rich umami flavor. The king of culinary mushrooms, prized by fine dining chefs.",
+    benefits: "Meaty Stems · Dense Mycelium",
+    badge: "Chef's Choice"
   },
 
   // ── 7. TOOLS & ACCESSORIES (6 items) ──

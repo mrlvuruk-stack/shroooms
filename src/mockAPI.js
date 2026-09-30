@@ -203,6 +203,54 @@ const mockProducts = [
     benefits: "Hardwood Log & Bag Ready · Dense Caps",
     badge: "Gourmet Grade"
   },
+  {
+    _id: "lc-7",
+    name: "White Oyster",
+    category: "Liquid Culture",
+    categorySlug: "liquid-culture",
+    image: "/banner_pouches.jpg",
+    price: 449,
+    unit: "10 ml Syringe",
+    description: "Pure isolated White Oyster (Pleurotus florida) liquid culture syringe. High commercial vigor with sterile 18G needle & alcohol wipe.",
+    benefits: "Commercial Vigor · Fast Colonizing",
+    badge: "Commercial Strain"
+  },
+  {
+    _id: "lc-8",
+    name: "Golden Yellow Oyster",
+    category: "Liquid Culture",
+    categorySlug: "liquid-culture",
+    image: "/shroooms_product_showcase.png",
+    price: 499,
+    unit: "10 ml Syringe",
+    description: "Vibrant Golden Yellow Oyster (Pleurotus citrinopileatus) pure liquid culture syringe with sterile 18G needle & alcohol wipe.",
+    benefits: "Vibrant Yellow Strain · High Yield",
+    badge: "Exotic Strain"
+  },
+  {
+    _id: "lc-9",
+    name: "Grey Oyster",
+    category: "Liquid Culture",
+    categorySlug: "liquid-culture",
+    image: "/shrooom.jpg",
+    price: 449,
+    unit: "10 ml Syringe",
+    description: "Resilient Grey Oyster (Pleurotus sajor-caju) isolated liquid culture syringe. Forgiving all-season cultivar.",
+    benefits: "Extremely Forgiving · Heavy Flushes",
+    badge: "Commercial Favorite"
+  },
+  {
+    _id: "lc-10",
+    name: "King Oyster",
+    category: "Liquid Culture",
+    categorySlug: "liquid-culture",
+    image: "/box_king_oyster.jpg",
+    price: 549,
+    unit: "10 ml Syringe",
+    description: "Heavy-yielding King Oyster (Pleurotus eryngii) stem clone isolated liquid culture syringe with sterile 18G needle.",
+    benefits: "Gourmet Chef Choice · Dense Stems",
+    badge: "Chef's Choice"
+  },
 
   // ── 4. FRESH MUSHROOMS (7 items) ──
   {
@@ -266,7 +314,7 @@ const mockProducts = [
     badge: "Exotic Bloom"
   },
   {
-    _id: "p6",
+    _id: "fm-elm",
     name: "Elm Oyster Mushroom (Fresh Gourmet)",
     category: "Fresh Mushrooms",
     categorySlug: "fresh-mushrooms",
@@ -278,7 +326,7 @@ const mockProducts = [
     badge: "Farm Harvest"
   },
   {
-    _id: "p7",
+    _id: "fm-chestnut",
     name: "Chestnut Mushroom (Fresh Gourmet)",
     category: "Fresh Mushrooms",
     categorySlug: "fresh-mushrooms",
@@ -425,6 +473,90 @@ const mockProducts = [
     benefits: "Medicinal Grade · Dense Colonizer",
     badge: "Adaptogen"
   },
+  {
+    _id: "spn-7",
+    name: "Blue Oyster",
+    category: "Spawn",
+    categorySlug: "spawn",
+    image: "/box_blue_oyster.jpg",
+    price: 399,
+    unit: "1 kg Bag",
+    description: "Vibrant ocean-blue clusters known for high yields, tender texture, and mild earthy flavor. Rapid colonization on grain.",
+    benefits: "Fast Colonizing · High Yield",
+    badge: "Grower Favorite"
+  },
+  {
+    _id: "spn-8",
+    name: "Pink Oyster",
+    category: "Spawn",
+    categorySlug: "spawn",
+    image: "/box_pink_oyster.jpg",
+    price: 399,
+    unit: "1 kg Bag",
+    description: "Striking tropical pink bouquet clusters. Extremely fast colonizer perfectly suited for warm Indian climate conditions.",
+    benefits: "Warm Climate · Rapid Flush",
+    badge: "Fast Crop"
+  },
+  {
+    _id: "spn-9",
+    name: "Elm Oyster",
+    category: "Spawn",
+    categorySlug: "spawn",
+    image: "/category_fresh_mushrooms.jpg",
+    price: 349,
+    unit: "1 kg Bag",
+    description: "Robust white to cream colored caps with thick stems. Highly resistant to green mold contamination with dependable yields.",
+    benefits: "Contamination Resistant · All-Season",
+    badge: "Resilient Strain"
+  },
+  {
+    _id: "spn-10",
+    name: "White Oyster",
+    category: "Spawn",
+    categorySlug: "spawn",
+    image: "/category_spawn.jpg",
+    price: 349,
+    unit: "1 kg Bag",
+    description: "Classic commercial white oyster cultivar. Soft fleshy caps, pleasant aroma, and dependable commercial yields.",
+    benefits: "High Flush Yield · Easy Cultivation",
+    badge: "All-Season"
+  },
+  {
+    _id: "spn-11",
+    name: "Golden Yellow Oyster",
+    category: "Spawn",
+    categorySlug: "spawn",
+    image: "/shroooms_product_showcase.png",
+    price: 399,
+    unit: "1 kg Bag",
+    description: "Bright sunshine-yellow clusters with fragrant nutty, cashewnut-like aroma upon cooking. Rapid grain colonizer.",
+    benefits: "Vibrant Color · Exotic Gourmet",
+    badge: "Exotic Strain"
+  },
+  {
+    _id: "spn-12",
+    name: "Grey Oyster",
+    category: "Spawn",
+    categorySlug: "spawn",
+    image: "/shrooom.jpg",
+    price: 349,
+    unit: "1 kg Bag",
+    description: "India's most popular commercial cultivation variety. Broad grey-brown caps with incredible environmental adaptability.",
+    benefits: "Commercial Benchmark · High Adaptability",
+    badge: "Commercial Favorite"
+  },
+  {
+    _id: "spn-13",
+    name: "King Oyster",
+    category: "Spawn",
+    categorySlug: "spawn",
+    image: "/box_king_oyster.jpg",
+    price: 449,
+    unit: "1 kg Bag",
+    description: "Thick meaty stems with rich umami flavor. The king of culinary mushrooms, prized by fine dining chefs.",
+    benefits: "Meaty Stems · Dense Mycelium",
+    badge: "Chef's Choice"
+  },
 
   // ── 7. TOOLS & ACCESSORIES (6 items) ──
   {
@@ -525,6 +657,38 @@ const hashCode = (str) => {
   return Math.abs(hash).toString(36);
 };
 
+// Products explicitly removed by user from both Admin and Storefront screens
+const EXCLUDED_PRODUCT_NAMES = [
+  "reishi mushroom (medicinal)",
+  "shiitake mushroom (organic)",
+  "maitake mushroom (hen of the woods)"
+];
+
+const getDeletedProductIds = () => {
+  try {
+    const raw = typeof window !== "undefined" && window.localStorage ? window.localStorage.getItem("shroooms_deleted_products") : null;
+    const list = raw ? JSON.parse(raw) : [];
+    return new Set(["p6", "p7", "p8", ...list]);
+  } catch {
+    return new Set(["p6", "p7", "p8"]);
+  }
+};
+
+const addDeletedProductId = (id) => {
+  try {
+    if (typeof window !== "undefined" && window.localStorage) {
+      const raw = window.localStorage.getItem("shroooms_deleted_products");
+      const list = raw ? JSON.parse(raw) : [];
+      if (!list.includes(id)) {
+        list.push(id);
+        window.localStorage.setItem("shroooms_deleted_products", JSON.stringify(list));
+      }
+    }
+  } catch (e) {
+    console.error("Error persisting deleted product ID:", e);
+  }
+};
+
 axios.interceptors.request.use(async (config) => {
   const { url, method, data } = config;
   
@@ -540,7 +704,34 @@ axios.interceptors.request.use(async (config) => {
             .from("products")
             .select("*");
           if (!error && dbProducts && dbProducts.length > 0) {
-            productsData = dbProducts;
+            // Filter out deleted/excluded products from dbProducts
+            const deletedSet = getDeletedProductIds();
+            const validDbProducts = dbProducts.filter((p) => {
+              if (deletedSet.has(p._id)) return false;
+              const nameLower = (p.name || "").toLowerCase().trim();
+              if (EXCLUDED_PRODUCT_NAMES.some((excluded) => nameLower.includes(excluded))) return false;
+              return true;
+            });
+
+            const dbMap = new Map(validDbProducts.map((p) => [p._id, p]));
+            productsData = mockProducts.map((mockP) => {
+              if (dbMap.has(mockP._id)) {
+                const dbP = dbMap.get(mockP._id);
+                return {
+                  ...mockP,
+                  ...dbP,
+                  category: dbP.category || mockP.category,
+                  categorySlug: dbP.categorySlug || mockP.categorySlug,
+                };
+              }
+              return mockP;
+            });
+            const mockIds = new Set(mockProducts.map((p) => p._id));
+            validDbProducts.forEach((dbP) => {
+              if (!mockIds.has(dbP._id)) {
+                productsData.push(dbP);
+              }
+            });
           } else {
             productsData = mockProducts;
           }
@@ -551,6 +742,15 @@ axios.interceptors.request.use(async (config) => {
       } else {
         productsData = mockProducts;
       }
+
+      // Final strict filter: remove any excluded or deleted items
+      const deletedSet = getDeletedProductIds();
+      productsData = productsData.filter((p) => {
+        if (deletedSet.has(p._id)) return false;
+        const nameLower = (p.name || "").toLowerCase().trim();
+        if (EXCLUDED_PRODUCT_NAMES.some((excluded) => nameLower.includes(excluded))) return false;
+        return true;
+      });
 
       return Promise.resolve({
         data: productsData,
@@ -565,24 +765,64 @@ axios.interceptors.request.use(async (config) => {
   // 1b. POST /api/products
   else if (url.endsWith("/api/products") && method === "post") {
     await delay(300);
+    const parsedData = getParsedData(data);
+    const newProduct = {
+      _id: "prod_" + Date.now(),
+      category: "Fresh Mushrooms",
+      categorySlug: "fresh-mushrooms",
+      ...parsedData
+    };
+    mockProducts.push(newProduct);
     config.adapter = async () => {
-      return Promise.reject(new Error("Catalog modification is disabled."));
+      return Promise.resolve({
+        data: { success: true, product: newProduct },
+        status: 200,
+        statusText: "OK",
+        headers: {},
+        config
+      });
     };
   }
 
   // 1c. PUT /api/products/:id
   else if (url.includes("/api/products/") && method === "put") {
     await delay(300);
+    const idToUpdate = url.split("/api/products/")[1]?.split("?")[0];
+    const parsedData = getParsedData(data);
+    const index = mockProducts.findIndex((p) => p._id === idToUpdate);
+    if (index > -1) {
+      mockProducts[index] = { ...mockProducts[index], ...parsedData };
+    }
     config.adapter = async () => {
-      return Promise.reject(new Error("Catalog modification is disabled."));
+      return Promise.resolve({
+        data: { success: true, product: index > -1 ? mockProducts[index] : parsedData },
+        status: 200,
+        statusText: "OK",
+        headers: {},
+        config
+      });
     };
   }
 
   // 1d. DELETE /api/products/:id
   else if (url.includes("/api/products/") && method === "delete") {
     await delay(300);
+    const idToDelete = url.split("/api/products/")[1]?.split("?")[0];
+    if (idToDelete) {
+      addDeletedProductId(idToDelete);
+      const index = mockProducts.findIndex((p) => p._id === idToDelete);
+      if (index > -1) {
+        mockProducts.splice(index, 1);
+      }
+    }
     config.adapter = async () => {
-      return Promise.reject(new Error("Catalog modification is disabled."));
+      return Promise.resolve({
+        data: { success: true, message: `Product ${idToDelete} removed successfully.` },
+        status: 200,
+        statusText: "OK",
+        headers: {},
+        config
+      });
     };
   }
 
